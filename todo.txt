@@ -1,0 +1,18 @@
+# fix blue/green leds remaining after button push
+# set up plugins to work with knobs
+
+
+# repeat note events
+# leds to reflect mode
+# led to follow active step
+# led when at zero
+# fix long notes
+
+
+-done-
+# add random trigs
+# pattern selector/32 step mode
+# step parameter
+# FPC/SliceX mode
+# light keyboard keys
+# add scales/random notes
