@@ -1,5 +1,6 @@
 import ui
 import channels
+import device
 import patterns
 import plugins
 from modes import Modes

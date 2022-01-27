@@ -1,4 +1,4 @@
-# name=Presonus Atom SQ 0_01
+# name=Presonus Atom SQ
 # Author: ts-forgery
 # Version .01
 

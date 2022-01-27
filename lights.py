@@ -19,7 +19,7 @@ c_keys = [36, 43, 50]
 
 
 class Lights():
-	
+
 	global step
 
 	def __init__(self):
@@ -185,8 +185,7 @@ if x, y, 0, 0 x = step number, if y =0 every step is turned off, if 1 every two 
 145, 1, 45, 32 blue if anything
 146, 0, 39, 32 purple
 145, 3, 46, 32 yellow 
+"""
 
 
 
-
-	""
