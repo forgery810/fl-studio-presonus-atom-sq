@@ -261,7 +261,6 @@ class Buttons:
 					print('Focus')
 					event.handled = True 				
 
-
 	def note_gen():
 
 		for i in range(patterns.getPatternLength(patterns.patternNumber())):

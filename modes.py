@@ -11,7 +11,6 @@ class Modes:
 	def __init__(self, event):
 		self.event = event
 		self.mode_selected = ['Notes', 'Step Entry', 'Pads per Channel']
-		# self.mode_change()
 		self.step_submodes = ['32 Step', 'Parameter Entry', 'Pattern Access', 'Random Notes']
 		submode = self.step_submodes
 

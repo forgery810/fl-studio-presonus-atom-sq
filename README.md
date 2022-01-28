@@ -5,6 +5,8 @@ A python MIDI-script to increase the functionality of the Presonus Atom SQ with 
 This is in the beta stage with known bugs and far from complete functionality.
 It is functioning well enough to be useful.
 
+If you use this please let me know of any bugs through github or any suggestions at forgery810@gmail.com
+
 #   FL Studio Setup
 
 Update to the latest FL Studio version. This will not work on some earlier versions of FL.
@@ -102,3 +104,5 @@ The jog wheel will scroll through mixer tracks and channels when the respective 
 While the up and down arrows work, they have a quirk where the will go the right direction and then every fifth push or so go the wrong direction for one push. It can still get you to your destination though.  
 
 In Pad per Channel mode, recorded notes last until end of pattern.
+
+Not so much a bug, as there may not be anything I can do about it, but the SQ lights the last push button blue or green which can hide the status of its step in step mode. 
