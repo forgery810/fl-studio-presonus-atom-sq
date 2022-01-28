@@ -8,7 +8,8 @@ class Modes:
 	mode = 0
 	step_iter = 0
 
-	def __init__(self):
+	def __init__(self, event):
+		self.event = event
 		self.mode_selected = ['Notes', 'Step Entry', 'Pads per Channel']
 		# self.mode_change()
 		self.step_submodes = ['32 Step', 'Parameter Entry', 'Pattern Access', 'Random Notes']
@@ -21,6 +22,9 @@ class Modes:
 		self.mode_init()
 		ui.setHintMsg(self.mode_selected[Modes.mode])
 		print(self.mode_selected[Modes.mode])
+		self.event.handled == True
+
+
 
 	def mode_init(self):
 		print('mode_init')

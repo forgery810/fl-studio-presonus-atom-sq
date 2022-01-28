@@ -31,10 +31,11 @@ I encourage you to email Presonus to allow the jog wheel to always be active (as
 Letter Buttons:
 
 A is the enter button
-B open the channel window for selected channel
+B opens the channel window for selected channel
 D brings up the plugin picker
-E toggles through 3 main modes Notes, Step Sequencer and Pads per Channel
+E toggles through 3 main modes Notes, Step Sequencer and Pad per Channel
 F selects sub-menus
+G currently rotates between Piano, Browser, and Playlist windows
 H currently rotates between the mixer and channel windows
 
 
@@ -59,8 +60,7 @@ Button 5 applies random notes to selected channel. (See below)
 
 # Pad Modes
 
-In Notes mode the pads become a keyboard (currently not set up. The lights reflect a keyboard but do not play as one. The Pads mode on the 
-Atom SQ under Inst must be changed to key to play as a keyboard)
+In Notes mode the pads become a keyboard (currently not set up. The lights reflect a keyboard but do not play as one. The Pads mode on the Atom SQ under Inst must be changed to key to play as a keyboard)
 
 # Step Sequencer 
 
@@ -84,5 +84,21 @@ Pitch, Velocity, Release, Fine Pitch, Panning, Mod X, and Mod Y of that step usi
 In Random mode, random notes from various scales can be applied to a channel. Knob 5 will choose the root note (this will appear in the hint message on the top left of FL).
 Knob 6 chooses the scale and knobs 7 and 8 control the low and high range of notes to be used. Push Button 5 to apply.
    
-   
- 
+
+# Knobs
+
+If the Mixer is focused, knob 5 will control the volume of the selected channel and knob 6 will control the panning.
+
+If Channels are focused, the knobs will control the volume of channels 1-8 respectively. Currently, this is limited to those channels but functionality to add control of all channels will be added. 
+
+
+# Jog Wheel
+
+The jog wheel will scroll through mixer tracks and channels when the respective window is open. As mentioned earlier, due to an unfortunate quirk with the SQ the first page of the Song mode must be open on the controller or the jog wheel does not send any midi data. The jog wheel can be used along with the arrow buttons to scroll through the browser when selected. 
+
+
+# Bugs
+
+While the up and down arrows work, they have a quirk where the will go the right direction and then every fifth push or so go the wrong direction for one push. It can still get you to your destination though.  
+
+In Pad per Channel mode, recorded notes last until end of pattern.

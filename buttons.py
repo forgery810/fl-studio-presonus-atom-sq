@@ -31,14 +31,18 @@ class Buttons:
 	touchpad_value = 0
 	lower_limit = 0
 	upper_limit = 0
+	g_rotate = [2, 3, 4]
+	g_iter = 0
+	
 
 	def __init__(self, event):
+
 		event = event
 		self.act_out(event)
 
 
 	def act_out(self, event):
-		push = Modes()
+		push = Modes(event)
 		print(event.midiId, event.data1, event.data2, event.midiChan, event.midiChanEx)
 		global j
 		global f
@@ -139,9 +143,10 @@ class Buttons:
 					if ui.getFocused(5) and plugins.isValid(channels.selectedChannel()):
 						print('plugin')
 						plugins.nextPreset(channels.selectedChannel())
-						event.handle = True
+						event.handled = True
 					else:
 						ui.right()
+						print('right')
 						event.handled = True
 
 		if event.midiId == 176 and event.data1 == data.pads['touch']:				# this selects for touchpad and allows it to go to zero
@@ -151,33 +156,41 @@ class Buttons:
 			
 			if event.data1 == data.knobs["jog_wheel"]:
 				print('jogging')
-				if ui.getFocused(1):
-					if event.data2 == 65:
-						print('channels focused')
-						if channels.channelNumber() > 0:
-							channels.selectOneChannel(channels.channelNumber() - 1)
-							# Lights.update_pattern()
-							print("selectOneChannel")
-							event.handled = True
+				if event.data2 == 1:
+					ui.next()
 
-					elif event.data2 == 1:
-						if channels.channelNumber() < channels.channelCount() - 1:
-							channels.selectOneChannel(channels.channelNumber() + 1)
-							event.handled = True
-						else:
-								print('Channels Maxed')
+				elif event.data2 == 65:
+					ui.previous()
 
-				elif ui.getFocused(0):
-						if event.data2 == 65:
-							if mixer.trackNumber() > 0:
-								mixer.setTrackNumber(mixer.trackNumber() - 1)
-								event.handled = True
+				# if ui.getFocused(1):
+				# 	if event.data2 == 65:
+				# 		print('channels focused')
+				# 		if channels.channelNumber() > 0:
+				# 			channels.selectOneChannel(channels.channelNumber() - 1)
+				# 			# Lights.update_pattern()
+				# 			print("selectOneChannel")
+				# 			event.handled = True
 
-						elif event.data2 == 1:
-							mixer.setTrackNumber(mixer.trackNumber() + 1)
-							event.handled = True
-				else:
-					event.handled = True
+				# 	elif event.data2 == 1:
+				# 		if channels.channelNumber() < channels.channelCount() - 1:
+				# 			channels.selectOneChannel(channels.channelNumber() + 1)
+				# 			event.handled = True
+				# 		else:
+				# 				print('Channels Maxed')
+
+				# elif ui.getFocused(0):
+				# 		if event.data2 == 65:
+				# 			if mixer.trackNumber() > 0:
+				# 				mixer.setTrackNumber(mixer.trackNumber() - 1)
+				# 				event.handled = True
+
+				# 		elif event.data2 == 1:
+				# 			mixer.setTrackNumber(mixer.trackNumber() + 1)
+				# 			event.handled = True
+
+				# elif ui.getFocused()
+				# else:
+				# 	event.handled = True
 
 			if event.midiChanEx == 130:						# 1-6 buttons
 
@@ -185,8 +198,6 @@ class Buttons:
 					print('quantize')
 					channels.quickQuantize(channels.channelNumber())
 					event.handled = True
-
-					
 
 
 				elif event.data1 == data.buttons["button_4"]:
@@ -207,9 +218,13 @@ class Buttons:
 			if event.midiChanEx == 128:						# A - H Buttons
 
 				if event.data1 == data.pads["a"]:
-					ui.enter()
-					print('enter')
-					print('a')
+					if ui.getFocused(4):
+						ui.selectBrowserMenuItem()		
+
+					else:	
+						ui.enter()
+						print('enter')
+						print('a')
 
 				elif event.data1 == data.pads["b"]:
 					channels.showCSForm(channels.channelNumber(), -1)
@@ -232,6 +247,10 @@ class Buttons:
 					push.sub_mode()
 
 				elif event.data1 == data.pads["g"]:
+					Buttons.g_iter += 1
+					if Buttons.g_iter >= len(Buttons.g_rotate):
+						Buttons.g_iter = 0
+					ui.setFocused(Buttons.g_rotate[Buttons.g_iter])
 					print("g")
 
 				elif event.data1 == data.pads['h']:
