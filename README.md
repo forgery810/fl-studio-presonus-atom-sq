@@ -64,25 +64,25 @@ Atom SQ under Inst must be changed to key to play as a keyboard)
 
 # Step Sequencer 
 
-    Ocatve must be set to zero for this mode to work correctly.
+Ocatve must be set to zero for this mode to work correctly.
    
-    When Channels are focused and Step Entry is selected the pads will now input steps. Arrows or jog wheel can used to select the channel. The leds will 
-   change to reflect the state of the current pattern.  
+When Channels are focused and Step Entry is selected the pads will now input steps. Arrows or jog wheel can used to select the channel. The leds will 
+change to reflect the state of the current pattern.  
    
-    The step-sequencer has four sub-menus: 32 Steps, Pattern Access, Parameter, and Random. 
+The step-sequencer has four sub-menus: 32 Steps, Pattern Access, Parameter, and Random. 
    
-    In any sub-menu Button 4 can be used to add random steps. The touchpad controls the liklihood of each step being set on. Touch to the left and all 
-    steps will be on and to the right for less. This can be used to clear patterns as well the furthest right will almost always empty the patterm.
+In any sub-menu Button 4 can be used to add random steps. The touchpad controls the liklihood of each step being set on. Touch to the left and all 
+steps will be on and to the right for less. This can be used to clear patterns as well the furthest right will almost always empty the patterm.
    
-    In 32 steps, the top row extends access to steps 17-32.
+In 32 steps, the top row extends access to steps 17-32.
    
-    In Pattern Access, the top row allows instant access to patterns 1-16.
+In Pattern Access, the top row allows instant access to patterns 1-16.
    
-    In Parameter Entry mode, individual steps can be selected to edit their parameters. Select an active step and the knobs can be used to edit the 
-    Pitch, Velocity, Release, Fine Pitch, Panning, Mod X, and Mod Y of that step using the knobs 1-7 respectively. 
+In Parameter Entry mode, individual steps can be selected to edit their parameters. Select an active step and the knobs can be used to edit the 
+Pitch, Velocity, Release, Fine Pitch, Panning, Mod X, and Mod Y of that step using the knobs 1-7 respectively. 
     
-    In Random mode, random notes from various scales can be applied to a channel. Knob 5 will choose the root note (this will appear in the hint message on the top left of FL).
-   Knob 6 chooses the scale and knobs 7 and 8 control the low and high range of notes to be used. Push Button 5 to apply.
+In Random mode, random notes from various scales can be applied to a channel. Knob 5 will choose the root note (this will appear in the hint message on the top left of FL).
+Knob 6 chooses the scale and knobs 7 and 8 control the low and high range of notes to be used. Push Button 5 to apply.
    
    
  
