@@ -5,8 +5,6 @@ A python MIDI-script to increase the functionality of the Presonus Atom SQ with 
 This is in the beta stage with known bugs and far from complete functionality.
 It is functioning well enough to be useful.
 
-# Installation:
-
 #   FL Studio Setup
 
 Update to the latest FL Studio version. This will not work on some earlier versions of FL.
@@ -48,7 +46,8 @@ Song buttons:
 
 Page 1:
 
-Solo and mute work as expected. If the Mixer window is focused the Arm button will toggle record. If the channels window is focused, it will set the current channel to the mixer path of the last selected mixer track. 
+Solo and mute work as expected. If the Mixer window is focused the Arm button will toggle record. If the channels window is focused, 
+it will set the current channel to the mixer path of the last selected mixer track. 
 
 Page 2:
 
@@ -60,7 +59,8 @@ Button 5 applies random notes to selected channel. (See below)
 
 # Pad Modes
 
-In Notes mode the pads become a keyboard (currently not set up. The lights reflect a keyboard but do not play as one. The Pads mode on the Atom SQ under Inst must be changed to key to play as a keyboard)
+In Notes mode the pads become a keyboard (currently not set up. The lights reflect a keyboard but do not play as one. The Pads mode on the 
+Atom SQ under Inst must be changed to key to play as a keyboard)
 
 # Step Sequencer 
 
@@ -71,13 +71,15 @@ In Notes mode the pads become a keyboard (currently not set up. The lights refle
    
     The step-sequencer has four sub-menus: 32 Steps, Pattern Access, Parameter, and Random. 
    
-    In any sub-menu Button 4 can be used to add random steps. The touchpad controls the liklihood of each step being set on. Touch to the left and all steps will be on and to      the right for less. This can be used to clear patterns as well the furthest right will almost always empty the patterm.
+    In any sub-menu Button 4 can be used to add random steps. The touchpad controls the liklihood of each step being set on. Touch to the left and all 
+    steps will be on and to the right for less. This can be used to clear patterns as well the furthest right will almost always empty the patterm.
    
     In 32 steps, the top row extends access to steps 17-32.
    
     In Pattern Access, the top row allows instant access to patterns 1-16.
    
-    In Parameter Entry mode, individual steps can be selected to edit their parameters. Select an ective step and the knobs can be used to edit the Pitch, Velocity, Release,        Fine Pitch, Panning, Mod X, and Mod Y of that step. 
+    In Parameter Entry mode, individual steps can be selected to edit their parameters. Select an active step and the knobs can be used to edit the 
+    Pitch, Velocity, Release, Fine Pitch, Panning, Mod X, and Mod Y of that step using the knobs 1-7 respectively. 
     
     In Random mode, random notes from various scales can be applied to a channel. Knob 5 will choose the root note (this will appear in the hint message on the top left of FL).
    Knob 6 chooses the scale and knobs 7 and 8 control the low and high range of notes to be used. Push Button 5 to apply.
