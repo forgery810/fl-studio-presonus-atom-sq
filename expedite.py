@@ -17,7 +17,6 @@ from buttons import Buttons
 from notes import Notes
 from knobs import Knobs
 from lights import Lights
-from midi2 import Midi2
 from modes import Modes
 import plugindata
 

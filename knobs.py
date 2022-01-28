@@ -90,7 +90,7 @@ class Knobs:
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, int(mapvalues(self.data_two, 0 , 240, 0, 127)), 1)
 						event.handled = True
 					else:
-						Lights.light_note(self.data_two)
+						# Lights.light_note(self.data_two)
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, self.data_two, 1)
 						event.handled = True
 
@@ -111,6 +111,9 @@ class Knobs:
 					elif event.data1 == data.knobs["knob_eight"]:
 						Buttons.upper_limit = int(mapvalues(self.data_two, 50, 0, 0, 127))
 						ui.setHintMsg("Setting Upper Limit")
+
+				elif event.data1-14 < channels.channelCount():
+					channels.setChannelVolume(event.data1-14, mapvalues(event.data2, 0, 1, 0, 127))
 
 			elif event.data1-14 < channels.channelCount():
 				channels.setChannelVolume(event.data1-14, mapvalues(event.data2, 0, 1, 0, 127))
