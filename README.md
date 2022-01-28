@@ -1,10 +1,13 @@
-# fl-studio-presonus-atom-sq
+# Presonus Atom SQ MIDI Script for FL Studio
+
 A python MIDI-script to increase the functionality of the Presonus Atom SQ with FL Studio
 
-
 This is in the beta stage with known bugs and far from complete functionality.
+It is functioning well enough to be useful.
 
-Installation:
+# Installation:
+
+#   FL Studio Setup
 
 Update to the latest FL Studio version. This will not work on some earlier versions of FL.
 
@@ -12,6 +15,72 @@ Clone and unzip. Copy folder to Dcouments/Image-Line/Fl Studio/Settings/Hardware
 The data should be in a folder together within the Hardware directory.
 
 In the FL Studio Midi Settings, click Refresh Device List. Enable both ATM SQ and MIDIIN2(ATM SQ) and set contoller type to 
-Presonus Atom SQ. 
+Presonus Atom SQ. The should be enabled in both Input and Output. Set the ATM SQ to the same port number in both In and Out. 
+The same must be done with both MIDIIN2(ATM SQ) In and Out but must be differnt from the ATM SQ port number.
 
-A-H
+#   Atom SQ Setup
+
+Go to Setup and on the second page set the SQ to MCU mode. Also set A-H to CC mode.
+
+Under User set Touch to Mod.
+
+Unfortunatley, for the jog wheel to function you must be on the first Song page on the SQ with Cursor highlighted. Otherwise the arrows can be used to move around.
+I encourage you to email Presonus to allow the jog wheel to always be active (as well as allowing more shift functionality) 
+
+
+# Manual:
+
+Letter Buttons:
+
+A is the enter button
+B open the channel window for selected channel
+D brings up the plugin picker
+E toggles through 3 main modes Notes, Step Sequencer and Pads per Channel
+F selects sub-menus
+H currently rotates between the mixer and channel windows
+
+
+Transport buttons:
+
+These function as labeled. Shift can be used to access the secondary functions with the expception of Count-in for some reason
+
+Song buttons:
+
+Page 1:
+
+Solo and mute work as expected. If the Mixer window is focused the Arm button will toggle record. If the channels window is focused, it will set the current channel to the mixer path of the last selected mixer track. 
+
+Page 2:
+
+Button 1 applies quantizer to selected channel.
+
+Button 4 adds random steps to selected channel in step-mode.
+
+Button 5 applies random notes to selected channel. (See below)
+
+# Pad Modes
+
+In Notes mode the pads become a keyboard (currently not set up. The lights reflect a keyboard but do not play as one. The Pads mode on the Atom SQ under Inst must be changed to key to play as a keyboard)
+
+# Step Sequencer 
+
+    Ocatve must be set to zero for this mode to work correctly.
+   
+    When Channels are focused and Step Entry is selected the pads will now input steps. Arrows or jog wheel can used to select the channel. The leds will 
+   change to reflect the state of the current pattern.  
+   
+    The step-sequencer has four sub-menus: 32 Steps, Pattern Access, Parameter, and Random. 
+   
+    In any sub-menu Button 4 can be used to add random steps. The touchpad controls the liklihood of each step being set on. Touch to the left and all steps will be on and to      the right for less. This can be used to clear patterns as well the furthest right will almost always empty the patterm.
+   
+    In 32 steps, the top row extends access to steps 17-32.
+   
+    In Pattern Access, the top row allows instant access to patterns 1-16.
+   
+    In Parameter Entry mode, individual steps can be selected to edit their parameters. Select an ective step and the knobs can be used to edit the Pitch, Velocity, Release,        Fine Pitch, Panning, Mod X, and Mod Y of that step. 
+    
+    In Random mode, random notes from various scales can be applied to a channel. Knob 5 will choose the root note (this will appear in the hint message on the top left of FL).
+   Knob 6 chooses the scale and knobs 7 and 8 control the low and high range of notes to be used. Push Button 5 to apply.
+   
+   
+ 
