@@ -1,15 +1,30 @@
-# fix blue/green leds remaining after button push
+version - 0.01.6
+
+	-to-do-
+
+# fix blue/green leds remaining after button push, if possible
 # set up plugins to work with knobs
-
-
+# shortcut to increase knobs cc's for greater access 
 # repeat note events
-# leds to reflect mode
 # led to follow active step
-# led when at zero
-# fix long notes
+# led when paramter at zero or c5 note
+# setup keyboard mode
+# setup scales mode
+# add new pattern(?)
+# fix up/down bug
+# increase channel knob access and or
+# change volume on selected channel
+# tap tempo
 
 
--done-
+	-done-
+# fixed mute button conflict with knobs 0.01.6
+# fixed bug where pad per channel mode wouldn't play if plugin focused 0.01.6
+# changed pad per channel lights to purple just because 0.01.5
+# fixed issue where step lights would not update with pattern change 0.01.5
+# added continuous note mode (works) in addition to keyboard mode (not yet) 0.01.5
+# fix long notes bug 0.01.5
+# add broswer scroll/select functionality 0.01.5
 # add random trigs
 # pattern selector/32 step mode
 # step parameter

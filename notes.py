@@ -8,8 +8,8 @@ from lights import Lights
 import data
 import plugindata
 
-
 temp_step = [0]
+
 class Notes:
 
 	def __init__(self, event):
@@ -18,9 +18,7 @@ class Notes:
 		if event.midiId == 144:
 			temp_step.clear()
 			temp_step.append(event.data1)
-			print(f'temp step: {temp_step}')
 
-		event = event
 		self.light = Lights()
 		self.range_one = [i for i in range(36, 52)]
 		self.range_two = [i for i in range(52, 68)]
@@ -28,24 +26,29 @@ class Notes:
 
 
 	def decide(self, event):
-		if ui.getFocused(5) and plugins.isValid(channels.selectedChannel()):
+		if ui.getFocusedPluginName() in plugindata.drum_plugs:
+			print('drums focused')
 			self.drum_plugins(event)
 		elif self.get_mode() == 0:
 			self.keyboard(event)
 			# Lights.clear_pattern()
-		elif self.get_mode() == 1:
-			print('get mode is 1')
-			print(f'step_iter: {Modes.step_iter}')
+		elif self.get_mode() == 1 and event.data2 >0:
+			# print('get mode is 1')
+			# print(f'step_iter: {Modes.step_iter}')
 			self.step_mode(event)
 		elif self.get_mode() == 2:
 			self.pad_channel(event)
 
 	def keyboard(self, event):
-		Lights.keyboard_lights()
-		channels.midiNoteOn(channels.selectedChannel(), event.data1, event.data2)
-		Lights.keyboard_lights()
-		print('keyboard')
-		event.handled = True
+		if Modes.note_iter == 0:
+			channels.midiNoteOn(channels.selectedChannel(), event.data1, event.data2)
+			Lights.continuous_notes()
+		elif Modes.note_iter == 1:
+			Lights.keyboard_lights()
+			channels.midiNoteOn(channels.selectedChannel(), event.data1, event.data2)
+			Lights.keyboard_lights()
+			print('keyboard')
+			event.handled = True
 				
 	def step_mode(self, event):
 		
@@ -56,15 +59,13 @@ class Notes:
 			event.handled = True
 
 		elif Modes.step_iter == 0:
-
 			if channels.getGridBit(channels.selectedChannel(), event.data1 - 36) == 0:						
 				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 1)	
 				event.handled = True
 			else:															
 				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 0)    
 				# self.light.update_pattern()
-				event.handled = True
-			
+				event.handled = True		
 			Lights.update_pattern()
 
 			if Modes.step_iter == 1:
@@ -79,7 +80,6 @@ class Notes:
 			channels.midiNoteOn(event.data1-36, 60, event.data2)
 			Lights.light_channels()
 			event.handled = True
-
 		else:
 			Lights.light_channels()
 

@@ -14,13 +14,10 @@ from lights import Lights
 from modes import Modes
 from notes import Notes
 import _random
-
 from midi import *
 
 current_arrow = 0
 arrow_index = 0
-
-# arrow_status = False
 
 class Buttons:
 
@@ -33,10 +30,8 @@ class Buttons:
 	upper_limit = 0
 	g_rotate = [2, 3, 4]
 	g_iter = 0
-	
 
 	def __init__(self, event):
-
 		event = event
 		self.act_out(event)
 
@@ -46,18 +41,10 @@ class Buttons:
 		print(event.midiId, event.data1, event.data2, event.midiChan, event.midiChanEx)
 		global j
 		global f
-		# global touchpad_value
-
-
-
-
-		# if event.midiId == 144 and event.midiChanEx == 137:			# 137 selects for notes
-		# 	notes = Notes(event)
 
 		if event.midiId == 144 and event.midiChanEx == 256:			# 256 selects for functions i.e. transport etc 
 			# message = Midi2(event)
 			if event.data2 > 0:
-
 
 				if event.data1 not in data.ud_arrow:
 					Directions.arrow_status = False
@@ -162,43 +149,12 @@ class Buttons:
 				elif event.data2 == 65:
 					ui.previous()
 
-				# if ui.getFocused(1):
-				# 	if event.data2 == 65:
-				# 		print('channels focused')
-				# 		if channels.channelNumber() > 0:
-				# 			channels.selectOneChannel(channels.channelNumber() - 1)
-				# 			# Lights.update_pattern()
-				# 			print("selectOneChannel")
-				# 			event.handled = True
-
-				# 	elif event.data2 == 1:
-				# 		if channels.channelNumber() < channels.channelCount() - 1:
-				# 			channels.selectOneChannel(channels.channelNumber() + 1)
-				# 			event.handled = True
-				# 		else:
-				# 				print('Channels Maxed')
-
-				# elif ui.getFocused(0):
-				# 		if event.data2 == 65:
-				# 			if mixer.trackNumber() > 0:
-				# 				mixer.setTrackNumber(mixer.trackNumber() - 1)
-				# 				event.handled = True
-
-				# 		elif event.data2 == 1:
-				# 			mixer.setTrackNumber(mixer.trackNumber() + 1)
-				# 			event.handled = True
-
-				# elif ui.getFocused()
-				# else:
-				# 	event.handled = True
-
 			if event.midiChanEx == 130:						# 1-6 buttons
 
 				if event.data1 == data.buttons["button_1"]:
 					print('quantize')
 					channels.quickQuantize(channels.channelNumber())
 					event.handled = True
-
 
 				elif event.data1 == data.buttons["button_4"]:
 					print("Random")
@@ -271,12 +227,10 @@ class Buttons:
 			#channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, int(mapvalues(num_gen(), 48 , 96, 0, 65535)), 1)
 
 def num_gen():
-	# print('num_gen')
 	rand_obj = _random.Random()
 	rand_obj.seed()
 	rand_int = rand_obj.getrandbits(16) 
 	return rand_int 
-
 
 def mapvalues(value, tomin, tomax, frommin, frommax):
 	input_value = value

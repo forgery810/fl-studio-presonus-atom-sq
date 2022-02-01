@@ -137,6 +137,7 @@ class Knobs:
 				print(self.offset)
 				print('has plugin')			
 				# print(plugin_dict[self.plugin][knob_num.index(self.data_one)])                                                                             																		
+				# plugins.setParamValue(mapvalues(self.data_two, 0, 1, 0, 127), plugindata.plugin_dict[self.plugin][plugindata.knob_num.index(self.data_one + (self.offset * 8))], self.channel)
 				plugins.setParamValue(mapvalues(self.data_two, 0, 1, 0, 127), plugindata.plugin_dict[self.plugin][plugindata.knob_num.index(self.data_one + (self.offset * 8))], self.channel)
 				return
 

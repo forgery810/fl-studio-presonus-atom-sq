@@ -54,7 +54,7 @@ indicate = Lights()
 
 def OnRefresh(ref_num):
 	print(f"OnRefresh: {ref_num}")
-	if ref_num == 65824:
+	if ref_num == 65824 or ref_num == 1024:
 		if Modes.mode == 1:
 			Lights.update_pattern()
 	# elif ref_num == 65831:

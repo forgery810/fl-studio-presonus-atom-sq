@@ -3,32 +3,26 @@ import channels
 import midi
 import ui
 import mixer
-# import general
 import playlist
 import transport
 import patterns
 import plugins
-# import modes
 from midi import *
 
-
-
-# from modes import Modes
 top_keys = [52, 53, 55, 56, 57, 59, 60, 62, 63, 64, 66, 67]
+off_keys = (54, 58, 61, 65)
 c_keys = [36, 43, 50]
-
+c_keys_cont = [36, 48, 60]
 
 class Lights():
 
 	global step
 
 	def __init__(self):
-		print('self')
 		self.indicator = 0
 		self.step = 0
 		# mode = Modes.mode
 		# s = self.update_pattern()
-
 
 	@staticmethod 	
 	def update_pattern():							# reset leds in step mode 
@@ -48,7 +42,7 @@ class Lights():
 	def update_second():							# light 2nd pattern in 32 step mode
 		for i in range(16, 32):
 			if channels.getGridBit(channels.selectedChannel(), i) == 0:
-				print('0')
+				# print('0')
 				device.midiOutMsg(144, 0, i + 36, 0)
 					# event.handled = True
 			elif channels.getGridBit(channels.selectedChannel(), i) == 1: 
@@ -69,7 +63,6 @@ class Lights():
 			device.midiOutMsg(144, 0, i + 36, 127)
 		device.midiOutMsg(144, 0, patterns.patternNumber() + 52, 127)
 
-
 		# else:
 		# 	print('else')
 		# 	for i in range(0,16):
@@ -77,14 +70,14 @@ class Lights():
 		# 			device.midiOutMsg(145, 0, i + 36, 0)
 		# 			device.midiOutMsg(144, 0, i + 52, 0)
 		# 			device.midiOutMsg(146, 0, i + 52, 22)		
+
 	@staticmethod
 	def light_channels():
-		print('light_channels')
 		for i in range(0, channels.channelCount()):
 			device.midiOutMsg(144, 0, 36 + i, 127)
-			device.midiOutMsg(147, 0, 36 + i, 0)
-		for x in range(channels.channelCount(), 16):
-			device.midiOutMsg(144, 0, 36 + x, 127)	
+			device.midiOutMsg(146, 0, 36 + i, 0)
+		for x in range(channels.channelCount(), 32):
+			device.midiOutMsg(144, 0, x + 36, 0)
 
 
 	def active_step(self, data):
@@ -92,10 +85,8 @@ class Lights():
 			self.step += 1
 		if self.step >= patterns.getPatternLength(patterns.patternNumber()):
 			self.step = 0
-		# print('light note')
 		Lights.update_pattern()
 		device.midiOutMsg(144, 0, self.step + 36, 127)
-
 
 	def keyboard_lights():
 		for i in range(36, 52):
@@ -107,6 +98,19 @@ class Lights():
 		for y in top_keys:
 			device.midiOutMsg(144, 0, y, 127)
 
+		for off in off_keys:
+			device.midiOutMsg(144, 0, off, 0)
+
+
+
+	def continuous_notes():
+		for z in range(36, 68):
+			device.midiOutMsg(144, 0, z, 127)
+
+		for k in c_keys_cont:
+			device.midiOutMsg(145, 0, k, 0)
+
+
 	def refresh(mode, submode):
 		if mode == 1:
 			Lights.update_pattern()
@@ -117,15 +121,9 @@ class Lights():
 		if self.indicator == patterns.getPatternLength(patterns.patternNumber())-1:
 			self.indicator = 0
 
-
 	def current_step(self, step):
 		print(self.indicator)
 		device.midiOutMsg(144, 0, self.indicator + 36, 127)
-
-
-
-
-		
 
 
 

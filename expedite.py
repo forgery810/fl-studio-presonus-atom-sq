@@ -27,11 +27,13 @@ class Expedite:
 		self.triage() 
 
 	def triage(self):
-		if self.event.data1 in data.knob_list:
+		# print(f'midichanex = {self.event.midiChanEx}' )
+		print(self.event.midiId, self.event.data1, self.event.data2, self.event.midiChanEx)
+		if self.event.data1 in data.knob_list and self.event.midiChanEx in range(128, 131):
 			print('in knobs')
 			knob = Knobs(self.event)
 
-		elif self.event.midiId == 144 and self.event.midiChanEx == 137:			# 137 selects for notes
+		elif self.event.midiChanEx == 137:			# 137 selects for notes
 			print('notes')
 			notes = Notes(self.event)
 
