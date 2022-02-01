@@ -103,6 +103,6 @@ The jog wheel will scroll through mixer tracks and channels when the respective 
 
 While the up and down arrows work, they have a quirk where the will go the right direction and then every fifth push or so go the wrong direction for one push. It can still get you to your destination though.  
 
-In Pad per Channel mode, recorded notes last until end of pattern.
+Fixed -> In Pad per Channel mode, recorded notes last until end of pattern. (This has been fixed in 0.01.05)
 
 Not so much a bug, as there may not be anything I can do about it, but the SQ lights the last push button blue or green which can hide the status of its step in step mode. 
