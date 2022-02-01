@@ -2,31 +2,10 @@
 
 A python MIDI-script to increase the functionality of the Presonus Atom SQ with FL Studio
 
-This is in the beta stage with known bugs and far from complete functionality.
+This is in the beta stage and far from complete functionality.
 It is functioning well enough to be useful.
 
 If you use this please let me know of any bugs through github or any suggestions at forgery810@gmail.com
-
-#   FL Studio Setup
-
-Update to the latest FL Studio version. This will not work on some earlier versions of FL.
-
-Clone and unzip. Copy folder to Dcouments/Image-Line/Fl Studio/Settings/Hardware
-The data should be in a folder together within the Hardware directory.
-
-In the FL Studio Midi Settings, click Refresh Device List. Enable both ATM SQ and MIDIIN2(ATM SQ) and set contoller type to 
-Presonus Atom SQ. The should be enabled in both Input and Output. Set the ATM SQ to the same port number in both In and Out. 
-The same must be done with both MIDIIN2(ATM SQ) In and Out but must be differnt from the ATM SQ port number.
-
-#   Atom SQ Setup
-
-Go to Setup and on the second page set the SQ to MCU mode. Also set A-H to CC mode.
-
-Under User set Touch to Mod.
-
-Unfortunatley, for the jog wheel to function you must be on the first Song page on the SQ with Cursor highlighted. Otherwise the arrows can be used to move around.
-I encourage you to email Presonus to allow the jog wheel to always be active (as well as allowing more shift functionality) 
-
 
 # Manual:
 
