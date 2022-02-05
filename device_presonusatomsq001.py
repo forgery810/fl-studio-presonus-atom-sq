@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ
 # Author: ts-forgery
-# Version 0.02.0
+# Version 0.02.1
 
 import arrangement
 import device
