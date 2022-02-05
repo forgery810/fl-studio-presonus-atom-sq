@@ -10,7 +10,7 @@ import plugindata
 
 temp_step = [0]
 
-class Notes:
+class Notes():
 
 	def __init__(self, event):
 		print(f'notes event: {event.data1}')
@@ -24,7 +24,6 @@ class Notes:
 		self.range_two = [i for i in range(52, 68)]
 		self.decide(event)
 
-
 	def decide(self, event):
 		if ui.getFocusedPluginName() in plugindata.drum_plugs:
 			print('drums focused')
@@ -33,20 +32,20 @@ class Notes:
 			self.keyboard(event)
 			# Lights.clear_pattern()
 		elif self.get_mode() == 1 and event.data2 >0:
-			# print('get mode is 1')
+			print('get mode is 1')
 			# print(f'step_iter: {Modes.step_iter}')
 			self.step_mode(event)
 		elif self.get_mode() == 2:
 			self.pad_channel(event)
 
 	def keyboard(self, event):
-		if Modes.note_iter == 0:
+		if Modes.note_iter == 1:
 			channels.midiNoteOn(channels.selectedChannel(), event.data1, event.data2)
 			Lights.continuous_notes()
-		elif Modes.note_iter == 1:
+		elif Modes.note_iter == 0:
 			Lights.keyboard_lights()
-			channels.midiNoteOn(channels.selectedChannel(), event.data1, event.data2)
-			Lights.keyboard_lights()
+			channels.midiNoteOn(channels.selectedChannel(), data.key_dict[str(event.data1)] + Modes.octave_values[Modes.sub_sub_key_iter], event.data2)
+			# Lights.keyboard_lights()
 			print('keyboard')
 			event.handled = True
 				
@@ -55,10 +54,10 @@ class Notes:
 		if Modes.step_iter == 2 and event.data1 >= 52:
 			print('select pattern')
 			patterns.jumpToPattern(event.data1 - 51)
-			self.light.light_pattern()
+			self.light.pattern_select()
 			event.handled = True
 
-		elif Modes.step_iter == 0:
+		elif Modes.step_iter == 0 or Modes.step_iter ==2 and event.data1 < 52:
 			if channels.getGridBit(channels.selectedChannel(), event.data1 - 36) == 0:						
 				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 1)	
 				event.handled = True
@@ -68,10 +67,13 @@ class Notes:
 				event.handled = True		
 			Lights.update_pattern()
 
-			if Modes.step_iter == 1:
-				self.light.light_pattern()
+			if Modes.step_iter == 2:
+				self.light.pattern_select()
 			else:	
 				self.light.update_second()	
+
+		if Modes.step_iter == 3: # what to do with lights in param edit mode and random mode
+			pass
 
 	def pad_channel(self, event):
 		print('in pad channel')

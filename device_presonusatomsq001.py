@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ
 # Author: ts-forgery
-# Version .01
+# Version 0.02.0
 
 import arrangement
 import device
@@ -24,7 +24,6 @@ from modes import Modes
 from expedite import Expedite
 import plugindata
 
-
 one = 0
 two = 0
 three = 0
@@ -44,16 +43,15 @@ indicate = Lights()
 	# if data < 3:
 	# 	step += 2
 	# if step >= patterns.getPatternLength(patterns.patternNumber()):
-	# 	step = 0
+	# 	step = 0 
 	# # print('light note')
 	# Lights.update_pattern()
+	# Lights.update_second()
 	# device.midiOutMsg(144, 0, step + 36, 127)
 	# device.midiOutMsg(124, 3, step + 36, 5)
 
-
-
 def OnRefresh(ref_num):
-	print(f"OnRefresh: {ref_num}")
+	# print(f"OnRefresh: {ref_num}")
 	if ref_num == 65824 or ref_num == 1024:
 		if Modes.mode == 1:
 			Lights.update_pattern()
@@ -62,17 +60,9 @@ def OnRefresh(ref_num):
 	# 	if plugins.getPluginName(channels.selectedChannel()) == 'Slicex':
 	# 		Lights.update_pattern() 
 
-
-	# transport.setLoopMode()
-
-
 def OnInit():
 	print("Presonus Atom SQ")
 	Lights.clear_pattern()
-	one = 0
-	two = 0
-	three = 0
-	four = 0
 
 def OnMidiMsg(event):
 	expedite = Expedite(event)

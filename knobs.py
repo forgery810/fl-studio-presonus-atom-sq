@@ -15,6 +15,7 @@ one = 0
 two = 0
 three = 0
 four = 0
+
 class Knobs:
 
 	def __init__(self, event):
@@ -29,17 +30,12 @@ class Knobs:
 		self.offset = event.midiChanEx - 128
 		self.knob_turn(event)
 
-
-
-
 	def knob_turn(self, event):
 		print('knob_turn')
 		global one
 		global two 
 		global three 
 		global four 
-
-
 		self.data_one = event.data1
 		self.data_two = event.data2
 		self.pad_step = notes.temp_step[0]
@@ -47,9 +43,7 @@ class Knobs:
 		self.pattern = patterns.patternNumber()
 		self.channel = channels.channelNumber()
 
-
-
-		if ui.getFocused(0):
+		if ui.getFocused(0) and self.data_one != 1:
 
 			if event.data1 == data.knobs["knob_five"]:
 				# one = event.data2
@@ -75,7 +69,7 @@ class Knobs:
 				# print(f'{one+30}, {two}, {three}, {four}')
 
 
-		elif ui.getFocused(1):
+		elif ui.getFocused(1) and self.data_one != 1:
 			print('in channels')
 			if Modes.mode == 1:
 				if Modes.step_iter == 1:
@@ -133,7 +127,15 @@ class Knobs:
 		self.param_count = plugins.getParamCount(self.channel)
 
 		if self.data_one < self.param_count + 19:				#this is probably unneccessary
-			if self.plugin in plugindata.plugin_dict:
+			if self.plugin in plugindata.touchpad_params:
+				if self.data_one == 1:
+					for param in plugindata.touchpad_params[self.plugin]:
+						print(param)
+						plugins.setParamValue(mapvalues(self.data_two, 0, 1, 0, 127), param, self.channel)
+						event.handled = True
+
+
+			if self.plugin in plugindata.plugin_dict and self.data_one != 1:
 				print(self.offset)
 				print('has plugin')			
 				# print(plugin_dict[self.plugin][knob_num.index(self.data_one)])                                                                             																		

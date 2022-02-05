@@ -5,6 +5,8 @@ A python MIDI-script to increase the functionality of the Presonus Atom SQ with 
 This is in the beta stage with known bugs and far from complete functionality.
 It is functioning well enough to be useful.
 
+There will be updates often, some minor and some major, so check back. Check the todo.txt files for changes.
+
 If you use this please let me know of any bugs through github or any suggestions at forgery810@gmail.com
 
 #   FL Studio Setup
@@ -29,6 +31,8 @@ I encourage you to email Presonus to allow the jog wheel to always be active (as
 
 
 # Manual:
+
+Much of the functionality of this script is mode dependent which relies on the hint message panel on the top left on FL. Unfortunately, if you have your mouse in the wrong place, over a step for example, you won't be able to see the mode notifications. So you will have to keep your mouse hovering over a neutral spot on the screen to see what is happening as you go through modes.  
 
 Letter Buttons:
 

@@ -43,7 +43,7 @@ class Buttons:
 		global f
 
 		if event.midiId == 144 and event.midiChanEx == 256:			# 256 selects for functions i.e. transport etc 
-			# message = Midi2(event)
+
 			if event.data2 > 0:
 
 				if event.data1 not in data.ud_arrow:
@@ -149,7 +149,7 @@ class Buttons:
 				elif event.data2 == 65:
 					ui.previous()
 
-			if event.midiChanEx == 130:						# 1-6 buttons
+			if event.midiChanEx == 130:												# 1-6 buttons
 
 				if event.data1 == data.buttons["button_1"]:
 					print('quantize')
@@ -183,12 +183,13 @@ class Buttons:
 						print('a')
 
 				elif event.data1 == data.pads["b"]:
-					channels.showCSForm(channels.channelNumber(), -1)
+					push.sub_sub_mode()
 					print('b')
 
 				elif event.data1 == data.pads["c"]:
+					channels.showCSForm(channels.channelNumber(), -1)
 					print('c')
-
+					
 				elif event.data1 == data.pads["d"]:
 					print('View Plugin Picker')
 					transport.globalTransport(midi.FPT_F8, 67)
@@ -225,6 +226,7 @@ class Buttons:
 			print(note)
 			channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, note, 1)
 			#channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, int(mapvalues(num_gen(), 48 , 96, 0, 65535)), 1)
+
 
 def num_gen():
 	rand_obj = _random.Random()
