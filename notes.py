@@ -45,7 +45,6 @@ class Notes():
 		elif Modes.note_iter == 0:
 			Lights.keyboard_lights()
 			channels.midiNoteOn(channels.selectedChannel(), data.key_dict[str(event.data1)] + Modes.octave_values[Modes.sub_sub_key_iter], event.data2)
-			# Lights.keyboard_lights()
 			print('keyboard')
 			event.handled = True
 				
@@ -57,7 +56,7 @@ class Notes():
 			self.light.pattern_select()
 			event.handled = True
 
-		elif Modes.step_iter == 0 or Modes.step_iter ==2 and event.data1 < 52:
+		elif Modes.step_iter != 1 or Modes.step_iter == 2 and event.data1 < 52:
 			if channels.getGridBit(channels.selectedChannel(), event.data1 - 36) == 0:						
 				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 1)	
 				event.handled = True
@@ -72,7 +71,7 @@ class Notes():
 			else:	
 				self.light.update_second()	
 
-		if Modes.step_iter == 3: # what to do with lights in param edit mode and random mode
+		if Modes.step_iter == 3: 				# what to do with lights in param edit mode and random mode
 			pass
 
 	def pad_channel(self, event):

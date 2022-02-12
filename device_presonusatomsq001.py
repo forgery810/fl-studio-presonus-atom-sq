@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ
 # Author: ts-forgery
-# Version 0.02.0
+# Version 0.02.1
 
 import arrangement
 import device
@@ -31,30 +31,33 @@ four = 0
 i = 0 
 step = 0
 indicate = Lights()
-# 144 white, 145 - red, 146 - green, 147 - blue - (36 - )
+
 
 # def OnUpdateBeatIndicator(event):
 # 	indicate.follow_beat()
 
 # def OnUpdateBeatIndicator(data):
-	# global step
-	# # print(val)
-	# # indicate.active_step(val)
-	# if data < 3:
-	# 	step += 2
-	# if step >= patterns.getPatternLength(patterns.patternNumber()):
-	# 	step = 0 
-	# # print('light note')
-	# Lights.update_pattern()
-	# Lights.update_second()
-	# device.midiOutMsg(144, 0, step + 36, 127)
-	# device.midiOutMsg(124, 3, step + 36, 5)
+# 	global step
+# 	# print(val)
+# 	# indicate.active_step(val)
+# 	if data < 3:
+# 		step += 2
+# 	if step >= patterns.getPatternLength(patterns.patternNumber()):
+# 		step = 0 
+# 	# print('light note')
+# 	Lights.update_pattern()
+# 	Lights.update_second()
+# 	device.midiOutMsg(144, 0, step + 36, 127)
+# 	device.midiOutMsg(124, 3, step + 36, 5)
 
 def OnRefresh(ref_num):
-	# print(f"OnRefresh: {ref_num}")
+
 	if ref_num == 65824 or ref_num == 1024:
 		if Modes.mode == 1:
 			Lights.update_pattern()
+			if Modes.step_iter == 0:
+				Lights.update_second()
+	# print(f"OnRefresh: {ref_num}")
 	# elif ref_num == 65831:
 	# 	print('295')
 	# 	if plugins.getPluginName(channels.selectedChannel()) == 'Slicex':

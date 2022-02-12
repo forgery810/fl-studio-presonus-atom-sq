@@ -10,6 +10,7 @@ import plugins
 from midi import *
 
 top_keys = [52, 53, 55, 56, 57, 59, 60, 62, 63, 64, 66, 67]
+continuous_black = [37, 39, 42, 44, 46, 49, 51, 54, 56, 58, 61, 63, 66]
 off_keys = (54, 58, 61, 65)
 c_keys = [36, 43, 50]
 c_keys_cont = [36, 48, 60]
@@ -83,16 +84,6 @@ class Lights():
 		for x in range(channels.channelCount(), 32):
 			device.midiOutMsg(144, 0, x + 36, 0)
 
-
-	def active_step(self, data):
-		print('Lights: active_step')
-		if data == 2:
-			self.step += 1
-		if self.step >= patterns.getPatternLength(patterns.patternNumber()):
-			self.step = 0
-		Lights.update_pattern()
-		device.midiOutMsg(144, 0, self.step + 36, 127)
-
 	def keyboard_lights():
 		print('Lights: keyboard_lights')
 		for i in range(36, 52):
@@ -107,12 +98,13 @@ class Lights():
 		for off in off_keys:
 			device.midiOutMsg(144, 0, off, 0)
 
-
-
 	def continuous_notes():
 		print('continuous_notes')
 		for z in range(36, 68):
 			device.midiOutMsg(144, 0, z, 127)
+
+		# for b in continuous_black:					# adding this code will change black keys to be light blue in continuos mode
+		# 	device.midiOutMsg(145, 1, b, 80)
 
 		for k in c_keys_cont:
 			device.midiOutMsg(145, 0, k, 0)
@@ -134,8 +126,6 @@ class Lights():
 		print('Lights: current_step')
 		print(self.indicator)
 		device.midiOutMsg(144, 0, self.indicator + 36, 127)
-
-
 
 
 	def clear_pattern():							

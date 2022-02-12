@@ -16,8 +16,8 @@ buttons = {
 			"mute": [16, 17, 18, 19, 20, 21, 22, 23],
 			"arm": [0, 1, 2, 3, 4, 5, 6, 7],			
 			"zoom": 100,
-			"select_mixer": 31,
-			"select_channels": 30,
+			# "select_mixer": 31,
+			# "select_channels": 30,
 			"button_1": 24,
 			"button_2": 25,
 			"button_3": 26,
@@ -76,7 +76,9 @@ tsport = {
 	"shift_record": 80,
 }
 
-ud_arrow = (24, 25, 26, 27, 28, 29, 30, 46)
+colors = [-10721942, -5808209, -10849336, -13462158, -13030268, -13462136, -10900811, -7293607, -4879527, -5545351, -12619400]
+
+ud_arrow = (24, 25, 26, 27, 28, 29, 30, 31, 46, 47)
 channel_selected = channels.channelNumber()
 
 cs = [0, 12, 24, 36, 48, 60, 72, 84, 96, 108, 120]

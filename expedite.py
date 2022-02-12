@@ -14,7 +14,7 @@ class Expedite:
 		self.triage() 
 
 	def triage(self):
-		print(self.event.midiId, self.event.data1, self.event.data2, self.event.midiChanEx)
+		# print(self.event.midiId, self.event.data1, self.event.data2, self.event.midiChanEx)
 
 		if self.event.data1 in data.knob_list and self.event.midiChanEx in range(128, 131):
 			print('in knobs')

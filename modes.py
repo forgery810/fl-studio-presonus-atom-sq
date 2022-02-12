@@ -11,12 +11,14 @@ class Modes:
 	note_iter = 0
 	step_sub_iter = 0
 	sub_sub_key_iter = 3
+	sub_sub_step_iter = 0
 	octave_values = (-36, -24, -12, 0, 12, 24, 36)
 
 	def __init__(self, event):
 		self.event = event
 		self.mode_selected = ['Notes', 'Step Sequencer', 'Pad per Channel']
-		self.step_submodes = ['32 Step', 'Parameter Entry', 'Pattern Access', 'Random Notes']
+		self.step_sub_sub = ['Standard', 'Random Notes']
+		self.step_submodes = ['32 Step', 'Parameter Entry', 'Pattern Access']
 		self.note_submodes = ['Keyboard', 'Continuous' ]
 		self.octave_names = ['-3', '-2', '-1', '0', '1', '2', '3']
 		self.continuous_modes = ['Play Notes', 'Set Notes']
@@ -32,7 +34,6 @@ class Modes:
 		ui.setHintMsg(self.mode_selected[Modes.mode])
 		print(self.mode_selected[Modes.mode])
 		self.event.handled == True
-
 	
 	def mode_init(self):
 		if Modes.mode == 0:								# Notes
@@ -70,19 +71,26 @@ class Modes:
 
 	def sub_sub_mode(self):
 		if Modes.mode == 0:
-			if Modes.note_iter == 0:   # check if in keyboard mode
+			if Modes.note_iter == 0:   				# check if in keyboard mode
 				Modes.sub_sub_key_iter += 1
 				if Modes.sub_sub_key_iter >= len(self.octave_names):
 					Modes.sub_sub_key_iter = 0
 				ui.setHintMsg(self.octave_names[Modes.sub_sub_key_iter])
 				print(self.octave_names[Modes.sub_sub_key_iter])
 
-			elif Modes.note_iter == 1:
+			elif Modes.note_iter == 1:				# continuous mode
 				Modes.step_sub_iter += 1 								
 				if Modes.step_sub_iter >= len(self.continuous_modes):
 					Modes.step_sub_key_iter = 0
 				ui.setHintMsg(self.continuous_modes[Modes.step_sub_iter])
 				print(self.continuous_modes[Modes.step_sub_iter])
+
+		elif Modes.mode == 1:							# check if in step mode
+			if Modes.step_sub_iter != 1:
+				Modes.sub_sub_step_iter += 1
+				if Modes.sub_sub_step_iter >= len(self.step_sub_sub):
+					Modes.sub_sub_step_iter = 0
+				ui.setHintMsg(self.step_sub_sub[Modes.sub_sub_step_iter])
 
 		self.mode_init()
 

@@ -1,4 +1,4 @@
-version - 0.02.0
+version - 0.02.3
 
 	-to-do-
 
@@ -10,17 +10,24 @@ version - 0.02.0
 # setup scales mode for continuous
 # add new pattern(?)
 # fix up/down bug
-# increase channel knob access and or
-# change volume on selected channel
 # tap tempo
-# lighting issues swtiching between modes
 # set leds so they refelct active mode
-# blue lights remain on steps in parameter mode 
+# blue lights remain on steps in parameter mode and random mode
 # in continuous mode, alter color of black keys
-# some buttons play notes when they shouldn't
+# if a effect plugin is focused, knobs will change the params on a synth plugin if selected in channels
+
 
 	-done-
-
+# Random Notes mode has moved from sub-mode to sub-sub mode. Accessed by pressing B button 
+	while in any step-seq sub-mode (except parameter entry)
+# fixed issue where lights for steps 17-32 weren't updating when selected channel changed 0.02.5
+# you can now add/remove steps in random note mode  0.02.4
+# added ability to change how different plugin parameters react to touchpad 0.02.3
+# fixed issue where some buttons would play notes when they shouldn't 0.02.2
+# channels knob control changed - knob 5 controls volume of selected channel - knob 6 panning   0.02.2 
+# 			and knob 8 rotates through various color options
+# on mixer, when turning jog wheel to left, selection on goes as far as the Master track   0.02.2 
+#  		 	and doesn't skip all the way to 125 which was disorientating 					 
 # fixed bug where entering step mode wasn't permitted in certain circumstances 0.02.1
 # added ability to control multiple plugin parameters with touchpad 0.02.0
 # fixed some lighting issues 0.01.9
@@ -35,11 +42,11 @@ version - 0.02.0
 # changed pad per channel lights to purple just because 0.01.5
 # fixed issue where step lights would not update with pattern change 0.01.5
 # added continuous note mode (works) in addition to keyboard mode (not yet) 0.01.5
-# fix long notes bug 0.01.5
-# add broswer scroll/select functionality 0.01.5
-# add random trigs
+# fixed long notes bug 0.01.5
+# added broswer scroll/select functionality 0.01.5
+# added random trigs
 # added pattern selector/32 step mode
 # added step parameter mode
 # FPC/SliceX mode
 # light keyboard keys
-# add scales/random notes
+# added scales/random notes

@@ -32,7 +32,6 @@ class Buttons:
 	g_iter = 0
 
 	def __init__(self, event):
-		event = event
 		self.act_out(event)
 
 
@@ -44,10 +43,11 @@ class Buttons:
 
 		if event.midiId == 144 and event.midiChanEx == 256:			# 256 selects for functions i.e. transport etc 
 
-			if event.data2 > 0:
+			if event.data1 in data.ud_arrow:
+				direct = Directions(event)
 
-				if event.data1 not in data.ud_arrow:
-					Directions.arrow_status = False
+			elif event.data2 > 0:
+				print('ed2 >0')
 
 				if event.data1 == data.tsport["play"]:
 					transport.start()
@@ -62,6 +62,9 @@ class Buttons:
 				elif event.data1 == data.tsport["record"]:
 					transport.record()
 					print('Toggle Record')	
+					event.handled = True 
+
+				elif event.data1 == data.buttons['zoom']:
 					event.handled = True 
 
 				elif event.data1 == data.tsport["metronome"]:	 
@@ -93,6 +96,9 @@ class Buttons:
 						channels.soloChannel(channels.channelNumber())	
 						event.handled = True
 
+					else:
+						event.handled = True
+
 				elif event.data1 in data.buttons["mute"]: 
 					if ui.getFocused(0):
 						mixer.muteTrack(mixer.trackNumber())
@@ -105,9 +111,6 @@ class Buttons:
 					else:
 						event.handled = True		
 
-				elif event.data1 in data.ud_arrow:
-					direct = Directions(event)
-
 				elif event.data1 in data.buttons["arm"]:
 					print('arm track')
 					if ui.getFocused(0):
@@ -115,6 +118,9 @@ class Buttons:
 						event.handled = True
 					elif ui.getFocused(1):
 						mixer.linkTrackToChannel(0)
+						event.handled = True
+					else:
+						event.handled = True
 				# elif event.data1 == data.buttons["zoom"]: 
 
 				elif event.data1 == data.pads['left_arrow']:
@@ -143,10 +149,16 @@ class Buttons:
 			
 			if event.data1 == data.knobs["jog_wheel"]:
 				print('jogging')
+
 				if event.data2 == 1:
 					ui.next()
 
-				elif event.data2 == 65:
+				elif ui.getFocused(0):
+					if event.data2 == 65 and mixer.trackNumber() > 0:
+						ui.previous()
+						event.handled = True
+
+				elif event.data2:
 					ui.previous()
 
 			if event.midiChanEx == 130:												# 1-6 buttons
