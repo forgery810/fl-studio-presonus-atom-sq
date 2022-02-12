@@ -1,5 +1,8 @@
 # Presonus Atom SQ MIDI Script for FL Studio
 
+
+(A good number of changes in this update. See manual.)
+
 A python MIDI-script to increase the functionality of the Presonus Atom SQ with FL Studio. This script adds a step-sequencer, random step and random note generator, mixer, channel, and plugin control, etc.
 
 See installation and manual pdfs for more information.
