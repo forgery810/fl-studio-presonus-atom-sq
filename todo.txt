@@ -1,4 +1,4 @@
-version - 0.02.6
+version - 0.03.0
 
 	-to-do-
 
@@ -9,16 +9,22 @@ version - 0.02.6
 # led when paramter at zero or c5 note
 # setup scales mode for continuous
 # add new pattern(?)
-# fix up/down bug
+# light rec & play buttons when active
 # tap tempo
 # set leds so they refelct active mode
-# blue lights remain on steps in parameter mode and random mode
+# blue lights remain on steps in parameter mode 
 # in continuous mode, alter color of black keys
-# if a effect plugin is focused, knobs will change the params on a synth plugin if selected in channels
+# if an effect plugin is focused, knobs will change the params on a synth plugin if selected in channels
 
 
 	-done-
-# Random Notes mode has moved from sub-mode to sub-sub mode. Accessed by pressing B button 
+
+# step leds now turn white when in parameter edit mode 0.03.0
+# during step parameter changes, readout now reflects CC value as well as active parameter 0.02.9
+# during knob turns under random mode, readout now reflects CC value of lower and upper note limits 0.02.9
+# added configuration option file - preset pattern knob optional 0.02.8
+# fixed issued where up/down arrows would not work consistently 0.02.7
+# Random Notes mode has moved from sub-mode to sub-sub mode. Accessed by pressing 'B' button 0.02.6
 	while in any step-seq sub-mode (except parameter entry)
 # fixed issue where lights for steps 17-32 weren't updating when selected channel changed 0.02.5
 # you can now add/remove steps in random note mode  0.02.4
