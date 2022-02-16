@@ -1,6 +1,7 @@
 import data
 import device
 import ui
+import modes
 
 class Directions():
 
@@ -15,10 +16,31 @@ class Directions():
 		print(Directions.ud_status)
 		Directions.up_down(self, event)
 
-
 	def up_down(self, event):
+
+		if event.data1 == 47 and event.data2 > 0:
+			ui.down()
+			Directions.ud_status = self.ud_result
+			print('down expeception')
+			event.handled = True
 		
-		if self.ud_result < Directions.ud_status:
+		elif event.data1 == 46 and event.data2 >0:
+			ui.up()
+			Directions.ud_status = self.ud_result
+			print('up_exception')
+			event.handled = True
+
+		elif event.data1 == 31 and self.ud_status == 8:
+			Directions.ud_status = self.ud_result
+			print('skip 31')
+			event.handled = True 
+
+		elif event.data1 == 24 and self.ud_status == 9:
+			Directions.ud_status = self.ud_result
+			print('skip 24')
+			event.handled = True 
+
+		elif self.ud_result < Directions.ud_status:
 			ui.up()
 			print('up')
 			Directions.ud_status = self.ud_result
@@ -33,4 +55,5 @@ class Directions():
 		else:
 			print('else')
 			event.handled = True
+
 

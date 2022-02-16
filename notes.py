@@ -64,15 +64,17 @@ class Notes():
 				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 0)    
 				# self.light.update_pattern()
 				event.handled = True		
-			Lights.update_pattern()
+			Lights.update_pattern(Modes.step_sub_iter)
 
 			if Modes.step_iter == 2:
 				self.light.pattern_select()
 			else:	
-				self.light.update_second()	
+				self.light.update_second(Modes.step_iter)	
 
-		if Modes.step_iter == 3: 				# what to do with lights in param edit mode and random mode
-			pass
+		elif Modes.step_iter == 1: 				# what to do with lights in param edit mode and random mode
+			self.light.update_pattern(Modes.step_iter)
+			self.light.update_second(Modes.step_iter)
+			event.handled = True
 
 	def pad_channel(self, event):
 		print('in pad channel')

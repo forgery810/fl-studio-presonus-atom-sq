@@ -36,20 +36,21 @@ class Modes:
 		self.event.handled == True
 	
 	def mode_init(self):
-		if Modes.mode == 0:								# Notes
+		if Modes.mode == self.mode_selected.index('Notes'):								# Notes
 			if Modes.note_iter == 0:
 				Lights.keyboard_lights()
 			elif Modes.note_iter == 1:
 				Lights.continuous_notes()
 
-		elif Modes.mode == 1:							# Step Entry
-			Lights.update_pattern()
+		elif Modes.mode == self.mode_selected.index('Step Sequencer'):							# Step Entry
+			print(f'step_sub_iter: {Modes.step_iter}')
+			Lights.update_pattern(Modes.step_iter)
 			if Modes.step_iter == 0 or Modes.step_iter == 1:			# check if in 32 step (0) or parameter entry modes
-				Lights.update_second()									# light steps 17-32
+				Lights.update_second(Modes.step_iter)									# light steps 17-32
 			elif Modes.step_iter == 2:									# check if pattern select mode
 				Lights.pattern_select()									# light top row as currently selected pattern
 
-		elif Modes.mode == 2:							# Pad per Channel
+		elif Modes.mode == self.mode_selected.index('Pad per Channel'):							# Pad per Channel
 			Lights.light_channels()										# light channels for channel play mode
 
 	def sub_mode(self):
@@ -59,6 +60,7 @@ class Modes:
 				Modes.step_iter = 0
 			print(self.step_submodes[self.step_iter])
 			ui.setHintMsg(self.step_submodes[self.step_iter])
+			self.mode_init()
 
 		elif Modes.mode == 0:
 			Modes.note_iter += 1
@@ -66,8 +68,7 @@ class Modes:
 				Modes.note_iter = 0
 			print(self.note_submodes[self.note_iter])
 			ui.setHintMsg(self.note_submodes[self.note_iter])
-
-		self.mode_init()
+			self.mode_init()
 
 	def sub_sub_mode(self):
 		if Modes.mode == 0:
@@ -97,3 +98,6 @@ class Modes:
 	def get_octave(self):
 		return self.octave_values[Modes.sub_sub_key_iter]
 
+
+	# def plus_minus(self):
+	# 	print('plusminus')

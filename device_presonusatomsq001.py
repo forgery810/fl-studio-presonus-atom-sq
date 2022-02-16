@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ
 # Author: ts-forgery
-# Version 0.02.1
+# Version 0.02.6
 
 import arrangement
 import device
@@ -36,9 +36,9 @@ indicate = Lights()
 # def OnUpdateBeatIndicator(event):
 # 	indicate.follow_beat()
 
-# def OnUpdateBeatIndicator(data):
-# 	global step
-# 	# print(val)
+def OnUpdateBeatIndicator(data):
+	global step
+	# print(data) v
 # 	# indicate.active_step(val)
 # 	if data < 3:
 # 		step += 2
@@ -51,13 +51,14 @@ indicate = Lights()
 # 	device.midiOutMsg(124, 3, step + 36, 5)
 
 def OnRefresh(ref_num):
+	print(f"OnRefresh: {ref_num}")
 
 	if ref_num == 65824 or ref_num == 1024:
 		if Modes.mode == 1:
-			Lights.update_pattern()
+			Lights.update_pattern(Modes.step_iter)
 			if Modes.step_iter == 0:
-				Lights.update_second()
-	# print(f"OnRefresh: {ref_num}")
+				Lights.update_second(Modes.step_iter)
+
 	# elif ref_num == 65831:
 	# 	print('295')
 	# 	if plugins.getPluginName(channels.selectedChannel()) == 'Slicex':
@@ -69,4 +70,8 @@ def OnInit():
 
 def OnMidiMsg(event):
 	expedite = Expedite(event)
+
+# def OnPitchBend(event):
+# 	pass
+	
 

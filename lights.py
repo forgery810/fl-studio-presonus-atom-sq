@@ -26,8 +26,8 @@ class Lights():
 		# s = self.update_pattern()
 
 	@staticmethod 	
-	def update_pattern():							# reset leds in step mode 
-		print('Lights: update_pattern')
+	def update_pattern(mode):							# reset leds in step mode 
+		print(f'Lights: update_pattern {mode}')
 		for i in range(0,16):
 			if channels.getGridBit(channels.selectedChannel(), i) == 0:
 				# print('0')
@@ -36,11 +36,19 @@ class Lights():
 			elif channels.getGridBit(channels.selectedChannel(), i) == 1: 
 				# print('1')
 				device.midiOutMsg(144, 0, i + 36, 127)
-				device.midiOutMsg(145, 0, i + 36, 0)
+				if mode != 1:
+					device.midiOutMsg(145, 0, i + 36, 0)
 				# event.handled = True
 
+	# @staticmethod
+	# def plus_sign():
+	# 	print('plus_sign')
+	
+	
+
+
 	@staticmethod
-	def update_second():							# light 2nd pattern in 32 step mode
+	def update_second(mode):							# light 2nd pattern in 32 step mode
 		print('Lights: update_second')
 		for i in range(16, 32):
 			if channels.getGridBit(channels.selectedChannel(), i) == 0:
@@ -50,7 +58,8 @@ class Lights():
 			elif channels.getGridBit(channels.selectedChannel(), i) == 1: 
 				# print('1')
 				device.midiOutMsg(144, 0, i + 36, 127)
-				device.midiOutMsg(146, 0, i + 36, 0)
+				if mode != 1:
+					device.midiOutMsg(146, 0, i + 36, 0)
 				# event.handled = True
 
 	@staticmethod
@@ -103,7 +112,7 @@ class Lights():
 		for z in range(36, 68):
 			device.midiOutMsg(144, 0, z, 127)
 
-		# for b in continuous_black:					# adding this code will change black keys to be light blue in continuos mode
+		# for b in continuous_black:					# adding this code will change black keys to be light blue in continuous mode
 		# 	device.midiOutMsg(145, 1, b, 80)
 
 		for k in c_keys_cont:

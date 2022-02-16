@@ -44,7 +44,7 @@ osc = {'Osc 1 panning': 0, 'Osc 1 shape': 1, 'Osc 1 coarse pitch': 2, 'Osc 1 fin
 # of the Plugin exactly. Within wach plugin dict is a list of parameters the touchpad will change. It must follow this format:
 # [number of parameter, value at 0 , value at 127] Value at 0 refers to what you want the value of that parameter to be when the knob is 
 # fully closed (at 0) and Value at 127 is the value when knob is fully open. 0 is the minimum and 1.0 is the max. Look at the examples below for guidance.
-# The lines below can be deleted or can have a # put in front to deactivate them. 
+# The line below can be deleted or can have a # put in front to deactivate them. 
 
 touchpad_params = {
 			'Transistor Bass': [[tb['Cutoff'], 1, .5], [tb['Waveform'], 0, .5], [tb['Resonance'], .5, 1], [tb['Envelope mod'], .5, 0]],

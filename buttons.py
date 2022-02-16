@@ -34,19 +34,20 @@ class Buttons:
 	def __init__(self, event):
 		self.act_out(event)
 
-
 	def act_out(self, event):
 		push = Modes(event)
 		print(event.midiId, event.data1, event.data2, event.midiChan, event.midiChanEx)
 		global j
 		global f
 
+		# if event.midiId == 224 and event.midiChanEx == 128:	# selects for + - buttons
+		# 	push.plus_minus()
+
 		if event.midiId == 144 and event.midiChanEx == 256:			# 256 selects for functions i.e. transport etc 
 
-			if event.data1 in data.ud_arrow:
-				direct = Directions(event)
 
-			elif event.data2 > 0:
+
+			if event.data2 > 0:
 				print('ed2 >0')
 
 				if event.data1 == data.tsport["play"]:
@@ -170,14 +171,14 @@ class Buttons:
 
 				elif event.data1 == data.buttons["button_4"]:
 					print("Random")
-					for i in range(patterns.getPatternLength(patterns.patternNumber())):
+					for i in range(patterns.getPatternLength(patterns.patternNumber())):    # clear pattern
 						channels.setGridBit(channels.channelNumber(), i, 0)
 					for z in range (patterns.getPatternLength(patterns.patternNumber())):
 						y = num_gen()
 						if y > (Buttons.touchpad_value * 516):
 							channels.setGridBit(channels.channelNumber(), z, 1)
 						else:
-							pass
+							channels.setGridBit(channels.channelNumber(), z, 0)
 					event.handled = True
 
 				elif event.data1 == data.buttons["button_5"]:
