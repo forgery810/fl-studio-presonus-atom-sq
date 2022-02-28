@@ -17,39 +17,25 @@ c_keys_cont = [36, 48, 60]
 
 class Lights():
 
-	global step
-
 	def __init__(self):
 		self.indicator = 0
 		self.step = 0
-		# mode = Modes.mode
-		# s = self.update_pattern()
 
 	@staticmethod 	
 	def update_pattern(mode):							# reset leds in step mode 
-		print(f'Lights: update_pattern {mode}')
 		for i in range(0,16):
 			if channels.getGridBit(channels.selectedChannel(), i) == 0:
-				# print('0')
 				device.midiOutMsg(144, 0, i + 36, 0)
-					# event.handled = True
 			elif channels.getGridBit(channels.selectedChannel(), i) == 1: 
-				# print('1')
 				device.midiOutMsg(144, 0, i + 36, 127)
-				if mode != 1:
+				if mode == 'accum':
+					device.midiOutMsg(147, 0, i + 36, 37)
+				elif mode != 1:
 					device.midiOutMsg(145, 0, i + 36, 0)
-				# event.handled = True
-
-	# @staticmethod
-	# def plus_sign():
-	# 	print('plus_sign')
-	
-	
 
 
 	@staticmethod
 	def update_second(mode):							# light 2nd pattern in 32 step mode
-		print('Lights: update_second')
 		for i in range(16, 32):
 			if channels.getGridBit(channels.selectedChannel(), i) == 0:
 				# print('0')
@@ -58,16 +44,18 @@ class Lights():
 			elif channels.getGridBit(channels.selectedChannel(), i) == 1: 
 				# print('1')
 				device.midiOutMsg(144, 0, i + 36, 127)
-				if mode != 1:
+				if mode == 'accum' :
+					print('in accum lights')
+					device.midiOutMsg(147, 0, i + 36, 37)
+				elif mode != 1:
 					device.midiOutMsg(146, 0, i + 36, 0)
-				# event.handled = True
 
 	@staticmethod
-	def pattern_select():										# Lights Top row white in pattern select mode
-		print('Lights: Light Pattern')
+	def pattern_select():								# Lights Top row white in pattern select mode
+		print('Lights: Light Pattern Select')
 		for i in range(16, 32):
 			device.midiOutMsg(144, 0, i + 36, 127)
-		device.midiOutMsg(144, 0, patterns.patternNumber() + 52, 127)
+		# device.midiOutMsg(144, 0, patterns.patternNumber() + 52, 127)
 
 	@staticmethod
 	def light_pattern_two():
@@ -75,14 +63,6 @@ class Lights():
 		for i in range(16, 32):
 			device.midiOutMsg(144, 0, i + 36, 127)
 		device.midiOutMsg(144, 0, patterns.patternNumber() + 52, 127)
-
-		# else:
-		# 	print('else')
-		# 	for i in range(0,16):
-		# 			device.midiOutMsg(144, 0, i + 36, 127)
-		# 			device.midiOutMsg(145, 0, i + 36, 0)
-		# 			device.midiOutMsg(144, 0, i + 52, 0)
-		# 			device.midiOutMsg(146, 0, i + 52, 22)		
 
 	@staticmethod
 	def light_channels():
@@ -98,11 +78,11 @@ class Lights():
 		for i in range(36, 52):
 			device.midiOutMsg(144, 0, i, 127)
 
-		for k in c_keys:
-			device.midiOutMsg(145, 0, k, 0)
+		for c in c_keys:
+			device.midiOutMsg(145, 0, c, 0)
 
-		for y in top_keys:
-			device.midiOutMsg(144, 0, y, 127)
+		for tk in top_keys:
+			device.midiOutMsg(144, 0, tk, 127)
 
 		for off in off_keys:
 			device.midiOutMsg(144, 0, off, 0)
@@ -115,8 +95,8 @@ class Lights():
 		# for b in continuous_black:					# adding this code will change black keys to be light blue in continuous mode
 		# 	device.midiOutMsg(145, 1, b, 80)
 
-		for k in c_keys_cont:
-			device.midiOutMsg(145, 0, k, 0)
+		for ck in c_keys_cont:
+			device.midiOutMsg(145, 0, ck, 0)
 
 
 	def refresh(mode, submode):
@@ -138,7 +118,7 @@ class Lights():
 
 
 	def clear_pattern():							
-		print('Lights: clear_pattern')
+		# print('Lights: clear_pattern')
 		# for i in range(0, 16):
 		# 	device.midiOutMsg(144, 0, i + 36, 127)
 		# 	device.midiOutMsg(145, 0, i + 36, 0)

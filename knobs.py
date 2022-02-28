@@ -16,11 +16,8 @@ from config import options
 class Knobs:
 
 	def __init__(self, event):
-		print(event.midiId)
+		# print(event.midiId)
 		self.get_track = 0
-		self.first = 0
-		self.second = 0
-		self.third = 0
 		self.offset = event.midiChanEx - 128
 
 		self.knob_turn(event)
@@ -48,10 +45,16 @@ class Knobs:
 
 		elif ui.getFocused(1) and self.data_one != 1:
 			print('in channels')
-			if Modes.mode == 1:												
+
+			if Modes.mode == 1:				
+
 				if Modes.step_iter == 1:									# Set Step Parameters
-		
-					if event.data1 <= 20:
+					print('step param knob')
+					
+					if event.data1 == data.knobs["knob_one"]:
+						ui.setHintMsg(f'Note: {data.midi_notes[self.data_two]}')
+
+					elif event.data1 <= 20:
 						ui.setHintMsg(f'{data.parameters[self.data_one - 14]}: {event.data2}')
 
 					if 6 <= self.data_one - 14 >= 5:
@@ -66,13 +69,16 @@ class Knobs:
 						event.handled = True
 
 				elif Modes.sub_sub_step_iter == 1:								# Random Mode - set scale/key
+					print('random mode knob')
 
 					if event.data1 == data.knobs["knob_five"]:
-						Buttons.root_note == int(mapvalues(self.data_two, 0, 25, 0, 127))
-						ui.setHintMsg(data.notes_list[int(mapvalues(self.data_two, 0, 11, 0, 127))])
+						Buttons.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
+						print(f'button.root_note: {Buttons.root_note}')
+						# ui.setHintMsg(data.notes_list[int(mapvalues(self.data_two, 0, 11, 0, 127))])
+						ui.setHintMsg(data.notes_list[Buttons.root_note])
 
 					elif event.data1 == data.knobs["knob_six"]:
-						Buttons.scale == int(mapvalues(self.data_two, 0, 25, 0, 127))
+						Buttons.scale = int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))
 						ui.setHintMsg(data.scale_names[int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))])
 					
 					elif event.data1 == data.knobs["knob_seven"]:
@@ -83,11 +89,29 @@ class Knobs:
 						Buttons.upper_limit = int(mapvalues(self.data_two, 50, 0, 0, 127))
 						ui.setHintMsg(f"Setting Upper Limit {self.data_two}")
 
-				# elif event.data1-14 < channels.channelCount():
-				# 	channels.setChannelVolume(event.data1-14, mapvalues(event.data2, 0, 1, 0, 127))
 
-			# elif event.data1-14 < channels.channelCount():				# set channel volume
-				
+				elif Modes.sub_sub_step_iter == 2:      			# Accumulator Mode
+					print('accum knob')
+
+					if self.data_one == data.knobs['knob_five']:
+						Notes.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
+						ui.setHintMsg(data.notes_list[int(mapvalues(self.data_two, 0, 11, 0, 127))])
+
+					elif event.data1 == data.knobs["knob_six"]:
+						Notes.scale_choice = int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))
+						print(f'Notes.scale_choice: {Notes.scale_choice}')
+						ui.setHintMsg(data.scale_names[int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))])
+					
+					elif event.data1 == data.knobs["knob_seven"]:
+						Notes.interval = int(mapvalues(self.data_two, -12, 12, 0, 127))
+						ui.setHintMsg(f'Note Interval: {int(mapvalues(self.data_two, -12, 12, 0, 127))}')
+
+					elif event.data1 == data.knobs["knob_eight"]:
+						Notes.pass_limit = int(mapvalues(self.data_two, 0, 10, 0, 127))
+						ui.setHintMsg(f'Count: {int(mapvalues(self.data_two, 0, 10, 0, 127))}')
+					event.handled = True
+
+																		# standard mode
 				elif self.data_one == data.knobs['knob_five']:
 					channels.setChannelVolume(channels.selectedChannel(), mapvalues(event.data2, 0, 1, 0, 127))
 				elif self.data_one == data.knobs['knob_six']:
@@ -100,6 +124,7 @@ class Knobs:
 					channels.setChannelColor(channels.selectedChannel(), data.colors[int(mapvalues(event.data2, 0, len(data.colors)-1, 0, 127))])
 
 		elif ui.getFocused(5) and plugins.isValid(self.channel):
+			print('plugin_control')
 			self.plugin_control(event)
 
 	def plugin_control(self, event):
@@ -107,20 +132,20 @@ class Knobs:
 		self.plugin = plugins.getPluginName(self.channel)	
 		self.param_count = plugins.getParamCount(self.channel)
 
-		if self.data_one < self.param_count + 19:				#this is probably unneccessary
-			if self.plugin in plugindata.touchpad_params:
-				if self.data_one == 1:												# this controls what touchpad does
-					for param in plugindata.touchpad_params[self.plugin]:
-						plugins.setParamValue(mapvalues(self.data_two, param[1], param[2], 0, 127), param[0], self.channel)
-						event.handled = True
+		# if self.data_one < self.param_count + 19:				#this is probably unneccessary
+		if self.plugin in plugindata.touchpad_params:
+			if self.data_one == 1:												# this controls what touchpad does
+				for param in plugindata.touchpad_params[self.plugin]:
+					plugins.setParamValue(mapvalues(self.data_two, param[1], param[2], 0, 127), param[0], self.channel)
+					event.handled = True
 
-			if self.plugin in plugindata.plugin_dict and self.data_one != 1:
-				plugins.setParamValue(mapvalues(self.data_two, 0, 1, 0, 127), plugindata.plugin_dict[self.plugin][plugindata.knob_num.index(self.data_one + (self.offset * 8))], self.channel)
-				return
+		if self.plugin in plugindata.plugin_dict and self.data_one != 1:
+			plugins.setParamValue(mapvalues(self.data_two, 0, 1, 0, 127), plugindata.plugin_dict[self.plugin][plugindata.knob_num.index(self.data_one + (self.offset * 8))], self.channel)
+			event.handled = True
 
-			else:		
-				plugins.setParamValue(mapvalues(self.data_two, 0, 1, 0, 127), self.data_one - 14, self.channel)
-				return
+		else:		
+			plugins.setParamValue(mapvalues(self.data_two, 0, 1, 0, 127), self.data_one - 14, self.channel)
+			event.handled = True
 
 	def set_pattern(self, pattern):
 		print(pattern)
@@ -148,5 +173,13 @@ def mapvalues(value, to_min, to_max, from_min, from_max):
 
 
 
+"""
+accumulator dicts:
 
+pattern number
+channel number
+step number
+interval
+count
+"""
 

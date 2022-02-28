@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ
 # Author: ts-forgery
-# Version 0.03.0
+# Version 0.2.1 
 
 import arrangement
 import device
@@ -20,30 +20,27 @@ from notes import Notes
 from knobs import Knobs
 from lights import Lights
 
+
 from modes import Modes
 from expedite import Expedite
 import plugindata
 
-one = 0
-two = 0
-three = 0
-four = 0
-i = 0 
+
 step = 0
 indicate = Lights()
 
 
-# def OnUpdateBeatIndicator(event):
-# 	indicate.follow_beat()
-
 def OnUpdateBeatIndicator(data):
-	global step
-	# print(data) v
+
+	Notes.update_beat(data)
+	# print(data)
+
+	# print(data) 
 # 	# indicate.active_step(val)
 # 	if data < 3:
 # 		step += 2
 # 	if step >= patterns.getPatternLength(patterns.patternNumber()):
-# 		step = 0 
+# 		step = 0  
 # 	# print('light note')
 # 	Lights.update_pattern()
 # 	Lights.update_second()
@@ -53,11 +50,34 @@ def OnUpdateBeatIndicator(data):
 def OnRefresh(ref_num):
 	print(f"OnRefresh: {ref_num}")
 
+	if ref_num == 1024:
+		if Notes.accum_on:
+			Notes.temp_reset_steps()
+
+
 	if ref_num == 65824 or ref_num == 1024:
-		if Modes.mode == 1:
-			Lights.update_pattern(Modes.step_iter)
-			if Modes.step_iter == 0:
-				Lights.update_second(Modes.step_iter)
+		# if Modes.mode == 1:
+		# 	Lights.update_pattern(Modes.step_iter)
+		# 	if Modes.step_iter == 0:
+		# 		Lights.update_second(Modes.step_iter)
+
+
+		if Modes.mode == 1:							# Step Entry
+			if Modes.sub_sub_step_iter == 2:
+				Lights.update_pattern('accum')
+				if Modes.step_iter != 2:
+					Lights.update_second('accum')
+				else:
+					Lights.pattern_select()
+			else:
+				Lights.update_pattern(Modes.step_iter)
+				if Modes.step_iter == 0 or Modes.step_iter == 1:			# check if in 32 step (0) or parameter entry modes
+					Lights.update_second(Modes.step_iter)									# light steps 17-32
+
+				elif Modes.step_iter == 2:									# check if pattern select mode
+					print('refresh pattern_select lightsS')
+					Lights.pattern_select()									# light top row as currently selected pattern
+
 
 	# elif ref_num == 65831:
 	# 	print('295')
@@ -65,7 +85,7 @@ def OnRefresh(ref_num):
 	# 		Lights.update_pattern() 
 
 def OnInit():
-	print("Presonus Atom SQ")
+	print("Presonus Atom SQ COPY")
 	Lights.clear_pattern()
 
 def OnMidiMsg(event):

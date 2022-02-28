@@ -30,6 +30,10 @@ class Buttons:
 	upper_limit = 0
 	g_rotate = [2, 3, 4]
 	g_iter = 0
+	interval = 0
+	accu_steps = []
+	clear_toggle = False
+	six_options = ['Press A to clear accum steps...']
 
 	def __init__(self, event):
 		self.act_out(event)
@@ -184,16 +188,41 @@ class Buttons:
 				elif event.data1 == data.buttons["button_5"]:
 					Buttons.note_gen()
 
+				elif event.data1 == data.buttons["button_6"]:
+					print(Buttons.clear_toggle)
+					if Modes.sub_sub_step_iter == 2:				# if in accumulator mode
+						if Buttons.clear_toggle == False:
+							ui.setHintMsg(Buttons.six_options[0])
+							Buttons.clear_toggle = True
+						elif Buttons.clear_toggle == True:
+							Buttons.clear_toggle = False
+							ui.setHintMsg('Clear option off')
+
+
+
 			if event.midiChanEx == 128:						# A - H Buttons
 
 				if event.data1 == data.pads["a"]:
 					if ui.getFocused(4):
-						ui.selectBrowserMenuItem()		
+						ui.selectBrowserMenuItem()	
+
+					elif Modes.sub_sub_step_iter == 2: 				# accumulator mode
+						if Buttons.clear_toggle == True:
+							# Notes.accum_step.clear()
+							Notes.reset_steps()
+							Buttons.clear_toggle = False
+							event.handled = True
+						elif Notes.accum_on == True and Buttons.clear_toggle == False:
+							Notes.accum_on = False
+							ui.setHintMsg("Accumulator Off")
+						elif Notes.accum_on == False and Buttons.clear_toggle == False:
+							Notes.accum_on = True	
+							ui.setHintMsg("Accumulator On")
 
 					else:	
 						ui.enter()
 						print('enter')
-						print('a')
+			
 
 				elif event.data1 == data.pads["b"]:
 					push.sub_sub_mode()
@@ -232,9 +261,10 @@ class Buttons:
 					event.handled = True 				
 
 	def note_gen():
-
+		print(f'root_note: {data.notes_list[Buttons.root_note]}')
+		print(f'scale: {data.scale_names[Buttons.scale]}')
 		for i in range(patterns.getPatternLength(patterns.patternNumber())):
-			note = data.scales[Buttons.scale_choice][Buttons.root_note][int(mapvalues(num_gen(), 0 + Buttons.lower_limit, len(data.scales[Buttons.scale_choice][Buttons.root_note]) - Buttons.upper_limit, 0, 65535))]
+			note = data.scales[Buttons.scale][Buttons.root_note][int(mapvalues(num_gen(), 0 + Buttons.lower_limit, len(data.scales[Buttons.scale][Buttons.root_note]) - Buttons.upper_limit, 0, 65535))]
 			# note = scales[0][0][int(mapvalues(num_gen(), 0, len(scales[0][0])-40, 0, 65535))]
 			print(note)
 			channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, note, 1)
