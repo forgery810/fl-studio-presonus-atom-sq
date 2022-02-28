@@ -81,24 +81,17 @@ class Notes():
 		elif Modes.step_iter == param_edit: 								# what to do with lights in param edit mode
 			self.light.update_pattern(Modes.step_iter)
 			self.light.update_second(Modes.step_iter)
-			print('param edit lights')
 			event.handled = True
 
 		elif Modes.step_iter != param_edit and Modes.sub_sub_step_iter == accumulator:							# ACCUMULATOR
-			print('in step in accum edit')
+			# print('in step in accum edit')
 			if Notes.accum_on and event.data1 - 36 < patterns.getPatternLength(patterns.patternNumber()):
-				# Notes.original_note = channels.getStepParam(event.data1-36, 0, channels.selectedChannel(), 0)
 				Notes.original_note = channels.getCurrentStepParam(channels.selectedChannel(), event.data1-36, 0)
 				print(Notes.original_note)
 				if Notes.original_note in data.scales[Notes.scale_choice][Notes.root_note]:
-					print('Count it')
 					Notes.accum_step.append([patterns.patternNumber(), channels.channelNumber(), event.data1-36, Notes.interval, Notes.pass_limit, 0, Notes.original_note, Notes.root_note, Notes.scale_choice, Notes.original_note, 0])
 				Notes.accum_chan = channels.channelNumber()
-				print(f'Accu_step: {Notes.accum_step}')
-				# if Modes.step_iter == 2:
-				# 	self.light.pattern_select()
-				# 	print
-				# self.light.update_second(Modes.step_iter)
+				# print(f'Accu_step: {Notes.accum_step}')
 				event.handled = True
 
 			else:
@@ -112,10 +105,8 @@ class Notes():
 				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 0)    
 				event.handled = True		
 			Lights.update_pattern(Modes.step_sub_iter)
-			print('update lights step edit')
 
 			if Modes.step_iter == jump_to_pattern:
-				print('jump to pattern lights')
 				self.light.pattern_select()
 			else:	
 				self.light.update_second(Modes.step_iter)	
@@ -194,8 +185,6 @@ class Notes():
 			if r[0] == patterns.patternNumber():
 				for st in range(patterns.getPatternLength(patterns.patternNumber())):
 					if st == r[2]:
-						# step_val = channels.getStepParam(st, 0, t[1], 0)
-						# print(f'step_val: {step_val}')
 						channels.setStepParameterByIndex(r[1], r[0], st, 0, r[6])
 		Notes.accum_step.clear()
 		ui.setHintMsg('Accum steps cleared')
