@@ -157,20 +157,14 @@ class Notes():
 		if beat == 1 and Notes.accum_on:
 			for l in Notes.accum_step:
 				l[5] += 1 												# iterate each counter per step
-
 				if l[5] <= l[4] and len(Notes.accum_step) > 0:			# if there are steps saved and the are below count send to accumulator function
 					Notes.accumulator(l)
-	
 				elif l[5] > l[4] and len(Notes.accum_step) > 0:			# else if count had gone over limit reset count and set to intial note value
-					print(f'note reset: {l[6]}')
+					# print(f'note reset: {l[6]}')
 					l[5] = 0
 					l[9] = l[6]
 					channels.setStepParameterByIndex(l[1], l[0], l[2], 0, l[6])
-# setsteparam
- # // Parameter 1: channel index, not respecting the filter
-  # // Parameter 2: pattern number - butter be the actual one, other you won'nt be able to check if the step is set, which is needed for this function, if you don't want it to crash
-  # // Parameter 3: Step, starting from 0.
-  # // Parameter 4: parameter, see below
+
 		# ([patterns.patternNumber(), channels.channelNumber(), event.data1-36, Notes.interval, Notes.pass_limit, 0, Notes.original_note, Notes.root_note, Notes.scale_choice, step_val, note_in_scale])
 		#   		0 							1 						2 			 3 					4  		  5 		6 					7 				8  					9        10
 	@staticmethod
@@ -181,25 +175,16 @@ class Notes():
 	@staticmethod
 	def accumulator(step_info):
 		t = step_info
-		print(Notes.accum_step)
-		
+		# print(Notes.accum_step)
 		for step in range(patterns.getPatternLength(patterns.patternNumber())):
 			if step == t[2]:
-				# t[9] = channels.getCurrentStepParam(t[1], step,  0)			# store current note at step
-
-				print(f'Step Val: {t[9]}')				# this catches -1 error and resets to root note
+				# print(f'Step Val: {t[9]}')				# this catches -1 error and resets to root note
 				if t[9] < 0:					
 					print('-1 error')
 					t[9] = t[6]
-
-				# print(f'Scale Choice: {data.scales[t[8]][t[7]]}')
-				# note_in_scale = t[10]
 				t[10] = data.scales[t[8]][t[7]].index(t[9])   # find current note is in selected scale
-				print(f'note_in_scale: {t[10]}')
-
-				print(f'noteinscale + t[3]: {t[10] + t[3]}')
-				# channels.setStepParameterByIndex(Notes.accum_chan, patterns.patternNumber(), step, 0, step_val + Notes.interval)
-				# channels.setStepParameterByIndex(t[1], patterns.patternNumber(), step, 0, step_val + t[3])
+				# print(f'note_in_scale: {t[10]}')
+				# print(f'noteinscale + t[3]: {t[10] + t[3]}')
 				channels.setStepParameterByIndex(t[1], t[0], step, 0, data.scales[t[8]][t[7]][t[10] + t[3]])
 				t[9] = data.scales[t[8]][t[7]][t[10] + t[3]]
 
