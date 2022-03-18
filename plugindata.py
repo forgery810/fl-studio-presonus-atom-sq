@@ -40,6 +40,7 @@ osc = {'Osc 1 panning': 0, 'Osc 1 shape': 1, 'Osc 1 coarse pitch': 2, 'Osc 1 fin
 		'Osc 3 shape': 15, 'Osc 3 coarse pitch': 16, 'Osc 3 fine pitch': 17, 'Osc 3 stereo phase offset': 18, 
 		'Osc 3 stereo detune': 19, 'Stereo phase randomness': 20
 		}
+hl = {'Phase randomness': 0, 'Low harmonics protection': 1, 'Sub harmonic 1': 2, 'Sub harmonic 3': 3, 'Sub harmonic 4': 4, 'Timbre EQ band 1': 5, 'Timbre EQ band 2': 6, 'Timbre EQ band 3': 7, 'Timbre EQ band 4': 8, 'Timbre EQ band 5': 9, 'Timbre EQ band 6': 10, 'Harmonic mask 1/12': 11, 'Harmonic mask 2/12': 12, 'Harmonic mask 3/12': 13, 'Harmonic mask 4/12': 14, 'Harmonic mask 5/12': 15, 'Harmonic mask 6/12': 16, 'Harmonic mask 7/12': 17, 'Harmonic mask 8/12': 18, 'Harmonic mask 9/12': 19, 'Harmonic mask 10/12': 20, 'Harmonic mask 11/12': 21, 'Harmonic mask 12/12': 22, 'Harmonic mask mix': 23, 'Harmonic mask mix LFO amount': 24, 'Stereo tremolo depth': 25, 'Volume env attack length': 26, 'Volume env decay length': 27, 'Volume env release length': 28, 'Velocity to attack': 29, 'Release velocity to release': 30, 'Pluck decay length': 31, 'Velocity to pluck decay': 32, 'Alternate pluck mode': 33, 'Pluck uses harmonic mask': 34, 'Pluck only on release': 35, 'Master volume': 36, 'Velocity to volume': 37, 'Master pitch': 38, 'Detuning': 39, 'Grittiness': 40, 'Pitch vibrato depth': 41, 'Pitch LFO amount': 42, 'Portamento mode': 43, 'Monophonic mode': 44, 'Portamento / legato time': 45, 'Velocity / release to portamento / legato time': 46, 'Adaptive filter envelope mode': 47, 'Filter env attack length': 48, 'Filter env decay length': 49, 'Filter env attack slope': 50, 'Filter env decay slope': 51, 'Filter env amount': 52, 'Velocity to filter env amount': 53, 'Filter frequency': 54, 'Filter scale': 55, 'Filter width': 56, 'Key to filter frequency': 57, 'Filter LFO amount': 58, 'Resonance amount': 59, 'Resonance scale': 60, 'Resonance offset / noise length': 61, 'Resonance self-oscillation': 62, 'Adaptive width': 63, 'Track filter frequency motion': 64, 'Unison order': 65, 'Unison panning': 66, 'Unison pitch thickness': 67, 'Unison phase': 68, 'Unison variation': 69, 'Unison type': 70, 'Phaser mix': 71, 'Phaser scale': 72, 'Phaser width': 73, 'Phaser width LFO amount': 74, 'Phaser offset': 75, 'Phaser offset LFO amount': 76, 'Phaser offset motion speed': 77, 'Key to phaser offset': 78, 'Harmonizer mix': 79, 'Harmonizer width': 80, 'Harmonizer width LFO amount': 81, 'Velocity to harmonizer width': 82, 'Harmonizer strength': 83, 'Harmonizer type': 84, 'Harmonizer position': 85, 'LFO shape / source': 86, 'Global / retriggered LFO': 87, 'LFO attack': 88, 'LFO speed': 89, 'Chorus type': 90, 'Chorus mix': 91, 'Delay type': 92, 'Delay input level': 93, 'Delay feedback level': 94, 'Delay time': 95, 'Reverb type': 96, 'Reverb wet level': 97, 'Compression level': 98, 'Velocity to unison pitch thickness': 99}
 
 # touchpad_params controls how parameters react to touchpad. The name of each dictionary within touchpad_params must match the name
 # of the Plugin exactly. Within wach plugin dict is a list of parameters the touchpad will change. It must follow this format:
@@ -49,9 +50,9 @@ osc = {'Osc 1 panning': 0, 'Osc 1 shape': 1, 'Osc 1 coarse pitch': 2, 'Osc 1 fin
 
 touchpad_params = {
 			'Transistor Bass': [[tb['Cutoff'], 1, .5], [tb['Waveform'], 0, .5], [tb['Resonance'], .5, 1], [tb['Envelope mod'], .5, 0]],
-			'Drumpad':  [ [dp['Membrane Cutoff'], 0, 1], [dp['Membrane Tension'], 0, .5], [dp['Membrane Size'], .75, 1] ],
-			'3x Osc': [ [osc['Osc 1 fine pitch'], .4, .6], [osc['Osc 2 fine pitch'], .6, .8], [osc['Osc 3 fine pitch'], .3, .8],], 
-
+			'Drumpad':  [[dp['Membrane Cutoff'], 0, 1], [dp['Membrane Tension'], 0, .5], [dp['Membrane Size'], .75, 1]],
+			'3x Osc': [[osc['Osc 1 fine pitch'], .4, .6], [osc['Osc 2 fine pitch'], .6, .8], [osc['Osc 3 fine pitch'], .3, .8],], 
+			'Harmless': [[hl['Filter frequency'], .2, .85 ], [hl['Resonance amount'], .0, .5 ], [hl['Reverb wet level'], .3, .8] ]
 			}
 
 

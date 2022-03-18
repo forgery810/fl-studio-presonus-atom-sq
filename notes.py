@@ -9,14 +9,26 @@ import data
 import plugindata
 
 temp_step = [0]
-random = 1
+random = 2
 param_edit = 1
-jump_to_pattern = 2
+continuous = 1
+pat = 0
+chan = 1
+evnt = 2
+intvl = 3
+limit = 4
+count = 5
+orig = 6
+root = 7
+scale = 8
+n_orig = 9
+n_count = 10
+jump_to_pattern = 1
 step_mode = 1
 standard = 0
 keyboard = 0 
 two_bars = 0
-accumulator = 2 
+accumulator = 3
 pads_per_channel = 2
 
 class Notes():
@@ -37,94 +49,101 @@ class Notes():
 	accum_on = True
 
 	def __init__(self, event):
-		print(f'notes event: {event.data1}')
-
+		
 		if event.midiId == 144: 			# store last note played for parameter edit
 			temp_step.clear()
 			temp_step.append(event.data1)
 		self.light = Lights()
+		self.p = Modes(event)
 		self.decide(event)
-
+	
 	def decide(self, event):
-
+		"""takes midi event data and passes it to appropriate function based on current mode found in Modes()"""
 		if ui.getFocusedPluginName() in plugindata.drum_plugs:
 			self.drum_plugins(event)
-		elif self.get_mode() == keyboard:
-			self.keyboard(event)
-			# Lights.clear_pattern()
+		elif self.get_mode() == 0:
+			if Modes.note_iter == keyboard:
+				self.keyboard(event)
+			elif Modes.note_iter == continuous:
+				self.continuous(event)
 		elif self.get_mode() == step_mode and event.data2 > 0:
 			self.step_mode(event)
 		elif self.get_mode() == pads_per_channel:
 			self.pad_channel(event)
 
 	def keyboard(self, event):
-		if Modes.note_iter == 1:
+		"""calls for keyboard led layout and takes incoming midi data and converts to approprite note in key_dict"""
+		Lights.keyboard_lights()
+		if str(event.data1) in data.key_dict:
+			channels.midiNoteOn(channels.selectedChannel(), data.key_dict[str(event.data1)] + Modes.octave_values[Modes.sub_sub_key_iter], event.data2)
+		else:
 			channels.midiNoteOn(channels.selectedChannel(), event.data1, event.data2)
-			Lights.continuous_notes()
-		elif Modes.note_iter == 0:
-			Lights.keyboard_lights()
-			if str(event.data1) in data.key_dict:
-				channels.midiNoteOn(channels.selectedChannel(), data.key_dict[str(event.data1)] + Modes.octave_values[Modes.sub_sub_key_iter], event.data2)
-			else:
-				channels.midiNoteOn(channels.selectedChannel(), event.data1, event.data2)
-			print('keyboard')
-			event.handled = True
-				
+		event.handled = True
+	
+	def continuous(self, event):
+		"""controls what happens to notepad presses when in continuous mode. -24 adjusts step data1 to tolerable range of notes within scale"""
+		channels.midiNoteOn(channels.selectedChannel(), data.scales[Modes.scale_iter][Modes.root_iter][event.data1-24], event.data2)
+		self.p.mode_init()
+		event.handled = True
+
 	def step_mode(self, event):
-		
+		"""controls notepad presses when in step mode"""
+
 		if Modes.step_iter == jump_to_pattern and event.data1 >= 52:		# Pattern Select Mode
-			print('select pattern')
 			patterns.jumpToPattern(event.data1 - 51)
-			Lights.pattern_select()
+			self.p.mode_init()
 			event.handled = True
 
-		elif Modes.step_iter == param_edit: 								# what to do with lights in param edit mode
-			self.light.update_pattern(Modes.step_iter)
-			self.light.update_second(Modes.step_iter)
-			event.handled = True
-
-		elif Modes.step_iter != param_edit and Modes.sub_sub_step_iter == accumulator:							# ACCUMULATOR
-			# print('in step in accum edit')
+															# ACCUMULATOR
+		elif  Modes.sub_sub_step_iter == accumulator:	
 			if Notes.accum_on and event.data1 - 36 < patterns.getPatternLength(patterns.patternNumber()):
 				Notes.original_note = channels.getCurrentStepParam(channels.selectedChannel(), event.data1-36, 0)
-				print(Notes.original_note)
+
 				if Notes.original_note in data.scales[Notes.scale_choice][Notes.root_note]:
-					Notes.accum_step.append([patterns.patternNumber(), channels.channelNumber(), event.data1-36, Notes.interval, Notes.pass_limit, 0, Notes.original_note, Notes.root_note, Notes.scale_choice, Notes.original_note, 0])
+					Notes.accum_step.append([patterns.patternNumber(), channels.channelNumber(), event.data1-36, 
+						Notes.interval, Notes.pass_limit, 0, Notes.original_note, Notes.root_note, Notes.scale_choice, 
+						Notes.original_note, 0])
+
 				Notes.accum_chan = channels.channelNumber()
-				# print(f'Accu_step: {Notes.accum_step}')
+				self.p.mode_init()
 				event.handled = True
 
 			else:
+				self.p.mode_init()
 				event.handled = True
-																# make sure not in accum or param entry modes
-		elif Modes.step_iter != param_edit or Modes.step_iter == jump_to_pattern and event.data1 < 52:       
+
+																
+		elif Modes.sub_sub_step_iter != param_edit:        # sets step as long as param edit not active
 			if channels.getGridBit(channels.selectedChannel(), event.data1 - 36) == 0:						
-				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 1)	
+				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 1)
+				self.p.mode_init()	
 				event.handled = True
 			else:															
-				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 0)    
-				event.handled = True		
-			Lights.update_pattern(Modes.step_sub_iter)
+				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 0)
+				self.p.mode_init()    
+				event.handled = True
 
-			if Modes.step_iter == jump_to_pattern:
-				self.light.pattern_select()
-			else:	
-				self.light.update_second(Modes.step_iter)	
+		elif Modes.sub_sub_step_iter == param_edit:
+			ui.setHintMsg(f'Note: {data.midi_notes[channels.getCurrentStepParam(channels.selectedChannel(), event.data1-36, 0)]}')#{data.midi_notes[channels.getGridBit(channels.selectedChannel(), event.data1 - 36)]}')
+			self.p.mode_init()
+			event.handled = True
+
+		else:
+			self.p.mode_init()
+			event.handled = True
 
 	def pad_channel(self, event):
-		print('in pad channel')
+		"""takes event midi data from pad press and play corresponding channel"""
 		if  event.data1 < (channels.channelCount() + 36) and event.midiId != 208:
 			channels.selectOneChannel(event.data1-36) 
 			channels.midiNoteOn(event.data1-36, 60, event.data2)
-			Lights.light_channels()
 			event.handled = True
 		else:
-			Lights.light_channels()
 			event.handled = True
-
+		self.p.mode_init()
 
 	def drum_plugins(self, event):
-
+		"""called when drum plugin window focused and plays corresponding drum pad"""
 		if event.midiId == 128 and event.data2 != 0:
 			print('skip')
 		elif plugins.getPluginName(channels.selectedChannel()) == 'FPC' and event.data1 in plugindata.atom_sq_pads:
@@ -143,49 +162,47 @@ class Notes():
 	def get_step_submode(self):
 		return Modes.step_iter
 
-	@staticmethod
 	def update_beat(beat):
+		"""used for accumulator. tracks every step when transport is active"""
 		if beat == 1 and Notes.accum_on:
 			for l in Notes.accum_step:
-				l[5] += 1 												# iterate each counter per step
-				if l[5] <= l[4] and len(Notes.accum_step) > 0:			# if there are steps saved and the are below count send to accumulator function
-					Notes.accumulator(l)
-				elif l[5] > l[4] and len(Notes.accum_step) > 0:			# else if count had gone over limit reset count and set to intial note value
-					# print(f'note reset: {l[6]}')
-					l[5] = 0
-					l[9] = l[6]
-					channels.setStepParameterByIndex(l[1], l[0], l[2], 0, l[6])
+				if l[chan] <= channels.channelCount()-1:
+					l[count] += 1 												# iterate each counter per step
+					if l[count] <= l[limit] and len(Notes.accum_step) > 0:			# if there are steps saved and the are below count send to accumulator function
+						Notes.accumulator(l)
+					elif l[count] > l[limit] and len(Notes.accum_step) > 0:			# else if count had gone over limit reset count and set to intial note value
+						# print(f'note reset: {l[6]}')
+						l[count] = 0
+						l[n_orig] = l[orig]
+						channels.setStepParameterByIndex(l[chan], l[pat], l[evnt], 0, l[orig])
 
 		# ([patterns.patternNumber(), channels.channelNumber(), event.data1-36, Notes.interval, Notes.pass_limit, 0, Notes.original_note, Notes.root_note, Notes.scale_choice, step_val, note_in_scale])
 		#   		0 							1 						2 			 3 					4  		  5 		6 					7 				8  					9        10
-	@staticmethod
+
 	def temp_reset_steps():
 		for n in Notes.accum_step:
-			n[9] = n[6]
+			n[n_orig] = n[orig]
 
-	@staticmethod
 	def accumulator(step_info):
+		"""step_info list for step to apply accumulator to. loops through pattern steps. gets current note, adds interval and resets note. """
 		t = step_info
-		# print(Notes.accum_step)
-		for step in range(patterns.getPatternLength(patterns.patternNumber())):
-			if step == t[2]:
-				# print(f'Step Val: {t[9]}')				# this catches -1 error and resets to root note
-				if t[9] < 0:					
+		for step in range(patterns.getPatternLength(t[pat])): # only applies to current pattern. may need to used stored pattern
+			if step == t[evnt]:
+				# print(f'Step Val: {t[9]}')				
+				if t[n_orig] < 0:						# this catches potential -1 error and resets to root note
 					print('-1 error')
-					t[9] = t[6]
-				t[10] = data.scales[t[8]][t[7]].index(t[9])   # find current note is in selected scale
-				# print(f'note_in_scale: {t[10]}')
-				# print(f'noteinscale + t[3]: {t[10] + t[3]}')
-				channels.setStepParameterByIndex(t[1], t[0], step, 0, data.scales[t[8]][t[7]][t[10] + t[3]])
-				t[9] = data.scales[t[8]][t[7]][t[10] + t[3]]
-
-	@staticmethod
+					t[n_orig] = t[orig]
+				t[n_count] = data.scales[t[scale]][t[root]].index(t[n_orig])   # find current note is in selected scale
+				channels.setStepParameterByIndex(t[chan], t[pat], step, 0, data.scales[t[scale]][t[root]][t[n_count] + t[intvl]])
+				t[n_orig] = data.scales[t[scale]][t[root]][t[n_count] + t[intvl]]
+	
 	def reset_steps():
+		"""resets all accumulator steps to original note stored in pattern"""
 		for r in Notes.accum_step:
-			if r[0] == patterns.patternNumber():
+			if r[pat] == patterns.patternNumber():
 				for st in range(patterns.getPatternLength(patterns.patternNumber())):
-					if st == r[2]:
-						channels.setStepParameterByIndex(r[1], r[0], st, 0, r[6])
+					if st == r[evnt]:
+						channels.setStepParameterByIndex(r[chan], r[pat], st, 0, r[orig])
 		Notes.accum_step.clear()
 		ui.setHintMsg('Accum steps cleared')
 

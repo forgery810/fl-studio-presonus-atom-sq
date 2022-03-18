@@ -2,7 +2,7 @@ import modes
 from midi import *
 import midi
 import data
-from buttons import Buttons
+from buttons import Buttons, PlusMinus
 from notes import Notes
 from knobs import Knobs
 from modes import Modes
@@ -21,21 +21,20 @@ class Expedite:
 			self.event.handled = True
 
 		elif self.event.midiId == 176 and self.event.data1 in data.knob_list and self.event.midiChanEx in range(128, 131):
-			print('in knobs')
 			if self.event.data1 == 1:
 				Buttons.touchpad_value = self.event.data2
 			knob = Knobs(self.event)
 
 		elif self.event.midiChanEx == 137:			# 137 selects for notes
-			# print('notes')
 			notes = Notes(self.event)
 
+		elif self.event.midiId == 224 and self.event.midiChanEx == 128:
+			plusminus = PlusMinus(self.event)
+
 		elif self.event.midiId == 144 and self.event.data1 in Directions.ud_arrow:
-			print('directions')
 			direct = Directions(self.event)
 
 		else:
-			print('Buttons')
 			Buttons(self.event)
 
 

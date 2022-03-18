@@ -1,22 +1,35 @@
-version - 0.5.1
+version - 0.6.2
 
 	-to-do-
 
-# fix blue/green leds remaining after button push, if possible
 # repeat note events
-# led to follow active step
 # led when paramter at zero or c5 note
-# setup scales mode for continuous
-# add new pattern(?)
 # light rec & play buttons when active
 # tap tempo
-# set leds so they refelct active mode
-# blue lights remain on steps in parameter mode 
-# in continuous mode, alter color of black keys
 # add note offset when scales are used to reduce their list size
+# light active pattern in pattern select mode
+# in param edit, have button push display current note
+# add option to let touchpad control plugins without their window focused
+# accumulator tied to channel name rather than order(?)
 
 	-done-
 
+# in random note mode, the range of notes has been improved for better control (less high notes) 0.6.2
+# fixed bug with accumulator caused by channel deletion 0.6.1 
+# cleaned up code 0.6.1
+# pressing step in parameter edit mode shows step's current note in message window 0.6.0
+# fixed issue where pressing 'h' button to select channels/mixer will cause error if  0.5.9
+	window is not open. This can still occur with 'g' button so config option was added
+	to control which windows it rotates through
+# left/right arrow buttons now scroll through patterns when channel rack is focused 0.5.8
+# led follows active step during play 0.5.7
+# added config option to control which windows 'g' button scrolls through 0.5.7
+# in continuous mode, root notes of scale are now represented with blue led 0.5.6
+# in continuous mode, + rotates through root notes, - rotates through scales 0.5.5
+#		blue led represents root but does not currently play root 
+# parameter entry is now a sub sub mode and accessed by the +/- buttons when in step mode 0.5.4
+# steps colors better reflect modes. blue - standard, white - param entry, purple - random, yellow - accumulator
+# +/- buttons now functioning. they control octaves and subsubmodes 0.5.2
 # fixed led issues when pattern selector and accumulator were selected 0.5.1
 # fixed various accumulator bugs 0.5.0
 # step leds turn yellow when in accumulator mode 0.1.3
