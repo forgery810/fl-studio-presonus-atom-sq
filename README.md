@@ -8,7 +8,7 @@ Now instead of the B button rotating through different sub modes, the plus/minus
 
 # Continuous Mode Updated
 
-Continuous note mode finally has scales added. Root notes can be toggle by pushing the plus button and scales with the minus button.
+Continuous note mode finally has scales added. Root notes can be selected by pushing the plus button and scales with the minus button.
 
 # New Mode Added
 
