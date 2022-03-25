@@ -13,6 +13,7 @@ class Modes:
 	step_sub_iter = 0
 	sub_sub_key_iter = 3
 	sub_sub_step_iter = 0
+	channels_iter = 0
 	octave_values = (-36, -24, -12, 0, 12, 24, 36)
 	root_iter = 0
 	scale_iter = 0
@@ -23,7 +24,7 @@ class Modes:
 		Modes.e = self.event
 		self.mode_selected = ['Notes', 'Step Sequencer', 'Pad per Channel']
 		self.step_sub_sub = ['Standard',  'Parameter Entry', 'Random Notes', 'Accumulator']
-		self.step_submodes = ['32 Step', 'Pattern Access']
+		self.step_submodes = ['32 Step', 'Pattern Access', 'Channel Select', 'Channel Mute']
 		self.note_submodes = ['Keyboard', 'Continuous']
 		self.octave_names = ['-3', '-2', '-1', '0', '1', '2', '3']
 		self.continuous_modes = ['Play Notes', 'Set Scale']
@@ -41,47 +42,62 @@ class Modes:
 
 	def mode_init(self):			
 		"""Determines lighting based on what modes are active. Calls appropriate Light() method"""
-		if Modes.mode == self.mode_selected.index('Notes'):								# Keyboard
+
+		if Modes.mode == self.mode_selected.index('Notes'):								
 			if Modes.note_iter == 0:
 				Lights.keyboard_lights()
 			elif Modes.note_iter == 1:
 				Lights.continuous_notes()
 
-		elif Modes.mode == self.mode_selected.index('Step Sequencer'):							# Step Entry
+		elif Modes.mode == self.mode_selected.index('Step Sequencer'):							
 
-			if self.step_sub_sub[Modes.sub_sub_step_iter] == 'Parameter Entry':				# parameter entry
+			if self.step_submodes[Modes.step_iter] == 'Channel Select':
+				Lights.channel_select('light_purple')
+
+			elif self.step_submodes[Modes.step_iter] == 'Channel Mute':
+				Lights.muted_channels()
+
+			elif self.step_submodes[Modes.step_iter] == 'Pattern Access':
+				Lights.pattern_select()
+				Lights.active_pattern(patterns.patternNumber())
+
+
+			if self.step_sub_sub[Modes.sub_sub_step_iter] == 'Parameter Entry':				
 				Lights.lower_steps('white')
-				if self.step_iter == 1:
-					Lights.pattern_select()
-				else:
+				# if self.step_iter == 1:
+				# 	Lights.pattern_select()
+				if self.step_iter == 0:
 					Lights.upper_steps('white')
 
 			elif self.step_sub_sub[Modes.sub_sub_step_iter] == 'Accumulator':							# accumulator
 				Lights.lower_steps('yellow')
-				if self.step_iter == 1:
-					Lights.pattern_select()
-				else:
+				# if self.step_iter == 1:
+				# 	Lights.pattern_select()
+				# else:
+				if self.step_iter == 0:
 					Lights.upper_steps('yellow')
 
 			elif self.step_sub_sub[Modes.sub_sub_step_iter] == 'Random Notes':							# random
 				Lights.lower_steps('purple')
-				if self.step_iter == 1:
-					Lights.pattern_select()
-				else:
+				# if self.step_iter == 1:
+				# 	Lights.pattern_select()
+				# else:
+				if self.step_iter == 0:
 					Lights.upper_steps('purple')
 
 			elif self.step_sub_sub[Modes.sub_sub_step_iter] == 'Standard':														# standard
 				Lights.lower_steps('blue')
 				if Modes.step_iter == 0:						# check if in 32 step (0) or parameter entry modes
 					Lights.upper_steps('blue')
-				elif Modes.step_iter == 1:									# check if pattern select mode
-					Lights.pattern_select()									# light top row as currently selected pattern
+				# elif Modes.step_iter == 1:									# check if pattern select mode
+				# 	Lights.pattern_select()									# light top row as currently selected pattern
 
 		elif Modes.mode == self.mode_selected.index('Pad per Channel'):							# Pad per Channel
 			Lights.light_channels()										# light channels for channel play mode
 
 	def sub_mode(self):
-		"""iterates through submodes"""
+		"""iterates through second level of modes - submodes"""
+
 		Modes.sub_sub_step_iter = 0   # reset sub sub mode to zero when sub mode changes
 
 		if Modes.mode == 1:
@@ -139,6 +155,7 @@ class Modes:
 	def get_roots(self):
 		"""finds root notes to set blue for currently selected scale and adds to list for Lights function to use
 			C is 0 and root_iter that is used to increment through root options is used as offset for other notes"""
+
 		for note in data.scales[Modes.scale_iter][Modes.root_iter][12:44]:
 			for c in data.cs:
 				if note == c + Modes.root_iter:

@@ -5,6 +5,7 @@ import ui
 import mixer
 import playlist
 import transport
+import channels
 import patterns
 import plugins
 from midi import *
@@ -16,8 +17,10 @@ off_keys = (54, 58, 61, 65)
 c_keys = [36, 43, 50]
 c_keys_cont = [36, 48, 60]
 
+
 class Lights():
 
+	colors = {'purple': 146, 'white': 144, 'yellow': 127, 'blue': 145, }
 	root_list = [36, 48, 60]
 
 	def __init__(self):
@@ -59,13 +62,45 @@ class Lights():
 					device.midiOutMsg(144, 0, s + 36, 127)
 
 
-	def pattern_select():								
-		"""lights top row white in pattern select mode"""
+	def pattern_select():	
+		"""lights top row white in pattern access mode"""
+
 		for i in range(16, 32):
 			device.midiOutMsg(144, 0, i + 36, 127)
-		# device.midiOutMsg(144, 0, patterns.patternNumber() + 52, 127)
+
+	def active_pattern(pattern_num):
+		"""light active pattern in pattern access mode"""
+
+		device.midiOutMsg(146, 0, pattern_num + 52, 127)
+
+	def channel_select(color):
+		"""lights top row leds according to color sent"""
+
+		for led in range(16, 16 + channels.channelCount()):
+			device.midiOutMsg(144, 0, led + 36, 127)						# turn white first
+			if color == 'light_purple':
+				device.midiOutMsg(146, 2, led + 36, 60)
+			elif color == 'white':
+				pass
+			elif color == 'yellow':
+				device.midiOutMsg(147, 0, led + 36, 60)	
+
+	def muted_channels():
+		"""lights muted and unmuted channels accordingly in channel mute mode"""
+
+		Lights.pattern_select()
+
+		for l in range(52, 52 + channels.channelCount()):
+			if not channels.isChannelMuted(l -52):
+				device.midiOutMsg(147, 0, l, 23)
+			else:
+				device.midiOutMsg(144, 0, l, 127)
+
+
 
 	def light_channels():
+		"""lights channels for pad per channel mode"""
+
 		for i in range(0, channels.channelCount()):
 			device.midiOutMsg(144, 0, 36 + i, 127)
 			device.midiOutMsg(146, 0, 36 + i, 0)

@@ -1,6 +1,6 @@
-# name=Presonus Atom SQ
+# name=Presonus Atom SQ-dev
 # Author: ts-forgery
-# Version 0.6.2
+# Version 0.6.4
 
 import device
 import mixer
@@ -37,8 +37,8 @@ def OnRefresh(ref_num):
 	md.mode_init()
 
 def OnInit():
-	print("Presonus Atom SQ COPY")
-	print(f'Scripting API Version: {general.getVersion()}')
+	print("Presonus Atom SQ - Version: 0.6.2")
+	(f'Scripting API Version: {general.getVersion()}')
 	Lights.clear_pattern()
 
 def OnMidiMsg(event):

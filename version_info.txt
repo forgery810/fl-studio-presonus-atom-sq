@@ -14,6 +14,9 @@ version - 0.6.2
 
 	-done-
 
+# B button now rotates through some options controlling A button functions (enter/copy pattern/paste)   0.6.4
+# new channel mute and and channel select modes added. top row of pads will mute/select 	0.6.3
+	channels 1-16 for quicker functionality while performing
 # in random note mode, the range of notes has been improved for better control (less high notes) 0.6.2
 # fixed bug with accumulator caused by channel deletion 0.6.1 
 # cleaned up code 0.6.1

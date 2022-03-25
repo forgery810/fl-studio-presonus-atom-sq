@@ -24,6 +24,8 @@ scale = 8
 n_orig = 9
 n_count = 10
 jump_to_pattern = 1
+channel_access = 2
+channel_mute = 3
 step_mode = 1
 standard = 0
 keyboard = 0 
@@ -93,6 +95,24 @@ class Notes():
 			patterns.jumpToPattern(event.data1 - 51)
 			self.p.mode_init()
 			event.handled = True
+
+		elif Modes.step_iter == channel_access and event.data1 >= 52:		# channel select
+			if event.data1 >= channels.channelCount() + 52:
+				self.p.mode_init()
+				event.handled = True
+			else:
+				channels.selectOneChannel(event.data1 - 52)
+				self.p.mode_init()
+				event.handled = True
+
+		elif Modes.step_iter == channel_mute and event.data1 >= 52: 		# channel mute
+			if event.data1 >= channels.channelCount() + 52:
+				self.p.mode_init()
+				event.handled = True
+			else:
+				channels.muteChannel(event.data1 - 52)
+				self.p.mode_init()
+				event.handled = True
 
 															# ACCUMULATOR
 		elif  Modes.sub_sub_step_iter == accumulator:	

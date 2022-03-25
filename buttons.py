@@ -35,6 +35,8 @@ class Buttons:
 	accu_steps = []
 	clear_toggle = False
 	six_options = ['Press A to clear accum steps...']
+	b_iter = 0
+	b_options = ['none', 'copy', 'paste', 'set tempo']
 	tempo_toggle = False
 	button_6_iter = 0
 
@@ -206,24 +208,35 @@ class Buttons:
 					if ui.getFocused(4):
 						ui.selectBrowserMenuItem()	
 
-					elif Modes.sub_sub_step_iter == 3: 				# accumulator mode
-						if Buttons.clear_toggle == True:
-							# Notes.accum_step.clear()
-							Notes.reset_steps()
-							Buttons.clear_toggle = False
+					elif Buttons.b_iter == 0:
+
+						if Modes.sub_sub_step_iter == 3: 				# accumulator mode
+							if Buttons.clear_toggle == True:
+								# Notes.accum_step.clear()
+								Notes.reset_steps()
+								Buttons.clear_toggle = False
+								event.handled = True
+							elif Notes.accum_on == True and Buttons.clear_toggle == False:
+								Notes.accum_on = False
+								ui.setHintMsg("Accumulator Off")
+							elif Notes.accum_on == False and Buttons.clear_toggle == False:
+								Notes.accum_on = True	
+								ui.setHintMsg("Accumulator On")
+						else:	
+							ui.enter()
 							event.handled = True
-						elif Notes.accum_on == True and Buttons.clear_toggle == False:
-							Notes.accum_on = False
-							ui.setHintMsg("Accumulator Off")
-						elif Notes.accum_on == False and Buttons.clear_toggle == False:
-							Notes.accum_on = True	
-							ui.setHintMsg("Accumulator On")
-					else:	
-						ui.enter()
-						print('enter')
-			
+							print('enter')
+
+					elif Buttons.b_iter != 0:
+						self.b_decide(Buttons.b_iter)
+						event.handled = True
 
 				elif event.data1 == data.pads["b"]:
+					Buttons.b_iter += 1
+					if Buttons.b_iter >= len(Buttons.b_options):
+						Buttons.b_iter = 0
+					ui.setHintMsg(Buttons.b_options[Buttons.b_iter])
+					# self.b_decide(Buttons.b_iter)
 					print('b')
 
 				elif event.data1 == data.pads["c"]:
@@ -256,6 +269,20 @@ class Buttons:
 					else:
 						transport.globalTransport(midi.FPT_F9, 68)
 					event.handled = True 				
+
+	def b_decide(self, choice):
+		if choice == 1:
+			self.copy_all()
+		elif choice == 2:
+			self.paste()
+
+
+	def copy_all(self):
+		channels.selectAll()
+		ui.copy()
+
+	def paste(self):
+		ui.paste()
 
 	def note_gen(self):
 		"""generates random notes. 0-65535 is the range of 16 bit numbers. note variable calls num_gen for random number which is mapped to index of note in chosen scale"""
