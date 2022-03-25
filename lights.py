@@ -29,6 +29,7 @@ class Lights():
 
 	def lower_steps(color):
 		"""takes in color and sends midi data to change lower row pads appropriate color"""
+
 		for s in range(0, 16):
 			if channels.getGridBit(channels.selectedChannel(), s) == 0:
 				device.midiOutMsg(144, 0, s + 36, 0)						# turn step leds off
@@ -47,6 +48,7 @@ class Lights():
 
 	def upper_steps(color):
 		"""takes in color and sends midi data to change upper row pads appropriate color"""
+
 		for s in range(16, 32):
 			if channels.getGridBit(channels.selectedChannel(), s) == 0:
 				device.midiOutMsg(144, 0, s + 36, 0)						# turn step leds off
@@ -109,23 +111,21 @@ class Lights():
 
 	def keyboard_lights():
 		"""sets pad leds to keyboard layout. sets c notes blue"""
+
 		for i in range(36, 52):
 			device.midiOutMsg(144, 0, i, 127)
-
 		for c in c_keys:
 			device.midiOutMsg(145, 0, c, 0)
-
 		for tk in top_keys:
 			device.midiOutMsg(144, 0, tk, 127)
-
 		for off in off_keys:
 			device.midiOutMsg(144, 0, off, 0)
 
 	def continuous_notes():
 		"""sets all keys white except root notes which are set blue depending on current scale selected"""
+
 		for z in range(36, 68):
 			device.midiOutMsg(144, 0, z, 127)
-
 		for rn in Lights.root_list:
 			device.midiOutMsg(145, 0, rn, 0)
 
@@ -134,6 +134,7 @@ class Lights():
 			Lights.update_pattern()
 
 	def follow_beat(self, data):
+		
 		self.indicator += 2
 		if self.indicator >= patterns.getPatternLength(patterns.patternNumber()) or data == 1:
 			self.indicator = 0
@@ -145,6 +146,7 @@ class Lights():
 
 	def clear_pattern():			
 		"""sets bottom row blue and top row purple"""			
+
 		for i in range(0,16):
 			device.midiOutMsg(144, 0, i + 36, 127)
 			device.midiOutMsg(145, 0, i + 36, 0)

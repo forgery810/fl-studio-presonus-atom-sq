@@ -1,5 +1,3 @@
-version - 0.6.2
-
 	-to-do-
 
 # repeat note events
@@ -11,9 +9,13 @@ version - 0.6.2
 # in param edit, have button push display current note
 # add option to let touchpad control plugins without their window focused
 # accumulator tied to channel name rather than order(?)
+# accumulator repeats notes in certain situations (when other steps are added) 
 
 	-done-
 
+# code cleanup 0.6.5
+# changed mode terminology for clairity. sub-modes are now layouts. sub-sub-modes are now sub-modes. 0.6.5
+	key sub modes are now octaves in code. 
 # B button now rotates through some options controlling A button functions (enter/copy pattern/paste)   0.6.4
 # new channel mute and and channel select modes added. top row of pads will mute/select 	0.6.3
 	channels 1-16 for quicker functionality while performing

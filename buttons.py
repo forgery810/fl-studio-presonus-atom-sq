@@ -36,7 +36,7 @@ class Buttons:
 	clear_toggle = False
 	six_options = ['Press A to clear accum steps...']
 	b_iter = 0
-	b_options = ['none', 'copy', 'paste', 'set tempo']
+	b_options = ['Enter', 'Copy Pattern', 'Copy Channel', 'Paste']
 	tempo_toggle = False
 	button_6_iter = 0
 
@@ -45,7 +45,8 @@ class Buttons:
 		self.act_out(event)
 
 	def act_out(self, event):
-		"handles button inputs and assigns function from fl studio api"
+		"""handles button inputs and assigns function from fl studio api"""
+
 		if event.midiId == 144:			
 
 			if event.data2 > 0:
@@ -184,7 +185,7 @@ class Buttons:
 							channels.setGridBit(channels.channelNumber(), z, 1)
 						else:
 							channels.setGridBit(channels.channelNumber(), z, 0)
-					self.push.mode_init()
+					Modes.mode_init()
 					event.handled = True
 
 				elif event.data1 == data.buttons["button_5"]:
@@ -210,7 +211,7 @@ class Buttons:
 
 					elif Buttons.b_iter == 0:
 
-						if Modes.sub_sub_step_iter == 3: 				# accumulator mode
+						if Modes.get_step_submode() == 3: 				# accumulator mode
 							if Buttons.clear_toggle == True:
 								# Notes.accum_step.clear()
 								Notes.reset_steps()
@@ -271,30 +272,45 @@ class Buttons:
 					event.handled = True 				
 
 	def b_decide(self, choice):
-		if choice == 1:
+		"""takes b_iter as input and calls appropriate function"""
+
+		if Buttons.b_options[choice] == 'Copy Pattern':
 			self.copy_all()
-		elif choice == 2:
+		elif Buttons.b_options[choice] == 'Copy Channel':
+			self.copy_one()
+		elif Buttons.b_options[choice] == 'Paste':
 			self.paste()
 
 
 	def copy_all(self):
+		"""called by b_decide"""
+
 		channels.selectAll()
 		ui.copy()
 
+	def copy_one(self):
+		"""called by b_decide"""
+
+		ui.copy()
+
 	def paste(self):
+		"""called by b_decide"""
+
 		ui.paste()
 
 	def note_gen(self):
 		"""generates random notes. 0-65535 is the range of 16 bit numbers. note variable calls num_gen for random number which is mapped to index of note in chosen scale"""
+
 		for i in range(patterns.getPatternLength(patterns.patternNumber())):
 			note = data.scales[Buttons.scale][Buttons.root_note][int(mapvalues(num_gen(), 0 + Buttons.lower_limit, 
 					len(data.scales[Buttons.scale][Buttons.root_note]) - Buttons.upper_limit, 0, 65535))]
 			print(note)
 			channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, note, 1)
-			self.push.mode_init()
+			Modes.mode_init()
 
 def num_gen():
-	"""seeds and returns 16 bit random number"""
+	"""seeds and returns 16 bit random number as int"""
+
 	rand_obj = _random.Random()
 	rand_obj.seed()
 	rand_int = rand_obj.getrandbits(16) 
@@ -302,6 +318,7 @@ def num_gen():
 
 def mapvalues(value, tomin, tomax, frommin, frommax):
 	"""takes in value and range and returns value within another range"""
+
 	input_value = value
 	solution = tomin + (tomax-(tomin))*((input_value - frommin) / (frommax - (frommin)))
 	if  -0.01 < solution < 0.01:

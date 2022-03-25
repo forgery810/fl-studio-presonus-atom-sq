@@ -22,6 +22,7 @@ class Knobs:
 
 	def knob_turn(self, event):
 		"""handles majority of knob based events"""
+		
 		self.data_one = event.data1
 		self.data_two = event.data2
 		self.pad_step = notes.temp_step[0]
@@ -42,7 +43,7 @@ class Knobs:
 		elif ui.getFocused(1) and self.data_one != 1:
 
 			if Modes.mode == 1:				
-				if Modes.sub_sub_step_iter == 1:									# Set Step Parameters
+				if Modes.get_step_submode() == 1:									# Set Step Parameters
 					if self.data_one == data.knobs["knob_one"]:
 						ui.setHintMsg(f'Note: {data.midi_notes[self.data_two]}')
 					elif self.data_one <= 20:
@@ -57,7 +58,7 @@ class Knobs:
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, self.data_two, 1)
 						event.handled = True
 
-				elif Modes.sub_sub_step_iter == 2:								# Random Mode - set scale/key
+				elif Modes.get_step_submode() == 2:								# Random Mode - set scale/key
 
 					if event.data1 == data.knobs["knob_five"]:
 						Buttons.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
@@ -74,7 +75,7 @@ class Knobs:
 						ui.setHintMsg(f"Setting Upper Limit {self.data_two}")
 
 
-				elif Modes.sub_sub_step_iter == 3:      			# Accumulator Mode
+				elif Modes.get_step_submode() == 3:      			# Accumulator Mode
 
 					if self.data_one == data.knobs['knob_five']:
 						Notes.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
