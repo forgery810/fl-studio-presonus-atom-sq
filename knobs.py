@@ -4,7 +4,7 @@ import data
 import ui
 import device
 from modes import Modes
-from notes import Notes
+from notes import Notes, Shifter
 import notes
 import patterns
 import plugins
@@ -103,6 +103,12 @@ class Knobs:
 
 				elif self.data_one == data.knobs['knob_eight']:
 					channels.setChannelColor(channels.selectedChannel(), data.colors[int(mapvalues(event.data2, 0, len(data.colors)-1, 0, 127))])
+
+			elif Modes.mode == 3:   								# Alter
+				if Modes.get_alter_mode() == 0:
+					if self.data_one == data.knobs['knob_five']:
+						Shifter.shift_type = int(mapvalues(self.data_two, 0, len(Modes.shifter_options) - 1, 0, 127))
+						ui.setHintMsg(f'Shift Type: {Modes.shifter_options[Shifter.shift_type]}')
 
 		elif ui.getFocused(5) and plugins.isValid(self.channel):
 			self.plugin_control(event)

@@ -9,10 +9,15 @@
 # in param edit, have button push display current note
 # add option to let touchpad control plugins without their window focused
 # accumulator tied to channel name rather than order(?)
-# accumulator repeats notes in certain situations (when other steps are added) 
 
 	-done-
 
+# fixed lighting issue when mute/selected channels used with more than 16 channels 0.6.9
+# fixed shifter bugs 0.6.9
+# sequencer shifter added 0.6.8
+# fixed issue where accumulator would repeat note under certain circumstances 0.6.7 
+# began adding sequence shifter 0.6.6
+# copy channel option added to B button options to join copy pattern	0.6.5
 # code cleanup 0.6.5
 # changed mode terminology for clairity. sub-modes are now layouts. sub-sub-modes are now sub-modes. 0.6.5
 	key sub modes are now octaves in code. 

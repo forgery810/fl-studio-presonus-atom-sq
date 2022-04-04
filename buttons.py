@@ -13,7 +13,7 @@ import config
 from direction import Directions
 from lights import Lights
 from modes import Modes	
-from notes import Notes
+from notes import Notes, Shifter
 import _random
 from midi import *
 
@@ -41,6 +41,7 @@ class Buttons:
 	button_6_iter = 0
 
 	def __init__(self, event):
+		self.shift = Shifter()
 		self.push = Modes(event)
 		self.act_out(event)
 
@@ -161,12 +162,16 @@ class Buttons:
 
 				if event.data2 == 1:
 					ui.next()
+					event.handled = True
 				elif ui.getFocused(0):
 					if event.data2 == 65 and mixer.trackNumber() > 0:
 						ui.previous()
 						event.handled = True
 				elif event.data2:
 					ui.previous()
+					event.handled = True
+				else:
+					event.handled = True 
 
 			if event.midiChanEx == 130 and event.data2 > 0:												# 1-6 buttons
 
@@ -179,7 +184,7 @@ class Buttons:
 					print("Random")
 					for i in range(patterns.getPatternLength(patterns.patternNumber())):    # clear pattern
 						channels.setGridBit(channels.channelNumber(), i, 0)
-					for z in range (patterns.getPatternLength(patterns.patternNumber())):
+					for z in range(patterns.getPatternLength(patterns.patternNumber())):
 						y = num_gen()
 						if y > (Buttons.touchpad_value * 516):
 							channels.setGridBit(channels.channelNumber(), z, 1)
@@ -193,7 +198,7 @@ class Buttons:
 
 				elif event.data1 == data.buttons["button_6"]:
 					print(Buttons.clear_toggle)
-					if Modes.sub_sub_step_iter == 3:				# if in accumulator mode
+					if Modes.sub_step_iter == 3:				# if in accumulator mode
 						if Buttons.clear_toggle == False:
 							ui.setHintMsg(Buttons.six_options[0])
 							Buttons.clear_toggle = True
@@ -205,9 +210,14 @@ class Buttons:
 
 			if event.midiChanEx == 128:						# A - H Buttons
 
-				if event.data1 == data.pads["a"]:
+				if event.data1 == data.pads['a']:
 					if ui.getFocused(4):
 						ui.selectBrowserMenuItem()	
+
+					if Modes.get_mode() == 3:				# shifter mode
+						print('shifting')
+						self.shift.set_shift()
+						event.handled = True
 
 					elif Buttons.b_iter == 0:
 
@@ -223,6 +233,13 @@ class Buttons:
 							elif Notes.accum_on == False and Buttons.clear_toggle == False:
 								Notes.accum_on = True	
 								ui.setHintMsg("Accumulator On")
+
+
+
+
+						elif ui.getFocused(1) or ui.getFocused(5):
+							channels.showCSForm(channels.channelNumber(), -1)
+
 						else:	
 							ui.enter()
 							event.handled = True
@@ -241,7 +258,12 @@ class Buttons:
 					print('b')
 
 				elif event.data1 == data.pads["c"]:
-					channels.showCSForm(channels.channelNumber(), -1)
+					print(channels.selectedChannel())
+					print('indexglobal')
+					print(channels.selectedChannel(0, 0, 1))
+					print('getchannelindex')
+					# print(channels.getChannelIndex())
+
 					print('c')
 					
 				elif event.data1 == data.pads["d"]:
@@ -255,7 +277,7 @@ class Buttons:
 
 				elif event.data1 == data.pads["f"]:
 					print('sub-mode')
-					self.push.sub_mode()
+					self.push.rotate_layout()
 
 				elif event.data1 == data.pads["g"]:
 					Buttons.g_iter += 1
@@ -280,7 +302,6 @@ class Buttons:
 			self.copy_one()
 		elif Buttons.b_options[choice] == 'Paste':
 			self.paste()
-
 
 	def copy_all(self):
 		"""called by b_decide"""
@@ -362,5 +383,5 @@ class PlusMinus:
 			self.minus_status = False		
 
 	def alter_something(self, increment):
-		self.mode.sub_sub_mode(increment)
+		self.mode.sub_mode(increment)
 

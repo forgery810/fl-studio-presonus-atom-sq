@@ -17,7 +17,6 @@ off_keys = (54, 58, 61, 65)
 c_keys = [36, 43, 50]
 c_keys_cont = [36, 48, 60]
 
-
 class Lights():
 
 	colors = {'purple': 146, 'white': 144, 'yellow': 127, 'blue': 145, }
@@ -26,6 +25,7 @@ class Lights():
 	def __init__(self):
 		self.indicator = 0
 		self.step = 0
+
 
 	def lower_steps(color):
 		"""takes in color and sends midi data to change lower row pads appropriate color"""
@@ -44,7 +44,8 @@ class Lights():
 				elif color == 'white':
 					device.midiOutMsg(144, 0, s + 36, 0)
 					device.midiOutMsg(144, 0, s + 36, 127)
-
+				elif color == 'light_blue':
+					device.midiOutMsg(145, 0, s + 36, 66)
 
 	def upper_steps(color):
 		"""takes in color and sends midi data to change upper row pads appropriate color"""
@@ -62,7 +63,9 @@ class Lights():
 					device.midiOutMsg(146, 0, s + 36, 0)
 				elif color == 'white':
 					device.midiOutMsg(144, 0, s + 36, 127)
-
+				elif color == 'light_blue':
+					print('light_blue')
+					device.midiOutMsg(145, 0, s + 36, 66)
 
 	def pattern_select():	
 		"""lights top row white in pattern access mode"""
@@ -78,7 +81,7 @@ class Lights():
 	def channel_select(color):
 		"""lights top row leds according to color sent"""
 
-		for led in range(16, 16 + channels.channelCount()):
+		for led in range(16, 16 + Lights.get_channel_count(16)):
 			device.midiOutMsg(144, 0, led + 36, 127)						# turn white first
 			if color == 'light_purple':
 				device.midiOutMsg(146, 2, led + 36, 60)
@@ -91,19 +94,14 @@ class Lights():
 		"""lights muted and unmuted channels accordingly in channel mute mode"""
 
 		Lights.pattern_select()
-
-		for l in range(52, 52 + channels.channelCount()):
-			if not channels.isChannelMuted(l -52):
+		for l in range(52, 52 + Lights.get_channel_count(16)):
+			if not channels.isChannelMuted(l - 52):
 				device.midiOutMsg(147, 0, l, 23)
-			else:
-				device.midiOutMsg(144, 0, l, 127)
-
-
-
+ 
 	def light_channels():
 		"""lights channels for pad per channel mode"""
 
-		for i in range(0, channels.channelCount()):
+		for i in range(0, Lights.get_channel_count(32)):
 			device.midiOutMsg(144, 0, 36 + i, 127)
 			device.midiOutMsg(146, 0, 36 + i, 0)
 		for x in range(channels.channelCount(), 32):
@@ -134,7 +132,7 @@ class Lights():
 			Lights.update_pattern()
 
 	def follow_beat(self, data):
-		
+
 		self.indicator += 2
 		if self.indicator >= patterns.getPatternLength(patterns.patternNumber()) or data == 1:
 			self.indicator = 0
@@ -154,3 +152,9 @@ class Lights():
 			device.midiOutMsg(146, 0, i + 52, 22)			
 
 
+	def get_channel_count(limit):
+		channel_count = channels.channelCount()
+		if channel_count > limit:
+			return limit
+		else:
+			return channel_count
