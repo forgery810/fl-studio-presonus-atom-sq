@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ
 # Author: ts-forgery
-# Version 0.7.0
+# Version 0.7.1
 
 import device
 import mixer
@@ -65,7 +65,8 @@ def OnUpdateBeatIndicator(data):
 				steps.reset_bar_count()
 
 def OnIdle():
- 	"""called by FL whether or not in play"""
+	"""called by FL whether or not in play"""
+
 	if transport.isPlaying() == True and Modes.mode == 1 and config.options['follow_step']:
 		Modes.mode_init()
 		device.midiOutMsg(144, 0, get_led_step(), 127)
