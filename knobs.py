@@ -73,25 +73,6 @@ class Knobs:
 					elif event.data1 == data.knobs["knob_eight"]:
 						Buttons.upper_limit = int(mapvalues(self.data_two, 127, 0, 0, 127))
 						ui.setHintMsg(f"Setting Upper Limit {self.data_two}")
-
-
-				elif Modes.get_step_submode() == 3:      			# Accumulator Mode
-
-					if self.data_one == data.knobs['knob_five']:
-						Notes.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
-						ui.setHintMsg(data.notes_list[int(mapvalues(self.data_two, 0, 11, 0, 127))])
-					elif event.data1 == data.knobs["knob_six"]:
-						Notes.scale_choice = int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))
-						print(f'Notes.scale_choice: {Notes.scale_choice}')
-						ui.setHintMsg(data.scale_names[int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))])		
-					elif event.data1 == data.knobs["knob_seven"]:
-						Notes.interval = int(mapvalues(self.data_two, -12, 12, 0, 127))
-						ui.setHintMsg(f'Note Interval: {int(mapvalues(self.data_two, -12, 12, 0, 127))}')
-					elif event.data1 == data.knobs["knob_eight"]:
-						Notes.pass_limit = int(mapvalues(self.data_two, 0, 10, 0, 127))
-						ui.setHintMsg(f'Count: {int(mapvalues(self.data_two, 0, 10, 0, 127))}')
-					event.handled = True
-
 																		# standard mode
 				elif self.data_one == data.knobs['knob_five']:
 					channels.setChannelVolume(channels.selectedChannel(), mapvalues(event.data2, 0, 1, 0, 127))
@@ -109,6 +90,21 @@ class Knobs:
 					if self.data_one == data.knobs['knob_five']:
 						Shifter.shift_type = int(mapvalues(self.data_two, 0, len(Modes.shifter_options) - 1, 0, 127))
 						ui.setHintMsg(f'Shift Type: {Modes.shifter_options[Shifter.shift_type]}')
+
+				elif Modes.get_alter_mode() == 1:		
+					if self.data_one == data.knobs['knob_five']:
+						Notes.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
+						ui.setHintMsg(data.notes_list[int(mapvalues(self.data_two, 0, 11, 0, 127))])
+					elif event.data1 == data.knobs["knob_six"]:
+						Notes.scale_choice = int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))
+						ui.setHintMsg(data.scale_names[int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))])		
+					elif event.data1 == data.knobs["knob_seven"]:
+						Notes.interval = int(mapvalues(self.data_two, -12, 12, 0, 127))
+						ui.setHintMsg(f'Note Interval: {int(mapvalues(self.data_two, -12, 12, 0, 127))}')
+					elif event.data1 == data.knobs["knob_eight"]:
+						Notes.pass_limit = int(mapvalues(self.data_two, 0, 10, 0, 127))
+						ui.setHintMsg(f'Count: {int(mapvalues(self.data_two, 0, 10, 0, 127))}')
+					event.handled = True
 
 		elif ui.getFocused(5) and plugins.isValid(self.channel):
 			self.plugin_control(event)

@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ-dev
 # Author: ts-forgery
-# Version 0.6.9
+# Version 0.7.0
 
 import device
 import mixer
@@ -22,6 +22,8 @@ alt = Shifter()
 current_pattern = 0
 
 class Steps:
+	"""this class makes sure functions that rely on current step/bar to be called are only called once
+		when those conditions are met"""
 
 	shift_called = False
 	bar_iter = 0
@@ -63,16 +65,12 @@ def OnUpdateBeatIndicator(data):
 				steps.reset_bar_count()
 
 def OnIdle():
-# 	"""called by FL whether or not in play"""
+ 	"""called by FL whether or not in play"""
 
 	if transport.isPlaying() == True and Modes.mode == 1 and config.options['follow_step']:
 		Modes.mode_init()
-		device.midiOutMsg(144, 0, mixer.getSongStepPos() + 36, 127)
-		device.midiOutMsg(145, 1, mixer.getSongStepPos() + 36, 60)
-
-	# steps = Steps()
-	# if transport.isPlaying() == True:
-	# 	print(mixer.getSongStepPos())
+		device.midiOutMsg(144, 0, get_led_step(), 127)
+		device.midiOutMsg(145, 1, get_led_step(), 60)
 
 	# if transport.isPlaying() and mixer.getSongStepPos() == patterns.getPatternLength(patterns.patternNumber())-1:
 	# 	# alt = Shifter()
@@ -85,11 +83,13 @@ def OnIdle():
 def OnRefresh(ref_num):
 	"""called by FL when any change is made to the program. with mouse, keyboard, controller etc"""
 	# print(ref_num)
+
 	s = Steps()
 
 	# if ref_num == 1024 and current_pattern != patterns.patternNumber():
 	# 	if Notes.accum_on:
 	# 		Notes.temp_reset_steps()
+
 	if ref_num == 256:
 		indicate.indicator = 0
 		s.reset_bar_count()
@@ -99,7 +99,7 @@ def OnRefresh(ref_num):
 def OnInit():
 	"""called when FL connects with controller"""
 
-	print("Presonus Atom SQ - Version: 0.6.4")
+	print("Presonus Atom SQ - Version: 0.7.0")
 	print(f'Scripting API Version: {general.getVersion()}')
 	Lights.clear_pattern()
 
@@ -108,5 +108,11 @@ def OnMidiMsg(event):
 
 	expedite = Expedite(event)
 
+def get_led_step():
+	""" Looks up current step and sets offset for atom led pad. Prevents led step lights above 32 steps""" 
 
-
+	offset = 36 + mixer.getSongStepPos() 
+	if mixer.getSongStepPos() > 31:
+		offset = 0
+	return offset
+	

@@ -32,7 +32,7 @@ step_mode = 1
 standard = 0
 keyboard = 0 
 two_bars = 0
-accumulator = 3
+accumulator = 1
 pads_per_channel = 2
 alter = 3
 
@@ -77,13 +77,13 @@ class Notes():
 		elif self.get_mode() == pads_per_channel:
 			self.pad_channel(event)
 		elif self.get_mode() == alter and event.data2 > 0:
-			# self.alterer(event)
-			# alt = Shifter()
+			self.alter_steps(event)
 			Modes.mode_init()
 			event.handled = True
 
 	def keyboard(self, event):
 		"""calls for keyboard led layout and takes incoming midi data and converts to approprite note in key_dict"""
+
 		Lights.keyboard_lights()
 		if str(event.data1) in data.key_dict:
 			channels.midiNoteOn(channels.selectedChannel(), data.key_dict[str(event.data1)] + Modes.get_octave(), event.data2)
@@ -93,9 +93,30 @@ class Notes():
 	
 	def continuous(self, event):
 		"""controls what happens to notepad presses when in continuous mode. -24 adjusts step data1 to tolerable range of notes within scale"""
+
 		channels.midiNoteOn(channels.selectedChannel(), data.scales[Modes.scale_iter][Modes.root_iter][event.data1-24], event.data2)
 		Modes.mode_init()
-		event.handled = True
+
+
+	def alter_steps(self, event):
+		"""decides what calss/function gets called when in alter mode and note/step is pressed"""
+
+		if Modes.alter_iter == 1:
+			if Notes.accum_on and event.data1 - 36 < patterns.getPatternLength(patterns.patternNumber()):
+				Notes.original_note = channels.getCurrentStepParam(channels.selectedChannel(), event.data1-36, 0)
+
+				if Notes.original_note in data.scales[Notes.scale_choice][Notes.root_note]:
+					Notes.accum_steps.append([patterns.patternNumber(), channels.channelNumber(), event.data1-36, 
+						Notes.interval, Notes.pass_limit, 0, Notes.original_note, Notes.root_note, Notes.scale_choice, 
+						Notes.original_note, 0])
+
+				Notes.accum_chan = channels.channelNumber()
+				Modes.mode_init()
+				event.handled = True
+
+			else:
+				Modes.mode_init()
+				event.handled = True
 
 	def step_mode(self, event):
 		"""controls notepad presses when in step mode"""
@@ -120,23 +141,6 @@ class Notes():
 				event.handled = True
 			else:
 				channels.muteChannel(event.data1 - 52)
-				Modes.mode_init()
-				event.handled = True
-															# ACCUMULATOR
-		elif  Modes.get_step_submode() == accumulator:	
-			if Notes.accum_on and event.data1 - 36 < patterns.getPatternLength(patterns.patternNumber()):
-				Notes.original_note = channels.getCurrentStepParam(channels.selectedChannel(), event.data1-36, 0)
-
-				if Notes.original_note in data.scales[Notes.scale_choice][Notes.root_note]:
-					Notes.accum_steps.append([patterns.patternNumber(), channels.channelNumber(), event.data1-36, 
-						Notes.interval, Notes.pass_limit, 0, Notes.original_note, Notes.root_note, Notes.scale_choice, 
-						Notes.original_note, 0])
-
-				Notes.accum_chan = channels.channelNumber()
-				Modes.mode_init()
-				event.handled = True
-
-			else:
 				Modes.mode_init()
 				event.handled = True
 																
@@ -194,7 +198,6 @@ class Notes():
 	def update_beat():
 		"""used for accumulator. tracks every step when transport is active"""
 
-		# if beat == 1 and Notes.accum_on:
 		for step in Notes.accum_steps:
 			if step[chan] <= channels.channelCount()-1:									# in case channels are deleted and 
 				step[count] += 1 														# iterate each counter per step
@@ -346,7 +349,7 @@ class Shifter():
 		else:
 			Shifter.shift_data.append([patterns.patternNumber(), channels.selectedChannel(), Shifter.shift_type, 0, 0, 0, ])
 											# 0 					1 						2 			3    4 new_pat								
-		print(f'shift datat: {Shifter.shift_data}')
+		print(f'shift data: {Shifter.shift_data}')
 
 	def clear_channel(self):
 		"""erases data in shift_data for currently selected channel"""

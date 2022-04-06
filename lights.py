@@ -26,7 +26,6 @@ class Lights():
 		self.indicator = 0
 		self.step = 0
 
-
 	def lower_steps(color):
 		"""takes in color and sends midi data to change lower row pads appropriate color"""
 
@@ -139,6 +138,8 @@ class Lights():
 		self.current_step(self.indicator)
 
 	def current_step(self, step):
+		"""takes current step and lights led for it"""
+		
 		device.midiOutMsg(144, 0, self.indicator + 36, 127)
 		device.midiOutMsg(145, 1, self.indicator + 36 , 80)
 
@@ -150,7 +151,6 @@ class Lights():
 			device.midiOutMsg(145, 0, i + 36, 0)
 			device.midiOutMsg(144, 0, i + 52, 127)
 			device.midiOutMsg(146, 0, i + 52, 22)			
-
 
 	def get_channel_count(limit):
 		channel_count = channels.channelCount()

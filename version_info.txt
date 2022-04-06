@@ -12,6 +12,7 @@
 
 	-done-
 
+# accumulator is now under alter mode 		0.7.0
 # fixed lighting issue when mute/selected channels used with more than 16 channels 0.6.9
 # fixed shifter bugs 0.6.9
 # sequencer shifter added 0.6.8

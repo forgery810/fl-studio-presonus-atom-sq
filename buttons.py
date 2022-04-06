@@ -234,9 +234,6 @@ class Buttons:
 								Notes.accum_on = True	
 								ui.setHintMsg("Accumulator On")
 
-
-
-
 						elif ui.getFocused(1) or ui.getFocused(5):
 							channels.showCSForm(channels.channelNumber(), -1)
 
@@ -262,8 +259,6 @@ class Buttons:
 					print('indexglobal')
 					print(channels.selectedChannel(0, 0, 1))
 					print('getchannelindex')
-					# print(channels.getChannelIndex())
-
 					print('c')
 					
 				elif event.data1 == data.pads["d"]:
@@ -360,6 +355,7 @@ class PlusMinus:
 	def status_maker(self):
 		"""reads plus minus button midi data and calls act_out when button is pushed and midi cc is no longer 0 but ignores continued cc 
 		data as to not retrigger until it button is released and cc is reset to 0"""
+		
 		if self.event.data2 > 64:
 			if self.plus_status != True and PlusMinus.zero_status == True:
 				self.plus_status = True
@@ -367,7 +363,6 @@ class PlusMinus:
 				self.alter_something(1)
 			elif self.plus_status == True:
 				self.plus_status = False
-
 
 		elif self.event.data2 < 64:
 			if self.minus_status != True and PlusMinus.zero_status == True:

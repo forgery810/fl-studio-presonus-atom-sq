@@ -19,10 +19,10 @@ class Modes:
 	octave_values = (-36, -24, -12, 0, 12, 24, 36)
 
 	mode_selected = ['Notes', 'Step Sequencer', 'Pad per Channel', 'Alter']
-	step_sub_names = ['Standard',  'Parameter Entry', 'Random Notes', 'Accumulator']
+	step_sub_names = ['Standard',  'Parameter Entry', 'Random Notes']
 	step_layouts = ['32 Step', 'Pattern Access', 'Channel Select', 'Channel Mute']
 	note_layouts = ['Keyboard', 'Continuous']
-	alter_submodes = ['Shifter']
+	alter_submodes = ['Shifter', "Accumulator"]
 	shifter_options = ['Left', ' Right', 'Invert', 'Clear']
 
 	octave_names = ['-3', '-2', '-1', '0', '1', '2', '3']
@@ -30,13 +30,6 @@ class Modes:
 
 	def __init__(self, event):
 		self.event = event
-		# Modes.e = self.event
-		# self.mode_selected = ['Notes', 'Step Sequencer', 'Pad per Channel']
-		# self.step_sub_names = ['Standard',  'Parameter Entry', 'Random Notes', 'Accumulator']
-		# self.step_submodes = ['32 Step', 'Pattern Access', 'Channel Select', 'Channel Mute']
-		# self.note_layouts = ['Keyboard', 'Continuous']
-		# self.octave_names = ['-3', '-2', '-1', '0', '1', '2', '3']
-		# self.continuous_modes = ['Play Notes', 'Set Scale']
 		
 	def mode_change(self):
 		"""increments through major modes"""
@@ -48,7 +41,6 @@ class Modes:
 			Modes.mode = 0
 		Modes.mode_init()
 		ui.setHintMsg(Modes.mode_selected[Modes.mode])
-
 
 	def mode_init():			
 		"""Determines lighting based on what modes are active. Calls appropriate Light() method"""
@@ -76,11 +68,6 @@ class Modes:
 				if Modes.step_iter == 0:
 					Lights.upper_steps('white')
 
-			elif Modes.step_sub_names[Modes.sub_step_iter] == 'Accumulator':							# accumulator
-				Lights.lower_steps('yellow')
-				if Modes.step_iter == 0:
-					Lights.upper_steps('yellow')
-
 			elif Modes.step_sub_names[Modes.sub_step_iter] == 'Random Notes':							# random
 				Lights.lower_steps('purple')
 				if Modes.step_iter == 0:
@@ -98,6 +85,11 @@ class Modes:
 			if Modes.alter_submodes[Modes.alter_iter] == 'Shifter':
 				Lights.lower_steps('light_blue')
 				Lights.upper_steps('light_blue')
+
+			elif Modes.alter_submodes[Modes.alter_iter] == 'Accumulator':							# accumulator
+				Lights.lower_steps('yellow')
+				if Modes.step_iter == 0:
+					Lights.upper_steps('yellow')
 
 	def rotate_layout(self):			# formally def sub_mode(self)
 		"""iterates through second level of modes - submodes"""
@@ -118,7 +110,7 @@ class Modes:
 			ui.setHintMsg(Modes.note_layouts[Modes.note_iter])
 			Modes.mode_init()
 
-	def sub_mode(self, increment):
+	def sub_mode(self, increment):					# formally sub_sub_mode
 		"""increments through various sub sub modes, increment variable dictates by how much"""
 
 		if Modes.mode == 0:
@@ -156,15 +148,14 @@ class Modes:
 			ui.setHintMsg(Modes.step_sub_names[Modes.sub_step_iter])
 			Modes.mode_init()
 
-		# elif Modes.mode == 3:												# check if in Alter Mode
-		# 	Modes.alter_iter += increment
-		# 	if Modes.alter_iter >= len(Modes.alter_submodes):
-		# 		Modes.alter_iter = 0
-		# 	elif Modes.alter_iter < 0:
-		# 		Modes.alter_iter = len(Modes.alter_submodes) - 1
-		# 	ui.setHintMsg(Modes.alter_submodes[Modes.alter_iter])
-		# 	Modes.mode_init()
-		# 	Shifter.
+		elif Modes.mode == 3:												# check if in Alter Mode
+			Modes.alter_iter += increment
+			if Modes.alter_iter >= len(Modes.alter_submodes):
+				Modes.alter_iter = 0
+			elif Modes.alter_iter < 0:
+				Modes.alter_iter = len(Modes.alter_submodes) - 1
+			ui.setHintMsg(Modes.alter_submodes[Modes.alter_iter])
+			Modes.mode_init()
 
 	def get_roots():
 		"""finds root notes to set blue for currently selected scale and adds to list for Lights function to use
