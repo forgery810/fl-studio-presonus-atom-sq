@@ -10,7 +10,6 @@ class Directions():
 	ud_arrow = (24, 25, 26, 27, 28, 29, 30, 31, 46, 47)
 
 	def __init__(self, event):
-
 		self.ud_result = self.ud_arrow.index(event.data1)
 		Directions.up_down(self, event)
 

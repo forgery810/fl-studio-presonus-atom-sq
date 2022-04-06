@@ -4,7 +4,7 @@ import data
 import ui
 import device
 from modes import Modes
-from notes import Notes
+from notes import Notes, Shifter
 import notes
 import patterns
 import plugins
@@ -22,6 +22,7 @@ class Knobs:
 
 	def knob_turn(self, event):
 		"""handles majority of knob based events"""
+		
 		self.data_one = event.data1
 		self.data_two = event.data2
 		self.pad_step = notes.temp_step[0]
@@ -42,7 +43,7 @@ class Knobs:
 		elif ui.getFocused(1) and self.data_one != 1:
 
 			if Modes.mode == 1:				
-				if Modes.sub_sub_step_iter == 1:									# Set Step Parameters
+				if Modes.get_step_submode() == 1:									# Set Step Parameters
 					if self.data_one == data.knobs["knob_one"]:
 						ui.setHintMsg(f'Note: {data.midi_notes[self.data_two]}')
 					elif self.data_one <= 20:
@@ -57,7 +58,7 @@ class Knobs:
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, self.data_two, 1)
 						event.handled = True
 
-				elif Modes.sub_sub_step_iter == 2:								# Random Mode - set scale/key
+				elif Modes.get_step_submode() == 2:								# Random Mode - set scale/key
 
 					if event.data1 == data.knobs["knob_five"]:
 						Buttons.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
@@ -72,25 +73,6 @@ class Knobs:
 					elif event.data1 == data.knobs["knob_eight"]:
 						Buttons.upper_limit = int(mapvalues(self.data_two, 127, 0, 0, 127))
 						ui.setHintMsg(f"Setting Upper Limit {self.data_two}")
-
-
-				elif Modes.sub_sub_step_iter == 3:      			# Accumulator Mode
-
-					if self.data_one == data.knobs['knob_five']:
-						Notes.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
-						ui.setHintMsg(data.notes_list[int(mapvalues(self.data_two, 0, 11, 0, 127))])
-					elif event.data1 == data.knobs["knob_six"]:
-						Notes.scale_choice = int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))
-						print(f'Notes.scale_choice: {Notes.scale_choice}')
-						ui.setHintMsg(data.scale_names[int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))])		
-					elif event.data1 == data.knobs["knob_seven"]:
-						Notes.interval = int(mapvalues(self.data_two, -12, 12, 0, 127))
-						ui.setHintMsg(f'Note Interval: {int(mapvalues(self.data_two, -12, 12, 0, 127))}')
-					elif event.data1 == data.knobs["knob_eight"]:
-						Notes.pass_limit = int(mapvalues(self.data_two, 0, 10, 0, 127))
-						ui.setHintMsg(f'Count: {int(mapvalues(self.data_two, 0, 10, 0, 127))}')
-					event.handled = True
-
 																		# standard mode
 				elif self.data_one == data.knobs['knob_five']:
 					channels.setChannelVolume(channels.selectedChannel(), mapvalues(event.data2, 0, 1, 0, 127))
@@ -102,6 +84,27 @@ class Knobs:
 
 				elif self.data_one == data.knobs['knob_eight']:
 					channels.setChannelColor(channels.selectedChannel(), data.colors[int(mapvalues(event.data2, 0, len(data.colors)-1, 0, 127))])
+
+			elif Modes.mode == 3:   								# Alter
+				if Modes.get_alter_mode() == 0:
+					if self.data_one == data.knobs['knob_five']:
+						Shifter.shift_type = int(mapvalues(self.data_two, 0, len(Modes.shifter_options) - 1, 0, 127))
+						ui.setHintMsg(f'Shift Type: {Modes.shifter_options[Shifter.shift_type]}')
+
+				elif Modes.get_alter_mode() == 1:		
+					if self.data_one == data.knobs['knob_five']:
+						Notes.root_note = int(mapvalues(self.data_two, 0, 11, 0, 127))
+						ui.setHintMsg(data.notes_list[int(mapvalues(self.data_two, 0, 11, 0, 127))])
+					elif event.data1 == data.knobs["knob_six"]:
+						Notes.scale_choice = int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))
+						ui.setHintMsg(data.scale_names[int(mapvalues(self.data_two, 0, len(data.scale_names)-1, 0, 127))])		
+					elif event.data1 == data.knobs["knob_seven"]:
+						Notes.interval = int(mapvalues(self.data_two, -12, 12, 0, 127))
+						ui.setHintMsg(f'Note Interval: {int(mapvalues(self.data_two, -12, 12, 0, 127))}')
+					elif event.data1 == data.knobs["knob_eight"]:
+						Notes.pass_limit = int(mapvalues(self.data_two, 0, 10, 0, 127))
+						ui.setHintMsg(f'Count: {int(mapvalues(self.data_two, 0, 10, 0, 127))}')
+					event.handled = True
 
 		elif ui.getFocused(5) and plugins.isValid(self.channel):
 			self.plugin_control(event)

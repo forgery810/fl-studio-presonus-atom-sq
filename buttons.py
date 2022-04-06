@@ -13,7 +13,7 @@ import config
 from direction import Directions
 from lights import Lights
 from modes import Modes	
-from notes import Notes
+from notes import Notes, Shifter
 import _random
 from midi import *
 
@@ -35,15 +35,19 @@ class Buttons:
 	accu_steps = []
 	clear_toggle = False
 	six_options = ['Press A to clear accum steps...']
+	b_iter = 0
+	b_options = ['Enter', 'Copy Pattern', 'Copy Channel', 'Paste']
 	tempo_toggle = False
 	button_6_iter = 0
 
 	def __init__(self, event):
+		self.shift = Shifter()
 		self.push = Modes(event)
 		self.act_out(event)
 
 	def act_out(self, event):
-		"handles button inputs and assigns function from fl studio api"
+		"""handles button inputs and assigns function from fl studio api"""
+
 		if event.midiId == 144:			
 
 			if event.data2 > 0:
@@ -158,12 +162,16 @@ class Buttons:
 
 				if event.data2 == 1:
 					ui.next()
+					event.handled = True
 				elif ui.getFocused(0):
 					if event.data2 == 65 and mixer.trackNumber() > 0:
 						ui.previous()
 						event.handled = True
 				elif event.data2:
 					ui.previous()
+					event.handled = True
+				else:
+					event.handled = True 
 
 			if event.midiChanEx == 130 and event.data2 > 0:												# 1-6 buttons
 
@@ -176,13 +184,13 @@ class Buttons:
 					print("Random")
 					for i in range(patterns.getPatternLength(patterns.patternNumber())):    # clear pattern
 						channels.setGridBit(channels.channelNumber(), i, 0)
-					for z in range (patterns.getPatternLength(patterns.patternNumber())):
+					for z in range(patterns.getPatternLength(patterns.patternNumber())):
 						y = num_gen()
 						if y > (Buttons.touchpad_value * 516):
 							channels.setGridBit(channels.channelNumber(), z, 1)
 						else:
 							channels.setGridBit(channels.channelNumber(), z, 0)
-					self.push.mode_init()
+					Modes.mode_init()
 					event.handled = True
 
 				elif event.data1 == data.buttons["button_5"]:
@@ -190,7 +198,7 @@ class Buttons:
 
 				elif event.data1 == data.buttons["button_6"]:
 					print(Buttons.clear_toggle)
-					if Modes.sub_sub_step_iter == 3:				# if in accumulator mode
+					if Modes.sub_step_iter == 3:				# if in accumulator mode
 						if Buttons.clear_toggle == False:
 							ui.setHintMsg(Buttons.six_options[0])
 							Buttons.clear_toggle = True
@@ -202,32 +210,55 @@ class Buttons:
 
 			if event.midiChanEx == 128:						# A - H Buttons
 
-				if event.data1 == data.pads["a"]:
+				if event.data1 == data.pads['a']:
 					if ui.getFocused(4):
 						ui.selectBrowserMenuItem()	
 
-					elif Modes.sub_sub_step_iter == 3: 				# accumulator mode
-						if Buttons.clear_toggle == True:
-							# Notes.accum_step.clear()
-							Notes.reset_steps()
-							Buttons.clear_toggle = False
+					if Modes.get_mode() == 3:				# shifter mode
+						print('shifting')
+						self.shift.set_shift()
+						event.handled = True
+
+					elif Buttons.b_iter == 0:
+
+						if Modes.get_step_submode() == 3: 				# accumulator mode
+							if Buttons.clear_toggle == True:
+								# Notes.accum_step.clear()
+								Notes.reset_steps()
+								Buttons.clear_toggle = False
+								event.handled = True
+							elif Notes.accum_on == True and Buttons.clear_toggle == False:
+								Notes.accum_on = False
+								ui.setHintMsg("Accumulator Off")
+							elif Notes.accum_on == False and Buttons.clear_toggle == False:
+								Notes.accum_on = True	
+								ui.setHintMsg("Accumulator On")
+
+						elif ui.getFocused(1) or ui.getFocused(5):
+							channels.showCSForm(channels.channelNumber(), -1)
+
+						else:	
+							ui.enter()
 							event.handled = True
-						elif Notes.accum_on == True and Buttons.clear_toggle == False:
-							Notes.accum_on = False
-							ui.setHintMsg("Accumulator Off")
-						elif Notes.accum_on == False and Buttons.clear_toggle == False:
-							Notes.accum_on = True	
-							ui.setHintMsg("Accumulator On")
-					else:	
-						ui.enter()
-						print('enter')
-			
+							print('enter')
+
+					elif Buttons.b_iter != 0:
+						self.b_decide(Buttons.b_iter)
+						event.handled = True
 
 				elif event.data1 == data.pads["b"]:
+					Buttons.b_iter += 1
+					if Buttons.b_iter >= len(Buttons.b_options):
+						Buttons.b_iter = 0
+					ui.setHintMsg(Buttons.b_options[Buttons.b_iter])
+					# self.b_decide(Buttons.b_iter)
 					print('b')
 
 				elif event.data1 == data.pads["c"]:
-					channels.showCSForm(channels.channelNumber(), -1)
+					print(channels.selectedChannel())
+					print('indexglobal')
+					print(channels.selectedChannel(0, 0, 1))
+					print('getchannelindex')
 					print('c')
 					
 				elif event.data1 == data.pads["d"]:
@@ -241,7 +272,7 @@ class Buttons:
 
 				elif event.data1 == data.pads["f"]:
 					print('sub-mode')
-					self.push.sub_mode()
+					self.push.rotate_layout()
 
 				elif event.data1 == data.pads["g"]:
 					Buttons.g_iter += 1
@@ -257,17 +288,45 @@ class Buttons:
 						transport.globalTransport(midi.FPT_F9, 68)
 					event.handled = True 				
 
+	def b_decide(self, choice):
+		"""takes b_iter as input and calls appropriate function"""
+
+		if Buttons.b_options[choice] == 'Copy Pattern':
+			self.copy_all()
+		elif Buttons.b_options[choice] == 'Copy Channel':
+			self.copy_one()
+		elif Buttons.b_options[choice] == 'Paste':
+			self.paste()
+
+	def copy_all(self):
+		"""called by b_decide"""
+
+		channels.selectAll()
+		ui.copy()
+
+	def copy_one(self):
+		"""called by b_decide"""
+
+		ui.copy()
+
+	def paste(self):
+		"""called by b_decide"""
+
+		ui.paste()
+
 	def note_gen(self):
 		"""generates random notes. 0-65535 is the range of 16 bit numbers. note variable calls num_gen for random number which is mapped to index of note in chosen scale"""
+
 		for i in range(patterns.getPatternLength(patterns.patternNumber())):
 			note = data.scales[Buttons.scale][Buttons.root_note][int(mapvalues(num_gen(), 0 + Buttons.lower_limit, 
 					len(data.scales[Buttons.scale][Buttons.root_note]) - Buttons.upper_limit, 0, 65535))]
 			print(note)
 			channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, note, 1)
-			self.push.mode_init()
+			Modes.mode_init()
 
 def num_gen():
-	"""seeds and returns 16 bit random number"""
+	"""seeds and returns 16 bit random number as int"""
+
 	rand_obj = _random.Random()
 	rand_obj.seed()
 	rand_int = rand_obj.getrandbits(16) 
@@ -275,6 +334,7 @@ def num_gen():
 
 def mapvalues(value, tomin, tomax, frommin, frommax):
 	"""takes in value and range and returns value within another range"""
+
 	input_value = value
 	solution = tomin + (tomax-(tomin))*((input_value - frommin) / (frommax - (frommin)))
 	if  -0.01 < solution < 0.01:
@@ -295,6 +355,7 @@ class PlusMinus:
 	def status_maker(self):
 		"""reads plus minus button midi data and calls act_out when button is pushed and midi cc is no longer 0 but ignores continued cc 
 		data as to not retrigger until it button is released and cc is reset to 0"""
+		
 		if self.event.data2 > 64:
 			if self.plus_status != True and PlusMinus.zero_status == True:
 				self.plus_status = True
@@ -302,7 +363,6 @@ class PlusMinus:
 				self.alter_something(1)
 			elif self.plus_status == True:
 				self.plus_status = False
-
 
 		elif self.event.data2 < 64:
 			if self.minus_status != True and PlusMinus.zero_status == True:
@@ -318,5 +378,5 @@ class PlusMinus:
 			self.minus_status = False		
 
 	def alter_something(self, increment):
-		self.mode.sub_sub_mode(increment)
+		self.mode.sub_mode(increment)
 

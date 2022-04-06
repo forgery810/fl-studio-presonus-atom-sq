@@ -1,5 +1,3 @@
-version - 0.6.2
-
 	-to-do-
 
 # repeat note events
@@ -14,6 +12,19 @@ version - 0.6.2
 
 	-done-
 
+# accumulator is now under alter mode 		0.7.0
+# fixed lighting issue when mute/selected channels used with more than 16 channels 0.6.9
+# fixed shifter bugs 0.6.9
+# sequencer shifter added 0.6.8
+# fixed issue where accumulator would repeat note under certain circumstances 0.6.7 
+# began adding sequence shifter 0.6.6
+# copy channel option added to B button options to join copy pattern	0.6.5
+# code cleanup 0.6.5
+# changed mode terminology for clairity. sub-modes are now layouts. sub-sub-modes are now sub-modes. 0.6.5
+	key sub modes are now octaves in code. 
+# B button now rotates through some options controlling A button functions (enter/copy pattern/paste)   0.6.4
+# new channel mute and and channel select modes added. top row of pads will mute/select 	0.6.3
+	channels 1-16 for quicker functionality while performing
 # in random note mode, the range of notes has been improved for better control (less high notes) 0.6.2
 # fixed bug with accumulator caused by channel deletion 0.6.1 
 # cleaned up code 0.6.1
