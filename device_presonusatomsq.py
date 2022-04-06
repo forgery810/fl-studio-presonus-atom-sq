@@ -66,7 +66,6 @@ def OnUpdateBeatIndicator(data):
 
 def OnIdle():
  	"""called by FL whether or not in play"""
-
 	if transport.isPlaying() == True and Modes.mode == 1 and config.options['follow_step']:
 		Modes.mode_init()
 		device.midiOutMsg(144, 0, get_led_step(), 127)
