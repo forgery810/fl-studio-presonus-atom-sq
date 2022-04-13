@@ -3,6 +3,8 @@ import channels
 import device
 import patterns
 import plugins
+import transport
+import midi
 from modes import Modes
 from lights import Lights
 import data
@@ -28,6 +30,7 @@ n_count = 10
 jump_to_pattern = 1
 channel_access = 2
 channel_mute = 3
+step_select = 4
 step_mode = 1
 standard = 0
 keyboard = 0 
@@ -143,6 +146,10 @@ class Notes():
 				channels.muteChannel(event.data1 - 52)
 				Modes.mode_init()
 				event.handled = True
+
+		elif Modes.step_iter == step_select and event.data1 >=52:		# step select
+			Notes.step_select(event)
+
 																
 		elif Modes.get_step_submode() != param_edit:      						  # sets step as long as param edit not active
 			if channels.getGridBit(channels.selectedChannel(), event.data1 - 36) == 0:						
@@ -165,8 +172,10 @@ class Notes():
 
 	def pad_channel(self, event):
 		"""takes event midi data from pad press and play corresponding channel"""
-
-		if  event.data1 < (channels.channelCount() + 36) and event.midiId != 208:
+		if event.data1 == 67:
+			transport.globalTransport(midi.FPT_TapTempo, 1)
+			event.handled = True
+		elif  event.data1 < (channels.channelCount() + 36) and event.midiId != 208:
 			channels.selectOneChannel(event.data1-36) 
 			channels.midiNoteOn(event.data1-36, 60, event.data2)
 			event.handled = True
@@ -242,6 +251,13 @@ class Notes():
 						channels.setStepParameterByIndex(r[chan], r[pat], st, 0, r[orig])
 		Notes.accum_steps.clear()
 		ui.setHintMsg('Accum steps cleared')
+
+	def step_select(event):
+		step = event.data1 - 51
+		length = patterns.getPatternLength(patterns.patternNumber())
+		offset = int(length / 16)
+		step_to_set = (step * offset * 24) - (24 * offset)
+		transport.setSongPos(step_to_set, 2)
 
 class Shifter():
 

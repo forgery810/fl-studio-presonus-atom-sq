@@ -1,6 +1,7 @@
 # name=Presonus Atom SQ-dev
 # Author: ts-forgery
-# Version 0.7.0
+# Version 0.7.5
+VERSION = '0.7.5-dev'
 
 import device
 import mixer
@@ -49,6 +50,8 @@ def OnUpdateBeatIndicator(data):
 
 	steps = Steps()
 
+	# print(transport.getSongPos(2))
+
 	Modes.mode_init()
 	if data == 1:
 		# print(patterns.getPatternLength(patterns.patternNumber()))
@@ -65,7 +68,7 @@ def OnUpdateBeatIndicator(data):
 				steps.reset_bar_count()
 
 def OnIdle():
- 	"""called by FL whether or not in play"""
+	"""called by FL whether or not in play"""
 
 	if transport.isPlaying() == True and Modes.mode == 1 and config.options['follow_step']:
 		Modes.mode_init()
@@ -99,7 +102,7 @@ def OnRefresh(ref_num):
 def OnInit():
 	"""called when FL connects with controller"""
 
-	print("Presonus Atom SQ - Version: 0.7.0")
+	print(f"Presonus Atom SQ - Version: {VERSION}")
 	print(f'Scripting API Version: {general.getVersion()}')
 	Lights.clear_pattern()
 

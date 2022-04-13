@@ -20,7 +20,7 @@ class Modes:
 
 	mode_selected = ['Notes', 'Step Sequencer', 'Pad per Channel', 'Alter']
 	step_sub_names = ['Standard',  'Parameter Entry', 'Random Notes']
-	step_layouts = ['32 Step', 'Pattern Access', 'Channel Select', 'Channel Mute']
+	step_layouts = ['32 Step', 'Pattern Access', 'Channel Select', 'Channel Mute', 'Step Select']
 	note_layouts = ['Keyboard', 'Continuous']
 	alter_submodes = ['Shifter', "Accumulator"]
 	shifter_options = ['Left', ' Right', 'Invert', 'Clear']
@@ -55,13 +55,18 @@ class Modes:
 
 			if Modes.step_layouts[Modes.step_iter] == 'Channel Select':
 				Lights.channel_select('light_purple')
+				Lights.active_channel(channels.channelNumber())
 
 			elif Modes.step_layouts[Modes.step_iter] == 'Channel Mute':
 				Lights.muted_channels()
+				
 
 			elif Modes.step_layouts[Modes.step_iter] == 'Pattern Access':
 				Lights.pattern_select()
 				Lights.active_pattern(patterns.patternNumber())
+
+			elif Modes.step_layouts[Modes.step_iter] == "Step Select":
+				Lights.step_select_lights()
 
 			if Modes.step_sub_names[Modes.sub_step_iter] == 'Parameter Entry':				
 				Lights.lower_steps('white')

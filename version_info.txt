@@ -3,15 +3,19 @@
 # repeat note events
 # led when paramter at zero or c5 note
 # light rec & play buttons when active
-# tap tempo
 # add note offset when scales are used to reduce their list size
-# light active pattern in pattern select mode
-# in param edit, have button push display current note
 # add option to let touchpad control plugins without their window focused
 # accumulator tied to channel name rather than order(?)
 
 	-done-
 
+# step select mode now added that skips directly to step during playback 0.7.5
+# graph editor now appears when editing step parameters 0.7.5
+# fixed lighting issue in mute channel mode 0.7.4
+# current/mutes channel lights in channel select/mute mode 	0.7.3
+# current pattern now lights purple when in pattern select mode 0.7.3 
+# tap tempo added to pad per channel mode on button 32  0.7.2
+# fixed tab error			 0.7.1
 # accumulator is now under alter mode 		0.7.0
 # fixed lighting issue when mute/selected channels used with more than 16 channels 0.6.9
 # fixed shifter bugs 0.6.9

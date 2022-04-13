@@ -44,18 +44,28 @@ class Knobs:
 
 			if Modes.mode == 1:				
 				if Modes.get_step_submode() == 1:									# Set Step Parameters
+					print(f'pad_step: {self.pad_step - 36}')
 					if self.data_one == data.knobs["knob_one"]:
 						ui.setHintMsg(f'Note: {data.midi_notes[self.data_two]}')
-					elif self.data_one <= 20:
+						channels.showGraphEditor(1, self.data_one - 14, self.pad_step - 35, self.channel)
+						event.handled = True						
+					elif self.data_one <= 20:						
 						ui.setHintMsg(f'{data.parameters[self.data_one - 14]}: {event.data2}')
-					if 6 <= self.data_one - 14 >= 5:
+						channels.showGraphEditor(1, self.data_one - 14, self.pad_step - 35, self.channel)
+						event.handled = True
+					if self.data_one - 14 == 6 or self.data_one - 14 == 5:			# mod y  knob 7 mod x
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, int(mapvalues(self.data_two, 0 , 255, 0, 127)), 1)
 						event.handled = True
-					elif self.data_one - 14 == 3:
+					elif self.data_one - 14 == 3:	# fine pitch
+						print('3')
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, int(mapvalues(self.data_two, 0 , 240, 0, 127)), 1)
 						event.handled = True
-					else:
+					elif self.data_one - 14 <= 2 or self.data_one - 14 == 4:				# panning, velocity, 
+						print('else')
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, self.data_two, 1)
+						event.handled = True
+					else:
+						channels.closeGraphEditor(True)
 						event.handled = True
 
 				elif Modes.get_step_submode() == 2:								# Random Mode - set scale/key

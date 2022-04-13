@@ -255,10 +255,7 @@ class Buttons:
 					print('b')
 
 				elif event.data1 == data.pads["c"]:
-					print(channels.selectedChannel())
-					print('indexglobal')
-					print(channels.selectedChannel(0, 0, 1))
-					print('getchannelindex')
+					transport.setSongPos(192, 2)
 					print('c')
 					
 				elif event.data1 == data.pads["d"]:
@@ -323,6 +320,9 @@ class Buttons:
 			print(note)
 			channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, note, 1)
 			Modes.mode_init()
+
+	def get_tempo_set_status():
+		return True 
 
 def num_gen():
 	"""seeds and returns 16 bit random number as int"""
