@@ -8,6 +8,8 @@
 
 	-done-
 
+# Merge dev to main 		0.8.0
+# Removed step selector		0.7.8
 # Fixed lighting issue in mute mode   0.7.7
 # Fixed issue that was causing double notes in continuous mode  0.7.7
 # C button now allows channel mute, select and pattern select to access patterns 1-16 and 17-32 via pads   0.7.6

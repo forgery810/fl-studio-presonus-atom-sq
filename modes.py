@@ -21,12 +21,11 @@ class Modes:
 
 	mode_selected = ['Notes', 'Step Sequencer', 'Pad per Channel', 'Alter']
 	step_sub_names = ['Standard',  'Parameter Entry', 'Random Notes']
-	step_layouts = ['32 Step', 'Pattern Access', 'Channel Select', 'Channel Mute', 'Step Select']
+	step_layouts = ['32 Step', 'Pattern Access', 'Channel Select', 'Channel Mute']
 	note_layouts = ['Keyboard', 'Continuous']
 	alter_submodes = ['Shifter', "Accumulator"]
 	shifter_options = ['Left', ' Right', 'Invert', 'Clear']
 	mult_options = ['1-16', '17-32']
-
 	octave_names = ['-3', '-2', '-1', '0', '1', '2', '3']
 	continuous_modes = ['Play Notes', 'Set Scale']
 
@@ -57,7 +56,8 @@ class Modes:
 
 			if Modes.step_layouts[Modes.step_iter] == 'Channel Select':
 				Lights.channel_select('light_purple')
-				Lights.active_channel(Modes.get_active_chan())
+				if Modes.get_active_chan() < 16:
+					Lights.active_channel(Modes.get_active_chan())
 
 			elif Modes.step_layouts[Modes.step_iter] == 'Channel Mute':
 				Lights.muted_channels()
@@ -65,10 +65,8 @@ class Modes:
 
 			elif Modes.step_layouts[Modes.step_iter] == 'Pattern Access':
 				Lights.pattern_select()
-				Lights.active_pattern(patterns.patternNumber())
-
-			elif Modes.step_layouts[Modes.step_iter] == "Step Select":
-				Lights.step_select_lights()
+				if Modes.get_active_pattern() <= 16:
+					Lights.active_pattern(Modes.get_active_pattern())
 
 			if Modes.step_sub_names[Modes.sub_step_iter] == 'Parameter Entry':				
 				Lights.lower_steps('white')
@@ -98,7 +96,7 @@ class Modes:
 				if Modes.step_iter == 0:
 					Lights.upper_steps('yellow')
 
-	def rotate_layout(self):			# formally def sub_mode(self)
+	def rotate_layout(self):			
 		"""iterates through second level of modes - submodes"""
 
 		Modes.sub_step_iter = 0   									# reset sub sub mode to zero when sub mode changes
@@ -117,7 +115,7 @@ class Modes:
 			ui.setHintMsg(Modes.note_layouts[Modes.note_iter])
 			Modes.mode_init()
 
-	def sub_mode(self, increment):					# formally sub_sub_mode
+	def sub_mode(self, increment):				
 		"""increments through various sub sub modes, increment variable dictates by how much"""
 
 		if Modes.mode == 0:
@@ -197,5 +195,8 @@ class Modes:
 
 	def get_active_chan():
 		return channels.channelNumber() - (16 * Modes.mult_iter)
+
+	def get_active_pattern():
+		return patterns.patternNumber() - (16 * Modes.mult_iter)
 
 

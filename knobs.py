@@ -150,6 +150,7 @@ class Knobs:
 
 def mapvalues(value, to_min, to_max, from_min, from_max):
 	"""takes in value and range and returns value within another range"""
+	
 	input_value = value
 	solution = to_min + (to_max-(to_min))*((input_value - from_min) / (from_max - (from_min)))
 	if value > from_max:

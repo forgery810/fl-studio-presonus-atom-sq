@@ -127,7 +127,7 @@ class Notes():
 		"""controls notepad presses when in step mode"""
 
 		if Modes.step_iter == jump_to_pattern and event.data1 >= 52:		# Pattern Select Mode
-			patterns.jumpToPattern(event.data1 - 51)
+			patterns.jumpToPattern(event.data1 - 51 + (16 * Modes.get_mult()))
 			Modes.mode_init()
 			event.handled = True
 
@@ -148,11 +148,7 @@ class Notes():
 				channels.muteChannel((event.data1 - 52) + (16 * Modes.get_mult()))
 				Modes.mode_init()
 				event.handled = True
-
-		elif Modes.step_iter == step_select and event.data1 >=52:		# step select
-			Notes.step_select(event)
-
-																
+														
 		elif Modes.get_step_submode() != param_edit:      						  # sets step as long as param edit not active
 			if channels.getGridBit(channels.selectedChannel(), event.data1 - 36) == 0:						
 				channels.setGridBit(channels.selectedChannel(), event.data1 - 36, 1)
@@ -254,13 +250,6 @@ class Notes():
 						channels.setStepParameterByIndex(r[chan], r[pat], st, 0, r[orig])
 		Notes.accum_steps.clear()
 		ui.setHintMsg('Accum steps cleared')
-
-	def step_select(event):
-		step = event.data1 - 51
-		length = patterns.getPatternLength(patterns.patternNumber())
-		offset = int(length / 16)
-		step_to_set = (step * offset * 24) - (24 * offset)
-		transport.setSongPos(step_to_set, 2)
 
 class Shifter():
 
