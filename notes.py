@@ -41,6 +41,7 @@ alter = 3
 
 class Notes():
 
+	mult = 1         # changed by c button 
 	scale_choice = 0
 	root_note = 0
 	accum_chan = 0
@@ -99,10 +100,11 @@ class Notes():
 
 		channels.midiNoteOn(channels.selectedChannel(), data.scales[Modes.scale_iter][Modes.root_iter][event.data1-24], event.data2)
 		Modes.mode_init()
+		event.handled = True
 
 
 	def alter_steps(self, event):
-		"""decides what calss/function gets called when in alter mode and note/step is pressed"""
+		"""decides what class/function gets called when in alter mode and note/step is pressed"""
 
 		if Modes.alter_iter == 1:
 			if Notes.accum_on and event.data1 - 36 < patterns.getPatternLength(patterns.patternNumber()):
@@ -130,20 +132,20 @@ class Notes():
 			event.handled = True
 
 		elif Modes.step_iter == channel_access and event.data1 >= 52:		# channel select
-			if event.data1 >= channels.channelCount() + 52:
+			if event.data1 - 52 >= channels.channelCount() - (16 * Modes.get_mult()):
 				Modes.mode_init()
 				event.handled = True
 			else:
-				channels.selectOneChannel(event.data1 - 52)
+				channels.selectOneChannel((event.data1 - 52) + (16 * Modes.get_mult()))
 				Modes.mode_init()
 				event.handled = True
 
 		elif Modes.step_iter == channel_mute and event.data1 >= 52: 		# channel mute
-			if event.data1 >= channels.channelCount() + 52:
+			if event.data1 - 52 >= channels.channelCount() - (16 * Modes.get_mult()):
 				Modes.mode_init()
 				event.handled = True
 			else:
-				channels.muteChannel(event.data1 - 52)
+				channels.muteChannel((event.data1 - 52) + (16 * Modes.get_mult()))
 				Modes.mode_init()
 				event.handled = True
 
@@ -171,7 +173,8 @@ class Notes():
 			event.handled = True
 
 	def pad_channel(self, event):
-		"""takes event midi data from pad press and play corresponding channel"""
+		"""takes event midi data from pad press and plays corresponding channel"""
+
 		if event.data1 == 67:
 			transport.globalTransport(midi.FPT_TapTempo, 1)
 			event.handled = True
@@ -184,7 +187,7 @@ class Notes():
 		Modes.mode_init()
 
 	def drum_plugins(self, event):
-		"""called when drum plugin window focused and plays corresponding drum pad"""
+		"""called when a drum plugin window is focused and plays corresponding drum pad"""
 
 		if event.midiId == 128 and event.data2 != 0:
 			print('skip')

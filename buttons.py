@@ -37,6 +37,7 @@ class Buttons:
 	six_options = ['Press A to clear accum steps...']
 	b_iter = 0
 	b_options = ['Enter', 'Copy Pattern', 'Copy Channel', 'Paste']
+	c_iter = 0
 	tempo_toggle = False
 	button_6_iter = 0
 
@@ -254,9 +255,9 @@ class Buttons:
 					# self.b_decide(Buttons.b_iter)
 					print('b')
 
-				elif event.data1 == data.pads["c"]:
-					transport.setSongPos(192, 2)
-					print('c')
+				elif event.data1 == data.pads['c']:
+					print(ui.getFocusedPluginName())
+					Modes.mult()
 					
 				elif event.data1 == data.pads["d"]:
 					print('View Plugin Picker')
@@ -284,6 +285,7 @@ class Buttons:
 					else:
 						transport.globalTransport(midi.FPT_F9, 68)
 					event.handled = True 				
+
 
 	def b_decide(self, choice):
 		"""takes b_iter as input and calls appropriate function"""

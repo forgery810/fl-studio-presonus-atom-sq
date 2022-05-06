@@ -17,7 +17,8 @@ class Knobs:
 
 	def __init__(self, event):
 		self.get_track = 0
-		self.offset = event.midiChanEx - 128
+		# self.offset = event.midiChanEx - 128
+		self.offset = Buttons.c_iter 
 		self.knob_turn(event)
 
 	def knob_turn(self, event):
@@ -121,6 +122,7 @@ class Knobs:
 
 	def plugin_control(self, event):
 		"""Called when plugin is focused. Knobs are set to control parameters on focused plugin"""
+
 		self.plugin = plugins.getPluginName(self.channel)	
 		self.param_count = plugins.getParamCount(self.channel)
 
@@ -140,6 +142,7 @@ class Knobs:
 
 	def set_pattern(self, pattern):
 		"""receives pattern number and looks up saved patterns. Sets chose pattern"""
+
 		for i in range(patterns.getPatternLength(patterns.patternNumber())):    # clear pattern
 			channels.setGridBit(channels.channelNumber(), i, 0)
 		for count, value in enumerate(data.preset_patterns[pattern]):

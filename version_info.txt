@@ -1,7 +1,6 @@
 	-to-do-
 
 # repeat note events
-# led when paramter at zero or c5 note
 # light rec & play buttons when active
 # add note offset when scales are used to reduce their list size
 # add option to let touchpad control plugins without their window focused
@@ -9,6 +8,10 @@
 
 	-done-
 
+# Fixed lighting issue in mute mode   0.7.7
+# Fixed issue that was causing double notes in continuous mode  0.7.7
+# C button now allows channel mute, select and pattern select to access patterns 1-16 and 17-32 via pads   0.7.6
+	and plugins parameters 1-8 and 9-16 via knobs 
 # step select mode now added that skips directly to step during playback 0.7.5
 # graph editor now appears when editing step parameters 0.7.5
 # fixed lighting issue in mute channel mode 0.7.4

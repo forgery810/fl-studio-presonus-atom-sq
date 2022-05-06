@@ -14,6 +14,7 @@ plugin_dict = {
 	'Ogun': [17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
 	'3x Osc': [1, 2, 3, 4, 5, 0, 8, 9, 10, 11, 12, 7, 6, 15, 16, 17, 18, 19, 14, 13, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	'GMS': [i for i in range(32, 70)],
+	'Fruity granulizer': [0, 1, 2, 3, 7, 4, 5, 6, 8, 9 , 10 , 11, 12, 13, 14, 15],
 			 }
 
 dp = {'<reserved>': 37, 'Mallet Amplitude': 2, 'Mallet Decay': 3, 'Mallet Noise': 4, 'Mallet Noise RP': 5, 'Membrane Decay': 6, 
@@ -54,10 +55,6 @@ touchpad_params = {
 			'3x Osc': [[osc['Osc 1 fine pitch'], .4, .6], [osc['Osc 2 fine pitch'], .6, .8], [osc['Osc 3 fine pitch'], .3, .8],], 
 			'Harmless': [[hl['Filter frequency'], .2, .85 ], [hl['Resonance amount'], .0, .5 ], [hl['Reverb wet level'], .3, .8] ]
 			}
-
-
-
-
 
 # ogun = {'Master level': 0, 'Master coarse pitch': 1, 'Master fine pitch': 2, 'Modulation X': 3, 'Modulation Y': 4, 'Timbre pre-decay': 5, 
 			# 'Timbre decay time': 6, 'Timbre release time': 7, 'Timbre fullness': 8, 'Timbre morphing / randomness': 9, 'Timbre seed 1': 10, 

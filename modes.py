@@ -13,6 +13,7 @@ class Modes:
 	octave_iter = 3
 	sub_step_iter = 0
 	channels_iter = 0
+	mult_iter = 0
 	root_iter = 0
 	scale_iter = 0
 	alter_iter = 0 
@@ -24,6 +25,7 @@ class Modes:
 	note_layouts = ['Keyboard', 'Continuous']
 	alter_submodes = ['Shifter', "Accumulator"]
 	shifter_options = ['Left', ' Right', 'Invert', 'Clear']
+	mult_options = ['1-16', '17-32']
 
 	octave_names = ['-3', '-2', '-1', '0', '1', '2', '3']
 	continuous_modes = ['Play Notes', 'Set Scale']
@@ -55,7 +57,7 @@ class Modes:
 
 			if Modes.step_layouts[Modes.step_iter] == 'Channel Select':
 				Lights.channel_select('light_purple')
-				Lights.active_channel(channels.channelNumber())
+				Lights.active_channel(Modes.get_active_chan())
 
 			elif Modes.step_layouts[Modes.step_iter] == 'Channel Mute':
 				Lights.muted_channels()
@@ -183,4 +185,17 @@ class Modes:
 	def get_mode():
 		print(f'get_mode = {Modes.mode}')
 		return Modes.mode
+
+	def mult():
+		Modes.mult_iter += 1
+		if Modes.mult_iter > 1:
+			Modes.mult_iter = 0
+		ui.setHintMsg(Modes.mult_options[Modes.mult_iter])
+
+	def get_mult():
+		return Modes.mult_iter
+
+	def get_active_chan():
+		return channels.channelNumber() - (16 * Modes.mult_iter)
+
 
