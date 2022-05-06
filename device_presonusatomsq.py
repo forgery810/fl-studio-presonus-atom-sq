@@ -1,4 +1,4 @@
-# name=Presonus Atom SQ-dev
+# name=Presonus Atom SQ
 # Author: ts-forgery
 VERSION = '0.8.0'
 
