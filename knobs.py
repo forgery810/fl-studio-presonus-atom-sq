@@ -17,7 +17,8 @@ class Knobs:
 
 	def __init__(self, event):
 		self.get_track = 0
-		self.offset = event.midiChanEx - 128
+		# self.offset = event.midiChanEx - 128
+		self.offset = Buttons.c_iter 
 		self.knob_turn(event)
 
 	def knob_turn(self, event):
@@ -44,18 +45,28 @@ class Knobs:
 
 			if Modes.mode == 1:				
 				if Modes.get_step_submode() == 1:									# Set Step Parameters
+					print(f'pad_step: {self.pad_step - 36}')
 					if self.data_one == data.knobs["knob_one"]:
 						ui.setHintMsg(f'Note: {data.midi_notes[self.data_two]}')
-					elif self.data_one <= 20:
+						channels.showGraphEditor(1, self.data_one - 14, self.pad_step - 35, self.channel)
+						event.handled = True						
+					elif self.data_one <= 20:						
 						ui.setHintMsg(f'{data.parameters[self.data_one - 14]}: {event.data2}')
-					if 6 <= self.data_one - 14 >= 5:
+						channels.showGraphEditor(1, self.data_one - 14, self.pad_step - 35, self.channel)
+						event.handled = True
+					if self.data_one - 14 == 6 or self.data_one - 14 == 5:			# mod y  knob 7 mod x
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, int(mapvalues(self.data_two, 0 , 255, 0, 127)), 1)
 						event.handled = True
-					elif self.data_one - 14 == 3:
+					elif self.data_one - 14 == 3:	# fine pitch
+						print('3')
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, int(mapvalues(self.data_two, 0 , 240, 0, 127)), 1)
 						event.handled = True
-					else:
+					elif self.data_one - 14 <= 2 or self.data_one - 14 == 4:				# panning, velocity, 
+						print('else')
 						channels.setStepParameterByIndex(self.channel, self.pattern, self.pad_step - 36, self.data_one - 14, self.data_two, 1)
+						event.handled = True
+					else:
+						channels.closeGraphEditor(True)
 						event.handled = True
 
 				elif Modes.get_step_submode() == 2:								# Random Mode - set scale/key
@@ -111,6 +122,7 @@ class Knobs:
 
 	def plugin_control(self, event):
 		"""Called when plugin is focused. Knobs are set to control parameters on focused plugin"""
+
 		self.plugin = plugins.getPluginName(self.channel)	
 		self.param_count = plugins.getParamCount(self.channel)
 
@@ -130,6 +142,7 @@ class Knobs:
 
 	def set_pattern(self, pattern):
 		"""receives pattern number and looks up saved patterns. Sets chose pattern"""
+
 		for i in range(patterns.getPatternLength(patterns.patternNumber())):    # clear pattern
 			channels.setGridBit(channels.channelNumber(), i, 0)
 		for count, value in enumerate(data.preset_patterns[pattern]):
@@ -137,6 +150,7 @@ class Knobs:
 
 def mapvalues(value, to_min, to_max, from_min, from_max):
 	"""takes in value and range and returns value within another range"""
+	
 	input_value = value
 	solution = to_min + (to_max-(to_min))*((input_value - from_min) / (from_max - (from_min)))
 	if value > from_max:

@@ -37,6 +37,7 @@ class Buttons:
 	six_options = ['Press A to clear accum steps...']
 	b_iter = 0
 	b_options = ['Enter', 'Copy Pattern', 'Copy Channel', 'Paste']
+	c_iter = 0
 	tempo_toggle = False
 	button_6_iter = 0
 
@@ -254,12 +255,9 @@ class Buttons:
 					# self.b_decide(Buttons.b_iter)
 					print('b')
 
-				elif event.data1 == data.pads["c"]:
-					print(channels.selectedChannel())
-					print('indexglobal')
-					print(channels.selectedChannel(0, 0, 1))
-					print('getchannelindex')
-					print('c')
+				elif event.data1 == data.pads['c']:
+					print(ui.getFocusedPluginName())
+					Modes.mult()
 					
 				elif event.data1 == data.pads["d"]:
 					print('View Plugin Picker')
@@ -287,6 +285,7 @@ class Buttons:
 					else:
 						transport.globalTransport(midi.FPT_F9, 68)
 					event.handled = True 				
+
 
 	def b_decide(self, choice):
 		"""takes b_iter as input and calls appropriate function"""
@@ -323,6 +322,9 @@ class Buttons:
 			print(note)
 			channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, note, 1)
 			Modes.mode_init()
+
+	def get_tempo_set_status():
+		return True 
 
 def num_gen():
 	"""seeds and returns 16 bit random number as int"""

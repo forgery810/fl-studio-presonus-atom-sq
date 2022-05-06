@@ -13,6 +13,7 @@ class Modes:
 	octave_iter = 3
 	sub_step_iter = 0
 	channels_iter = 0
+	mult_iter = 0
 	root_iter = 0
 	scale_iter = 0
 	alter_iter = 0 
@@ -24,7 +25,7 @@ class Modes:
 	note_layouts = ['Keyboard', 'Continuous']
 	alter_submodes = ['Shifter', "Accumulator"]
 	shifter_options = ['Left', ' Right', 'Invert', 'Clear']
-
+	mult_options = ['1-16', '17-32']
 	octave_names = ['-3', '-2', '-1', '0', '1', '2', '3']
 	continuous_modes = ['Play Notes', 'Set Scale']
 
@@ -55,13 +56,17 @@ class Modes:
 
 			if Modes.step_layouts[Modes.step_iter] == 'Channel Select':
 				Lights.channel_select('light_purple')
+				if Modes.get_active_chan() < 16:
+					Lights.active_channel(Modes.get_active_chan())
 
 			elif Modes.step_layouts[Modes.step_iter] == 'Channel Mute':
 				Lights.muted_channels()
+				
 
 			elif Modes.step_layouts[Modes.step_iter] == 'Pattern Access':
 				Lights.pattern_select()
-				Lights.active_pattern(patterns.patternNumber())
+				if Modes.get_active_pattern() <= 16:
+					Lights.active_pattern(Modes.get_active_pattern())
 
 			if Modes.step_sub_names[Modes.sub_step_iter] == 'Parameter Entry':				
 				Lights.lower_steps('white')
@@ -91,7 +96,7 @@ class Modes:
 				if Modes.step_iter == 0:
 					Lights.upper_steps('yellow')
 
-	def rotate_layout(self):			# formally def sub_mode(self)
+	def rotate_layout(self):			
 		"""iterates through second level of modes - submodes"""
 
 		Modes.sub_step_iter = 0   									# reset sub sub mode to zero when sub mode changes
@@ -110,7 +115,7 @@ class Modes:
 			ui.setHintMsg(Modes.note_layouts[Modes.note_iter])
 			Modes.mode_init()
 
-	def sub_mode(self, increment):					# formally sub_sub_mode
+	def sub_mode(self, increment):				
 		"""increments through various sub sub modes, increment variable dictates by how much"""
 
 		if Modes.mode == 0:
@@ -178,4 +183,20 @@ class Modes:
 	def get_mode():
 		print(f'get_mode = {Modes.mode}')
 		return Modes.mode
+
+	def mult():
+		Modes.mult_iter += 1
+		if Modes.mult_iter > 1:
+			Modes.mult_iter = 0
+		ui.setHintMsg(Modes.mult_options[Modes.mult_iter])
+
+	def get_mult():
+		return Modes.mult_iter
+
+	def get_active_chan():
+		return channels.channelNumber() - (16 * Modes.mult_iter)
+
+	def get_active_pattern():
+		return patterns.patternNumber() - (16 * Modes.mult_iter)
+
 

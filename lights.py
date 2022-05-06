@@ -75,7 +75,12 @@ class Lights():
 	def active_pattern(pattern_num):
 		"""light active pattern in pattern access mode"""
 
-		device.midiOutMsg(146, 0, pattern_num + 52, 127)
+		device.midiOutMsg(146, 0, pattern_num + 51, 5)
+
+	def active_channel(channel_num):
+		"""lights currently selected channel in channel modes"""
+
+		device.midiOutMsg(145, 0, channel_num + 52, 5)
 
 	def channel_select(color):
 		"""lights top row leds according to color sent"""
@@ -92,10 +97,12 @@ class Lights():
 	def muted_channels():
 		"""lights muted and unmuted channels accordingly in channel mute mode"""
 
-		Lights.pattern_select()
 		for l in range(52, 52 + Lights.get_channel_count(16)):
 			if not channels.isChannelMuted(l - 52):
+				device.midiOutMsg(144, 0, l, 127)
 				device.midiOutMsg(147, 0, l, 23)
+			else:
+				device.midiOutMsg(144, 0, l, 0)
  
 	def light_channels():
 		"""lights channels for pad per channel mode"""
@@ -117,6 +124,14 @@ class Lights():
 			device.midiOutMsg(144, 0, tk, 127)
 		for off in off_keys:
 			device.midiOutMsg(144, 0, off, 0)
+
+	def step_select_lights():
+		"""set pad leds for step select"""	
+
+		diff_steps = [52, 56, 60, 64]
+		Lights.pattern_select()
+		for t in diff_steps:
+			device.midiOutMsg(146, 0, t, 36)
 
 	def continuous_notes():
 		"""sets all keys white except root notes which are set blue depending on current scale selected"""

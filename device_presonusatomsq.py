@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ
 # Author: ts-forgery
-# Version 0.7.1
+VERSION = '0.8.0'
 
 import device
 import mixer
@@ -19,7 +19,6 @@ from expedite import Expedite
 
 indicate = Lights()
 alt = Shifter()
-current_pattern = 0
 
 class Steps:
 	"""this class makes sure functions that rely on current step/bar to be called are only called once
@@ -51,10 +50,7 @@ def OnUpdateBeatIndicator(data):
 
 	Modes.mode_init()
 	if data == 1:
-		# print(patterns.getPatternLength(patterns.patternNumber()))
 		if patterns.getPatternLength(patterns.patternNumber()) < 32:
-			# print(f'mixer step: {mixer.getSongStepPos()}')
-			# current_pattern = patterns.patternNumber()
 			steps.call_shift()
 			steps.reset_shift()
 		elif patterns.getPatternLength(patterns.patternNumber()) >= 32:
@@ -72,23 +68,11 @@ def OnIdle():
 		device.midiOutMsg(144, 0, get_led_step(), 127)
 		device.midiOutMsg(145, 1, get_led_step(), 60)
 
-	# if transport.isPlaying() and mixer.getSongStepPos() == patterns.getPatternLength(patterns.patternNumber())-1:
-	# 	# alt = Shifter()
-	# 	steps.call_shift()
-	# 	Steps.shift_called = True
-
-	# if transport.isPlaying and mixer.getSongStepPos() == 0:
-	# 	steps.reset_shift()
-
 def OnRefresh(ref_num):
 	"""called by FL when any change is made to the program. with mouse, keyboard, controller etc"""
 	# print(ref_num)
 
 	s = Steps()
-
-	# if ref_num == 1024 and current_pattern != patterns.patternNumber():
-	# 	if Notes.accum_on:
-	# 		Notes.temp_reset_steps()
 
 	if ref_num == 256:
 		indicate.indicator = 0
@@ -99,7 +83,7 @@ def OnRefresh(ref_num):
 def OnInit():
 	"""called when FL connects with controller"""
 
-	print("Presonus Atom SQ - Version: 0.7.0")
+	print(f"Presonus Atom SQ - Version: {VERSION}")
 	print(f'Scripting API Version: {general.getVersion()}')
 	Lights.clear_pattern()
 
