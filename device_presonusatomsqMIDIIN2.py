@@ -226,5 +226,5 @@ midi2_inputs = {
     "solo": "solo",
     "mute": "mute",
     "arm": "arm",
-    "jog_wheel": ["jog_tempo_up", "jog_wheel_down"],
+    "jog_wheel": ["jog_wheel_up", "jog_wheel_down"],
 }

@@ -105,7 +105,7 @@ class EncoderHandler:
     def set(self):
         if self.mode_manager.current_mode.submode == StepSequencerSubmode.PARAMETER_ENTRY:
             self.handle_parameter_entry_encoder(self.event)
-        elif ui.getFocused(5) and plugins.isValid(channels.selectedChannel()): # and cl["defaults"]["plugin_control"]:
+        elif ui.getFocused(5) and plugins.isValid(channels.selectedChannel()): 
             self.control_plugin()
         else:
             try:
