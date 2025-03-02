@@ -211,6 +211,7 @@ class MidiHandler:
             print(f"Warning: No button data found for button ID {button_id}. Event data: {event.midiId}, {event.data1}, {event.data2}, {event.midiChanEx}, {event.midiChan}")
             self.event.handled = False
 
+# If editing the following, make sure to only choose functions form the Midi2Action class above
 
 midi2_inputs = {
 
@@ -227,4 +228,5 @@ midi2_inputs = {
     "mute": "mute",
     "arm": "arm",
     "jog_wheel": ["jog_wheel_up", "jog_wheel_down"],
+
 }
