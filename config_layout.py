@@ -1,4 +1,4 @@
-# visit www.midicontrol.cc/atom-sq/funcitons for complete list of functions
+# visit www.midicontrol.cc/atom-sq/functions for complete list of functions
 
 buttons = {
 
@@ -10,7 +10,7 @@ buttons = {
                               "random_pattern"
           ], "track": 0},
 
-    "c": {  "functions": [    "randomize_plugin", 
+    "c": {  "functions": [    "quantize", 
                               "change_pattern_select_mode"
                         ],
          "track": 0},
