@@ -51,8 +51,10 @@ class PadHandler:
                 self.mode_manager.current_mode.handle_keyboard_note(self.event)
             elif self.mode_manager.current_mode.submode == NoteSubmode.CONTINUOUS:
                 self.mode_manager.current_mode.handle_continuous_note(self.event)
+            elif self.mode_manager.current_mode.submode == NoteSubmode.DRUM:
+                self.mode_manager.current_mode.handle_continuous_note(self.event)
         elif isinstance(self.mode_manager.current_mode, PadPerChannelMode):
-            self.mode_manager.current_mode.handle_pad_press(self.event)
+            self.mode_manager.current_mode.handle_drum_plugin_pad(self.event)
         pad_num = self.event.data1
         if self.get_led_state(pad_num):
             original_state = self.get_led_state(pad_num)  # Get and remove original state

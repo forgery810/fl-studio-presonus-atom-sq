@@ -42,7 +42,6 @@ class Mode:
     def __init__(self, state, lights_instance):
         if type(self) is Mode:
             raise Exception("Mode class cannot be instantiated directly. Use a subclass.")
-        print(lights_instance)
         self.state = state
         self.lights_instance = lights_instance
         self.submode = None
@@ -103,7 +102,6 @@ class ModeManager:
         for mode_name in config.ACTIVE_MODES:
             try:
                 mode_enum = MainMode[mode_name]
-                print(mode_enum)
                 self.active_modes.append(mode_enum)
             except KeyError:
                 print(f"Invalid Mode Name: {mode_name}")
@@ -174,14 +172,13 @@ class NotesLayout(Enum):
         self.layout_name = layout_name
         self.led_method_name = led_method_name
 
-    def update_leds(self, lights_instance, color=None):
+    def update_leds(self, lights_instance, state, color=None):
         """Calls the appropriate method to update the LEDs for this layout."""
         led_method = getattr(self, self.led_method_name)
-        led_method(lights_instance)
+        led_method(lights_instance, state)
 
-    def keyboard_leds(self, lights_instance):
+    def keyboard_leds(self, lights_instance, state):
         """Updates LEDs for the keyboard layout."""
-        # print('keyboard_leds')
         new_led_state = []
         for key_num in range(36, 68): 
             if key_num in lights_instance.c_keys:
@@ -194,9 +191,9 @@ class NotesLayout(Enum):
         lights_instance.update_led_state(new_led_state)
         lights_instance.send_midi_messages()
 
-    def continuous_leds(self, lights_instance):
+    def continuous_leds(self, lights_instance, state):
         new_led_state = []
-        scale = Scales.get_scale()
+        scale = Scales.get_scale(state.scale_choice)
         root_note = Notes.root
         octave_base = Notes.get_octave()
         start_note = octave_base + root_note
@@ -207,7 +204,6 @@ class NotesLayout(Enum):
             if 36 <= key_num < 68:
             #     # Check if the note is the root note
                 if scale_index == 0:
-                    print(i)
                     new_led_state.append((key_num, 1, "purple"))  # Root note: blue
                 else:
                     new_led_state.append((key_num, 1, "white"))  # Other notes in scale: white
@@ -215,7 +211,7 @@ class NotesLayout(Enum):
         lights_instance.update_led_state(new_led_state)
         lights_instance.send_midi_messages()
 
-    def drum_plugin_leds(self, lights_instance, color=None):
+    def drum_plugin_leds(self, lights_instance, state, color=None):
         """Updates LEDs for drum plugin layout."""
         new_led_state = []
         for key_num in range(36, 52):
@@ -380,7 +376,6 @@ class StepSequencerLayout(Enum):
                 patterns.jumpToPattern(pattern_pressed)
                 event.handled = True
             elif not state.pattern_change_immediate:
-                print('change next pattern')
                 state.next_pattern = event.data1 - 51 + (16 * self.pattern_access_range)
                 event.handled = True
             else:
@@ -390,7 +385,6 @@ class StepSequencerLayout(Enum):
         """Updates LEDs for the pattern select layout."""
         new_led_state = []
         pattern_led = patterns.patternNumber() - (self.pattern_access_range * 16) - 1
-        print(f"pattern_led: {pattern_led}")
         for i in range(16):
             if i == pattern_led:
                 new_led_state.append((52 + i, 1, "blue"))
@@ -476,8 +470,6 @@ class PadPerChannelLayout(Enum):
         lights_instance.clear_all_leds()
         channel_count = channels.channelCount()
         new_led_state = []
-        print("default_leds")
-        print(self.channel_access_range)
         for i in range(32):
             if i + (self.channel_access_range * 32) < channels.channelCount():
                 new_led_state.append((36 + i, 1, "purple"))
@@ -579,7 +571,6 @@ class NotesMode(Mode):
     def handle_plus_button(self):
         self.state.octave_index = (self.state.octave_index + 1) % len(self.octave_names)
         ui.setHintMsg(f"Octave: {self.octave_names[self.state.octave_index]}")
-        print(f"Octave: {self.octave_names[self.state.octave_index]}")
         self.update_display()
 
     def handle_minus_button(self):
@@ -606,7 +597,7 @@ class NotesMode(Mode):
             self.layout = NotesLayout.CONTINUOUS  
         elif self.submode == NoteSubmode.DRUM:
             self.layout = NotesLayout.DRUM  
-        self.layout.update_leds(self.lights) 
+        self.layout.update_leds(self.lights, self.state) 
 
     def handle_pad_press(self, event):
         if self.submode == NoteSubmode.DRUM:
@@ -626,7 +617,7 @@ class NotesMode(Mode):
         event.handled = True
 
     def handle_continuous_note(self, event):
-        scale = Scales.get_scale()
+        scale = Scales.get_scale(self.state.scale_choice)
         root = self.state.root_note
         index = (event.data1 - 36) % len(scale)
         octave = Notes.octaves[self.state.octave_index]
@@ -723,7 +714,6 @@ class StepSequencerMode(Mode):
         new_index = (current_index + increment) % len(submodes)
         self.submode = submodes[new_index]
         channels.closeGraphEditor(channels.selectedChannel())
-        print(submodes[new_index])
         self.update_display()
 
     def update_display(self):
@@ -801,7 +791,6 @@ class PadPerChannelMode(Mode):
         pass 
 
     def update_display(self):
-        print('update_display ppc')
         ui.setHintMsg(f"Pad Per Channel: {self.mult_options[self.channel_access_range]}")
         self.layout.update_leds(self.lights)
 

@@ -240,12 +240,14 @@ class Action():
         self.state.root_note += 1
         if self.state.root_note >= len(Notes.note_list):
             self.state.root_note = 0
+        self.mode_manager.current_mode.update_display()
         ui.setHintMsg(Notes.root_name(self.state.root_note))
 
     def increment_scale(self):
         self.state.scale_choice += 1
         if self.state.scale_choice >= len(Scales.scales):
             self.state.scale_choice = 0
+        self.mode_manager.current_mode.update_display()
         ui.setHintMsg(Scales.get_scale_name(self.state.scale_choice))
 
     def open_plugins(self):

@@ -7,7 +7,7 @@ buttons = {
           ], "track": 0},
 
     "b": {  "functions": [    "open_plugins", 
-                              "random_pattern"
+                              "focus_channels"
           ], "track": 0},
 
     "c": {  "functions": [    "quantize", 
@@ -28,7 +28,7 @@ buttons = {
                         ],
          "track": 0},
 
-    "g": {  "functions": [    "change_select_range", 
+    "g": {  "functions": [    "wait_for_input", 
                               "double_pattern"
                         ],
          "track": 0},
@@ -75,7 +75,7 @@ buttons = {
           "track": 0},
 
     "button_1": {
-                "functions": [  "arm", 
+                "functions": [  "escape", 
                                 "change_color"
                         ], 
                 "track": 0},     
@@ -96,7 +96,7 @@ buttons = {
                 "functions": [  "increment_scale", 
                                 "set_root_note"
                         ], 
-                "track": 5 },
+                "track": 0 },
 
     "button_5": {
                 "functions": [  "random_trigs", 
@@ -113,11 +113,12 @@ buttons = {
 }
 
 encoder_mappings = {
+
     "knob_1": { "functions": [  
-                                "selected_level",
+                                "mixer_level",
                                 "nothing"
                                 ],
-                    "track": 0},
+                    "track": 8},
     "knob_2": { "functions": [  
                                 "selected_pan",
                                 "nothing"
@@ -198,16 +199,19 @@ encoder_mappings = {
                                 "mixer_pan"
                                 ], 
                     "track": 9 },
+                    
     "knob_18": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"
                                 ], 
                     "track": 10 },
+                    
     "knob_19": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"
                                 ], 
                     "track": 11 },
+                    
     "knob_20": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"
@@ -223,6 +227,7 @@ encoder_mappings = {
                                 "mixer_pan"
                                 ], 
                     "track": 14 },
+                    
     "knob_23": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"

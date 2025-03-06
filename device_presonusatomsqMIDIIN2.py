@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ MIDIIN2
 # Author: ts-forgery
-VERSION = '0.8.1'
+VERSION = '1.0'
 
 import device
 import general

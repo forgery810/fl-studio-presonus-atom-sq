@@ -70,8 +70,9 @@ class Scales(Notes):
 	def get_scale_choice():
 		return Scales.scale_choice
 
-	def get_scale():
-		return Scales.scales[Scales.scale_choice]
+	@staticmethod
+	def get_scale(choice):
+		return Scales.scales[choice]
 
 	def scale_message(data_two):
 		return ui.setHintMsg(Scales.scale_names[int(mapvalues(self.data_two, 0, len(Scales.scale_names)-1, 0, 127))])
