@@ -189,11 +189,10 @@ class ButtonHandler():
             state.track_original = button_data["track"] 
             action_method = getattr(action_handler, button_data["functions"][state.shift_status], None)
             if action_method:
+                try:
                     action_method()
-                # try:
-                    # action_method()
-                # except Exception as e:
-                    # print(f"Error with action: {e}. ")
+                except Exception as e:
+                    print(f"Error with action: {e}. ")
             else:
                 print(f"Warning: Method '{button_data["functions"][state.shift_status]}' not found in action_handler.")
         else:

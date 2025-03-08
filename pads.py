@@ -25,9 +25,9 @@ class PadHandler:
 
     def handle_pad_event(self):
         """takes midi event data and passes it to appropriate function based on current mode found in Modes()"""
-        if ui.getFocusedPluginName() in plugindata.drum_plugs:
-            return self.handle_drum_plugin_pad(self.event)
-        elif self.event.midiId == 144:
+        # if ui.getFocusedPluginName() in plugindata.drum_plugs:
+        #     return self.handle_drum_plugin_pad(self.event)
+        if self.event.midiId == 144:
             return self.handle_pad_press()
         elif self.event.midiId == 128: 
             return self.handle_pad_release()
@@ -52,9 +52,9 @@ class PadHandler:
             elif self.mode_manager.current_mode.submode == NoteSubmode.CONTINUOUS:
                 self.mode_manager.current_mode.handle_continuous_note(self.event)
             elif self.mode_manager.current_mode.submode == NoteSubmode.DRUM:
-                self.mode_manager.current_mode.handle_continuous_note(self.event)
+                self.mode_manager.current_mode.handle_drum_plugin_pad(self.event)
         elif isinstance(self.mode_manager.current_mode, PadPerChannelMode):
-            self.mode_manager.current_mode.handle_drum_plugin_pad(self.event)
+            self.mode_manager.current_mode.handle_pad_press(self.event)
         pad_num = self.event.data1
         if self.get_led_state(pad_num):
             original_state = self.get_led_state(pad_num)  # Get and remove original state

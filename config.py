@@ -21,10 +21,10 @@ NOTES_SUBMODES = ["KEYBOARD", "CONTINUOUS", "DRUM"]
 STEP_SEQUENCER_LAYOUTS =  ["STEP_32", "PATTERN_ACCESS", "CHANNEL_MUTE", "CHANNEL_SELECT"]
 """ Chose from "STEP_32", "PATTERN_ACCESS", "CHANNEL_MUTE", "CHANNEL_SELECT" """
 
-COLORS = [0, 10963273, 4311177, 4293320, 14264921, 10517732]
+COLORS = [0, 10963273, 4311177, 4293320, 14264921, 10517732, 6871293, 7635441]
 """ Color numbers can be found at www.midicontrol.cc/fl-colors. There is no limit to how many can be added. Make sure a comma follows each number."""
 
-SET_WINDOWS = [mixer, channels, browser] 
+SET_WINDOWS = [mixer, channels, browser,] 
 """ This controls what windows the rotate_set_windows will rotate through. Only choose from the options at the top of the page. """
 
 LIGHT_CURRENT_STEP = True

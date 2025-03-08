@@ -7,7 +7,7 @@ buttons = {
           ], "track": 0},
 
     "b": {  "functions": [    "open_plugins", 
-                              "focus_channels"
+                              "random_pattern"
           ], "track": 0},
 
     "c": {  "functions": [    "quantize", 
@@ -199,19 +199,19 @@ encoder_mappings = {
                                 "mixer_pan"
                                 ], 
                     "track": 9 },
-                    
+
     "knob_18": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"
                                 ], 
                     "track": 10 },
-                    
+
     "knob_19": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"
                                 ], 
                     "track": 11 },
-                    
+
     "knob_20": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"
@@ -227,7 +227,7 @@ encoder_mappings = {
                                 "mixer_pan"
                                 ], 
                     "track": 14 },
-                    
+
     "knob_23": { "functions": [
                                 "mixer_level", 
                                 "mixer_pan"

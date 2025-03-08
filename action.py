@@ -309,7 +309,7 @@ class Action():
     def tap_tempo(self):
         transport.globalTransport(midi.FPT_TapTempo, 100)
 
-    def wait_for_input():
+    def wait_for_input(self):
         transport.globalTransport(midi.FPT_WaitForInput, 111)
 
     def item_menu(self):
