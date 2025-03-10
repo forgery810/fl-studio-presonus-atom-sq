@@ -628,15 +628,14 @@ class NotesMode(Mode):
 
     def handle_drum_plugin_pad(self, event):
         """called when a drum plugin window is focused and plays corresponding drum pad"""
+        print(channels.channelNumber())
         try:
-            if plugins.getPluginName(channels.selectedChannel()) == 'FPC' and event.data1 in plugindata.atom_sq_pads:
-                print('FPC')
-                channels.midiNoteOn(channels.selectedChannel(), plugindata.FPC_pads[plugindata.atom_sq_pads.index(event.data1)], event.data2)
-                event.handled = True
-            else:
+            if event.data1 in plugindata.atom_sq_pads:
+                channels.midiNoteOn(channels.channelNumber(), plugindata.FPC_pads[plugindata.atom_sq_pads.index(event.data1)], event.data2)
                 event.handled = True
         except Exception as e:
             print(e)
+        event.handled = True
 
     def get_octave(self):
         return self.octave_iter

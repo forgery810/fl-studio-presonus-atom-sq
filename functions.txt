@@ -98,9 +98,6 @@ random_pattern
 shift
 get_shift_status
 set_random_offset
-get_random_offset
-get_step_param
-get_mixer_num
 nothing
 zoom_in_horz
 zoom_out_horz
@@ -113,7 +110,6 @@ select_pattern
 mute_channel
 change_pattern_select_mode
 change_select_range
-set_parameter_value
 
 
 Encoder Functions:

@@ -1,0 +1,5 @@
+--- 1.05
+
+-Switched default jog wheel function to control tempo
+-Fixed issue where Drum Mode was not playing appropriate channel
+-Added default layout to config_layout.py, commented out for easy reset
