@@ -6,7 +6,7 @@ buttons = {
                               "shift"
           ], "track": 0},
 
-    "b": {  "functions": [    "open_plugins", 
+    "b": {  "functions": [    "randomize_plugin", 
                               "random_pattern"
           ], "track": 0},
 
@@ -115,7 +115,7 @@ buttons = {
 encoder_mappings = {
 
     "knob_1": { "functions": [  
-                                "mixer_level",
+                                "selected_level",
                                 "nothing"
                                 ],
                     "track": 8},
@@ -407,7 +407,7 @@ pitch_bend = ["script_function", "pitch_bend"]
 # encoder_mappings = {
 
 #     "knob_1": { "functions": [  
-#                                 "mixer_level",
+#                                 "selected_level",
 #                                 "nothing"
 #                                 ],
 #                     "track": 8},

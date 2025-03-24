@@ -11,6 +11,7 @@ ACTIVE_MODES = [
     "NOTES",      
     "STEP_SEQUENCER",
     "PAD_PER_CHANNEL",
+    "MIXER_CONTROL"
     
 ]
 """Chose from the following: "NOTES", "STEP_SEQUENCER", "PAD_PER_CHANNEL", "MIXER_CONTROL" """
@@ -21,7 +22,7 @@ NOTES_SUBMODES = ["KEYBOARD", "CONTINUOUS", "DRUM"]
 STEP_SEQUENCER_LAYOUTS =  ["STEP_32", "PATTERN_ACCESS", "CHANNEL_MUTE", "CHANNEL_SELECT"]
 """ Chose from "STEP_32", "PATTERN_ACCESS", "CHANNEL_MUTE", "CHANNEL_SELECT" """
 
-COLORS = [0, 10963273, 4311177, 4293320, 14264921, 10517732, 6871293, 7635441, 13891778, 15126507]
+COLORS = [11899869,11466617]
 """ Color numbers can be found at www.midicontrol.cc/fl-colors. There is no limit to how many can be added. Make sure a comma follows each number."""
 
 SET_WINDOWS = [mixer, channels, browser] 
@@ -44,7 +45,7 @@ PATTERN_CHANGE_IMMEDIATE = True
 	change until the end of the current bar. False will mean patterns are changed immediately."""
 
 ROOT_NOTE = "C"
-SCALE = "Natural Minor"
+SCALE = "Major"
 
 """ Root Note and Scale combined will set the default scale the script opens with. These can both be changed
 	with a MIDI controller if you dedicate buttons to it. It may be easier, though, to change the values here
