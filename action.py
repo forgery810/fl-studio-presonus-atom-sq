@@ -562,10 +562,12 @@ class EncoderAction(Action):
         print(f"chan: {chan}")
         pat = patterns.patternNumber()
         print(f"pat: {pat}")
-        step = self.state.selected_step
-        print(f"step: {step}")
+        # step = self.state.selected_step
         param = self.state.parameter_index
-        channels.setStepParameterByIndex(chan, pat, step, param, int(utility.mapvalues(event.data2, 0, 255, 0, 127)))
+        # print(f"step: {step}")
+        for step in self.state.selected_steps:
+            channels.setStepParameterByIndex(chan, pat, step, param, int(utility.mapvalues(event.data2, 0, 255, 0, 127)))
+        
         channels.showGraphEditor(False, self.state.parameter_index, self.state.selected_step, channels.channelNumber(), True)
     #   int index, int patNum, int step, int param, int value, (bool useGlobalIndex = False)
 

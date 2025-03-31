@@ -10,8 +10,7 @@ def num_gen():
 	rand_int = rand_obj.getrandbits(16) 
 	return rand_int 
 
-def mapvalues(value, tomin, tomax, frommin, frommax):
-	input_value = value
+def mapvalues(input_value, tomin, tomax, frommin, frommax):
 	solution = tomin + (tomax-(tomin))*((input_value - frommin) / (frommax - (frommin)))
 	if  -0.01 < solution < 0.01:
 		solution = 0

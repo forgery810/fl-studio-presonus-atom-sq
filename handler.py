@@ -159,16 +159,15 @@ class EncoderHandler:
             Encoder.link_chan += 1
         return tracks[Encoder.link_chan]
 
-    def handle_parameter_entry_encoder(self, event):
-        """Handles encoder events in PARAMETER_ENTRY submode."""
-        encoder_id = event.data1
-        encoder_value = event.data2
+    # def handle_parameter_entry_encoder(self, event):
+    #     """Handles encoder events in PARAMETER_ENTRY submode."""
+    #     encoder_id = event.data1
+    #     encoder_value = event.data2
 
     def handle_parameter_entry_encoder(self, event):
         """Handles encoder events in PARAMETER_ENTRY submode."""
         encoder_id = event.data1
         encoder_value = event.data2
-
         if 14 <= encoder_id <= 20:                  
             self.state.parameter_index = encoder_id - 14  
             current_mode = self.mode_manager.current_mode
@@ -199,8 +198,6 @@ class ButtonHandler():
             print(f"Warning: No button data found for button ID {button_id}.")
         if button_data["functions"][state.shift_status] != 'nothing':
             event.handled = True
-
-
 
 class PitchBendHandler:
     """Handles events from the '+' and '-' buttons, adjusting parameters

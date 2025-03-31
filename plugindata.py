@@ -18,10 +18,10 @@ plugin_dict = {
 	'3x Osc': [1, 2, 3, 4, 5, 0, 8, 9, 10, 11, 12, 7, 6, 15, 16, 17, 18, 19, 14, 13, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	'GMS': [i for i in range(32, 70)],
 	'Fruity granulizer': [0, 1, 2, 3, 7, 4, 5, 6, 8, 9 , 10 , 11, 12, 13, 14, 15],
-	'Harmless': [54, 59, 52, 56, 26, 27, 28, 31, ],
+	'Harmless': [54, 3, 59, 52, 56, 26, 27, 28, 31, ],
 	'Toxic Biohazard': [15, 16, 0, 1, 2, 3, 4, 5, 6],
 	'FLEX': [21, 22, 10, 11, 12, 13, 14, 15],
-	'Poizone': [18, 22, 23, 24, 25, 18, 19, 20, 66, 0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+	'Poizone': [18, 29, 33, 22, 23, 24, 25, 18, 19, 20, 66, 0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
 	
 			 }
 # poizone ={
@@ -329,7 +329,7 @@ plugin_dict = {
 # 		'Osc 3 stereo detune': 19, 'Stereo phase randomness': 20
 	
 # 		}
-# hl = {'Phase randomness': 0, 'Low harmonics protection': 1, 'Sub harmonic 1': 2, 'Sub harmonic 3': 3, 'Sub harmonic 4': 4, 
+# harmless = {'Phase randomness': 0, 'Low harmonics protection': 1, 'Sub harmonic 1': 2, 'Sub harmonic 3': 3, 'Sub harmonic 4': 4, 
 # 	'Timbre EQ band 1': 5, 'Timbre EQ band 2': 6, 'Timbre EQ band 3': 7, 'Timbre EQ band 4': 8, 'Timbre EQ band 5': 9, 
 # 	'Timbre EQ band 6': 10, 'Harmonic mask 1/12': 11, 'Harmonic mask 2/12': 12, 'Harmonic mask 3/12': 13, 
 # 	'Harmonic mask 4/12': 14, 'Harmonic mask 5/12': 15, 'Harmonic mask 6/12': 16, 'Harmonic mask 7/12': 17, 

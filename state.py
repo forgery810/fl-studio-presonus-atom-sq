@@ -15,6 +15,7 @@ class State:
         self.random_min_octave = 6
         self.random_offset = 63
         self.selected_step = 0
+        self.selected_steps = []
         self.track_number = -1
         self.track_original = -1
 

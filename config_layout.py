@@ -6,7 +6,7 @@ buttons = {
                               "shift"
           ], "track": 0},
 
-    "b": {  "functions": [    "randomize_plugin", 
+    "b": {  "functions": [    "open_plugins", 
                               "random_pattern"
           ], "track": 0},
 
