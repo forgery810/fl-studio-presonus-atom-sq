@@ -1,3 +1,4 @@
+
 parameter_ranges = {
     0: (0, 12),  # pNote (example range)
     1: (13, 30),  # pVelocity
@@ -7,6 +8,8 @@ parameter_ranges = {
     5: (87, 105),  # pModX
     6: (106, 127),  # pModY
 }
+
+
 
 knobs = []
 

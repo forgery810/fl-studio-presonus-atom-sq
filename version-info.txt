@@ -1,3 +1,8 @@
+--- 1.25
+
+-Fixed some config_layout presets
+-Added Layout options of Parameter Entry Submode. Multiple steps can now be edited at the same time
+
 --- 1.05
 
 -Switched default jog wheel function to control tempo

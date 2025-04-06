@@ -11,7 +11,7 @@ def num_gen():
 	return rand_int 
 
 def mapvalues(input_value, tomin, tomax, frommin, frommax):
-	solution = tomin + (tomax-(tomin))*((input_value - frommin) / (frommax - (frommin)))
+	solution = tomin + (tomax-(tomin)) * ((input_value - frommin) / (frommax - (frommin)))
 	if  -0.01 < solution < 0.01:
 		solution = 0
 	return solution

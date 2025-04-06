@@ -31,9 +31,10 @@ def OnInit():
 def OnRefresh(ref_num):
 	"""called by FL when any change is made to the program. with mouse, keyboard, controller etc"""
 	# print(f"OnRefresh: {ref_num}")
-	mode_manager.refresh_leds()
 	if ref_num == 65824:
 		state.channel_index = -1
+		state.selected_steps = []
+	mode_manager.refresh_leds()
 
 def OnMidiMsg(event):
 	"""called by FL everytime a MIDI message is sent by controller"""

@@ -410,6 +410,7 @@ class Action():
         channels.selectChannel(self.state.channel_index)
 
     def change_step_parameter(self):
+        print('change_step_parameter')
         self.state.parameter_index += 1
         if self.state.parameter_index > 6:
             self.state.parameter_index = 0
@@ -556,20 +557,107 @@ class EncoderAction(Action):
 
     parameter_ranges = [ 0, 19, 37, 56, 74, 92, 110, 128 ]
 
-    def set_parameter_value(self, event):
+    def _set_steps_parameter(self, event, value_calculator):
+        """Helper function to set parameters for selectedcted steps."""
+        chan = channels.selectedChannel()
+        pat = patterns.patternNumber()
+        param = self.state.parameter_index
+
+        if not self.state.selected_steps:
+            print("No steps selected for parameter change.")
+            return
+
+        try:
+            sorted_steps = sorted(self.state.selected_steps)
+            num_steps = len(sorted_steps)
+
+            for i, step in enumerate(sorted_steps):
+                target_value = value_calculator(event.data2, i, num_steps)
+
+                target_value_int = int(target_value)
+
+                channels.setStepParameterByIndex(chan, pat, step, param, target_value_int)
+
+        except Exception as e:
+            print(f"Error setting parameter during loop for step {step}: {e}")
+
+        try:
+            first_step_to_refresh = sorted_steps[0]
+            channels.showGraphEditor(False, param, first_step_to_refresh, channels.channelNumber(), True)
+        except Exception as e:
+            print(f"Error refreshing graph editor: {e}")
+
+    def _set_max_param(self):
+        '''Account for the different parameter value ranges'''
+        param = self.state.parameter_index
+        if param == midi.pModX or param == midi.pModY:
+            return  255
+        elif param == midi.pFinePitch:
+            return 240
+        else:
+            return 128
+
+
+    def equal_param_steps(self, event):
+        """Sets selected step parameter values equally."""
+        max_param_value = self._set_max_param()
+        chan = channels.selectedChannel()
+        pat = patterns.patternNumber()
+        param = self.state.parameter_index
+        for step in self.state.selected_steps:
+            channels.setStepParameterByIndex(chan, pat, step, param, int(utility.mapvalues(event.data2, 0, max_param_value, 0, 127)))
+        channels.showGraphEditor(True, self.state.parameter_index, self.state.selected_step, channels.channelNumber())
+
+    def ramp_param_steps(self, event):
+        """Sets selected step parameter values to ramp."""
 
         chan = channels.selectedChannel()
-        print(f"chan: {chan}")
-        pat = patterns.patternNumber()
-        print(f"pat: {pat}")
-        # step = self.state.selected_step
         param = self.state.parameter_index
-        # print(f"step: {step}")
-        for step in self.state.selected_steps:
-            channels.setStepParameterByIndex(chan, pat, step, param, int(utility.mapvalues(event.data2, 0, 255, 0, 127)))
-        
-        channels.showGraphEditor(False, self.state.parameter_index, self.state.selected_step, channels.channelNumber(), True)
-    #   int index, int patNum, int step, int param, int value, (bool useGlobalIndex = False)
+        max_param_value = self._set_max_param()
+        sorted_steps = sorted(self.state.selected_steps)
+        first_step = sorted_steps[0]
+
+        # Get the current value of the first selected step to use as the start value
+        start_value = channels.getStepParam(first_step, param, chan, 0, 64) # Ignore last two args as requested
+        def calculator(cc_value, index, total_steps):
+            max_value = utility.mapvalues(cc_value, 0, max_param_value, 0, 127)
+            min_value = start_value
+            if total_steps <= 1:
+                return max_value # Avoid division by zero / single step case
+            return min_value + (max_value - min_value) * (index / (total_steps - 1))
+        self._set_steps_parameter(event, calculator)
+      
+    def fade_param_steps(self, event):
+        """Sets selected step parameter values to fade."""
+
+        chan = channels.selectedChannel()
+        param = self.state.parameter_index
+        sorted_steps = sorted(self.state.selected_steps)
+        last_step = sorted_steps[-1]
+        max_param_value = self._set_max_param()
+
+        end_value = channels.getStepParam(last_step, param, chan, 0, 64) 
+        def calculator(cc_value, index, total_steps):
+            # Map the CC value to the START value of the fade (0-127)
+            start_value = utility.mapvalues(cc_value, 0, max_param_value, 0, 127)
+            if total_steps <= 1:
+                return start_value # Avoid division by zero / single step case
+            return start_value + (end_value - start_value) * (index / (total_steps - 1))
+        self._set_steps_parameter(event, calculator)
+
+
+    def random_param_steps(self, event):
+        """Sets selected step values randomly, influenced by CC value (e.g., as max)."""
+        import random
+        rand_obj = random.Random()
+        max_param_value = self._set_max_param()
+
+        def calculator(cc_value, index, total_steps):
+            # Map CC value to the MAX possible random value
+            max_value = utility.mapvalues(cc_value, 0, max_param_value, 0, 127)
+            min_value = 0 
+            return rand_obj.randint(int(min_value), int(max_value))
+        self._set_steps_parameter(event, calculator)
 
     def call_func(f, event):
         method = getattr(EncoderAction, f)
@@ -591,7 +679,7 @@ class EncoderAction(Action):
 
     def set_step_parameter(self, event):
         self.state.parameter_index = self.get_param_from_range(event.data2)
-        channels.showGraphEditor(True, self.state.parameter_index, self.state.selected_step, channels.selectedChannel())
+        # channels.showGraphEditor(True, self.state.parameter_index, self.state.selected_step, channels.selectedChannel())
 
     def set_random_offset(self, event):
         self.state.random_offset = event.data2

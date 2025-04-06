@@ -159,23 +159,29 @@ class EncoderHandler:
             Encoder.link_chan += 1
         return tracks[Encoder.link_chan]
 
-    # def handle_parameter_entry_encoder(self, event):
-    #     """Handles encoder events in PARAMETER_ENTRY submode."""
-    #     encoder_id = event.data1
-    #     encoder_value = event.data2
-
     def handle_parameter_entry_encoder(self, event):
         """Handles encoder events in PARAMETER_ENTRY submode."""
+
         encoder_id = event.data1
         encoder_value = event.data2
+
         if 14 <= encoder_id <= 20:                  
             self.state.parameter_index = encoder_id - 14  
-            current_mode = self.mode_manager.current_mode
-            self.encoder_action.set_parameter_value(event)
+            param_layout = self.mode_manager.current_mode.parameter_entry_layout
+            action_func_name = param_layout.action_func_name
+            action_method = getattr(self.encoder_action, action_func_name, None)
+            if action_method:
+                # Call the specific action method (e.g., set_parameter_ramp)
+                action_method(self.event)
+                self.event.handled = True # Mark event as handled
+            else:
+                print(f"Warning: Action method '{action_func_name}' not found in EncoderAction for layout '{param_layout.name}'.")
+                self.event.handled = True 
 
         elif encoder_id == 21:
             channels.closeGraphEditor(True)
             self.event.handled = True
+
 
 class ButtonHandler():
     @staticmethod

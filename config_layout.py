@@ -43,7 +43,7 @@ buttons = {
           ], "track": 0},
 
     "b2": {  "functions": [   "shift_pattern_right", 
-                              "link_last_tweaked"
+                              "change_select_range"
           ], "track": 0},
 
     "c2": {  "functions": [   "double_pattern", 
@@ -335,7 +335,7 @@ pitch_bend = ["script_function", "pitch_bend"]
 #           ], "track": 0},
 
 #     "b2": {  "functions": [   "shift_pattern_right", 
-#                               "link_last_tweaked"
+#                               "change_select_range"
 #           ], "track": 0},
 
 #     "c2": {  "functions": [   "double_pattern", 

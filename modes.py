@@ -451,16 +451,18 @@ class StepSequencerLayout(Enum):
         return (led_num, 0, "off")  # Default if not found
 
 class ParameterEntryLayout(Enum):
-    EQUAL_VALUES = (0, "Equal", "param_equal_leds", "param_action")
-    RAMP_VALUES = (1, "Increase", "param_ramp_leds", "param_action")
-    FADE_VALUES = (2, "Fade", "param_fade_leds", "param_action")
-    RANDOM_VALUES = (3, "Random", "param_random_leds", "param_action")
+    EQUAL_VALUES = (0, "Equal", "param_equal_leds", "param_action", "equal_param_steps", "purple")
+    RAMP_VALUES = (1, "Increase", "param_ramp_leds", "param_action", "ramp_param_steps", "light_blue")
+    FADE_VALUES = (2, "Fade", "param_fade_leds", "param_action", "fade_param_steps", "light_yellow")
+    RANDOM_VALUES = (3, "Random", "param_random_leds", "param_action", "random_param_steps", "light_purple")
 
-    def __init__(self, value, layout_name, led_method_name, pad_action_method_name):
+    def __init__(self, value, layout_name, led_method_name, pad_action_method_name, action_func_name, color):
         self._value_ = value
         self.layout_name = layout_name
         self.led_method_name = led_method_name
         self.pad_action_method_name = pad_action_method_name
+        self.action_func_name = action_func_name
+        self.color = color
 
     def __str__(self):
         return self.name
@@ -476,70 +478,6 @@ class ParameterEntryLayout(Enum):
         method = getattr(self, self.pad_action_method_name)
         # Pass the necessary context
         method(step_sequencer_mode_instance, event, state)
-
-    # def param_equal_leds(self, mode, lights_instance, state, color=None):
-    #     new_led_state = []
-    #     for i in range(32): # Assuming max 32 steps visible on pads
-    #         pad_num = 36 + i
-    #         if i in state.selected_steps:
-    #             new_led_state.append((pad_num, 1, "purple"))  # Highlight selected step
-    #         elif channels.getGridBit(channels.selectedChannel(), i) == 1:
-    #             # Optional: Indicate steps that actually have notes/trigs
-    #              new_led_state.append((pad_num, 1, "light_white")) # Dimmer white
-    #             # Or just keep them off if not selected:
-    #             # new_led_state.append((pad_num, 0, "off"))
-    #         else:
-    #             new_led_state.append((pad_num, 0, "off")) # Off if no trig and not selected
-    #     lights_instance.update_led_state(new_led_state)
-    #     lights_instance.send_midi_messages()
-
-    # def param_ramp_leds(self, mode, lights_instance, state, color=None):
-    #     new_led_state = []
-    #     for i in range(32): # Assuming max 32 steps visible on pads
-    #         pad_num = 36 + i
-    #         if i in state.selected_steps:
-    #             new_led_state.append((pad_num, 1, "purple"))  # Highlight selected step
-    #         elif channels.getGridBit(channels.selectedChannel(), i) == 1:
-    #             # Optional: Indicate steps that actually have notes/trigs
-    #              new_led_state.append((pad_num, 1, "light_white")) # Dimmer white
-    #             # Or just keep them off if not selected:
-    #             # new_led_state.append((pad_num, 0, "off"))
-    #         else:
-    #             new_led_state.append((pad_num, 0, "off")) # Off if no trig and not selected
-    #     lights_instance.update_led_state(new_led_state)
-    #     lights_instance.send_midi_messages()
-
-    # def param_fade_leds(self, mode, lights_instance, state, color=None):
-    #     new_led_state = []
-    #     for i in range(32): # Assuming max 32 steps visible on pads
-    #         pad_num = 36 + i
-    #         if i in state.selected_steps:
-    #             new_led_state.append((pad_num, 1, "purple"))  # Highlight selected step
-    #         elif channels.getGridBit(channels.selectedChannel(), i) == 1:
-    #             # Optional: Indicate steps that actually have notes/trigs
-    #              new_led_state.append((pad_num, 1, "light_white")) # Dimmer white
-    #             # Or just keep them off if not selected:
-    #             # new_led_state.append((pad_num, 0, "off"))
-    #         else:
-    #             new_led_state.append((pad_num, 0, "off")) # Off if no trig and not selected
-    #     lights_instance.update_led_state(new_led_state)
-    #     lights_instance.send_midi_messages()
-
-    # def param_random_leds(self, mode, lights_instance, state, color=None):
-    #     new_led_state = []
-    #     for i in range(32): # Assuming max 32 steps visible on pads
-    #         pad_num = 36 + i
-    #         if i in state.selected_steps:
-    #             new_led_state.append((pad_num, 1, "purple"))  # Highlight selected step
-    #         elif channels.getGridBit(channels.selectedChannel(), i) == 1:
-    #             # Optional: Indicate steps that actually have notes/trigs
-    #              new_led_state.append((pad_num, 1, "light_white")) # Dimmer white
-    #             # Or just keep them off if not selected:
-    #             # new_led_state.append((pad_num, 0, "off"))
-    #         else:
-    #             new_led_state.append((pad_num, 0, "off")) # Off if no trig and not selected
-    #     lights_instance.update_led_state(new_led_state)
-    #     lights_instance.send_midi_messages()
 
     def param_action(self, event, state):
         pad_index = event.data1 - 36
@@ -764,7 +702,6 @@ class StepSequencerMode(Mode):
         self.selected_param_pads = []
 
         self.parameter_entry_layout = ParameterEntryLayout.EQUAL_VALUES
-        # Store the available layouts for cycling (if needed)
         self.active_parameter_entry_layouts = list(ParameterEntryLayout)
         self.current_parameter_entry_layout_index = 0
 
@@ -778,13 +715,6 @@ class StepSequencerMode(Mode):
     def handle_pad_press(self, event):
         if self.submode == StepSequencerSubmode.PARAMETER_ENTRY:
             self.parameter_entry_layout.param_action(event, self.state)
-            # print("PARAMETER_ENTRY")
-            # pad_index = event.data1 - 36
-            # if 0 <= pad_index < 32:
-                # if pad_index in self.state.selected_steps:
-                    # self.state.selected_steps.remove(pad_index)
-                # else:
-                    # self.state.selected_steps.append(pad_index)
             self.update_leds_for_parameter_entry()  
             # event.handled = True 
         elif event.data1 < 52:
@@ -807,9 +737,9 @@ class StepSequencerMode(Mode):
 
     def handle_minus_button(self):
         if self.submode == StepSequencerSubmode.STANDARD:
-            self.cycle_layout(1)
+            self.cycle_layout(-1)
         elif self.submode == StepSequencerSubmode.PARAMETER_ENTRY:
-            self.cycle_parameter_entry_layout(1)
+            self.cycle_parameter_entry_layout(-1)
 
     def cycle_range(self):
         if self.get_layout() == "PATTERN_ACCESS":
@@ -833,24 +763,21 @@ class StepSequencerMode(Mode):
         self.update_display()
 
     def update_display(self):
-        ui.setHintMsg(f"Step Sequencer - {self.layout.layout_name}")
-        print(self.submode)
+
         if self.submode == StepSequencerSubmode.STANDARD:
             self.layout.update_leds(self.lights, self.state, "blue")  
+            ui.setHintMsg(f"Step Sequencer - {self.layout.layout_name}")
         elif self.submode == StepSequencerSubmode.PARAMETER_ENTRY:
-            print('djfsfkjdsldfj')
-            # self.layout.update_leds(self.lights, "white") 
-            # self.layout.update_leds(self.lights, self.state, "blue")  
             self.update_leds_for_parameter_entry() 
+            ui.setHintMsg(f"Parameter Entry - {self.parameter_entry_layout.name}")
 
 
     def update_leds_for_parameter_entry(self):
         """Updates the LEDs to indicate the selected step in parameter entry mode."""
-        print("update_leds_for_parameter_entry")
         new_led_state = []
         for i in range(32):
             if i in self.state.selected_steps:
-                new_led_state.append((36 + i, 1, "purple"))  # Highlight selected step
+                new_led_state.append((36 + i, 1, self.parameter_entry_layout.color))  # Highlight selected step
             elif channels.getGridBit(channels.selectedChannel(), i) == 1:
                 new_led_state.append((36 + i, 1, "white"))  # Use white for other steps
             else:
