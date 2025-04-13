@@ -1,3 +1,8 @@
+--- 1.26
+
+-Fixed issue where shift pattern wasn't working on > 16 step patterns
+-Double pattern now works up to 512 steps
+
 --- 1.25
 
 -Fixed some config_layout presets
