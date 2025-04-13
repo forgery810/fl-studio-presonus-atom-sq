@@ -364,7 +364,7 @@ class Action():
         original_length = patterns.getPatternLength(pattern)
 
         new_length = original_length * 2
-        if new_length >= 129:
+        if new_length >= 513:
             print("Pattern too long for doubling")
         else:
             for channel in range(channels.channelCount()):
@@ -374,7 +374,7 @@ class Action():
                     channels.setGridBit(channel, new_step, bit)
 
                     if bit:  
-                        note = channels.getStepParam(step, 0, channel, 0, 64)  # Use 64 as padsStride
+                        note = channels.getStepParam(step, 0, channel, 0, patterns.getPatternLength(patterns.patternNumber()))  # Use 64 as padsStride
                         channels.setStepParameterByIndex(channel, pattern, new_step, 0, note) # Use 64 as padsStride
 
     def print_plugin_data(self):

@@ -19,6 +19,7 @@ class Shifter():
         self.channel = channels.selectedChannel()
         self.pat_num = patterns.patternNumber()
         self.pat_len = patterns.getPatternLength(self.pat_num)
+        print(f"pat_len: {self.pat_len}")
         self.pattern, self.notes = self.get_pattern_and_notes() # Get the old state and notes
 
     def back(self):
@@ -38,8 +39,9 @@ class Shifter():
         notes = []
         for bit in range(self.pat_len):
             grid_bit = channels.getGridBit(self.channel, bit)
-            note_value = channels.getStepParam(bit, 0, channels.selectedChannel(), 0) #Get first parameter, which is the note value
-            print(note_value)
+            # int step, int param, int offset, int startPos, (int padsStride = 16), (bool useGlobalIndex* = False)
+            note_value = channels.getStepParam(bit, 0, channels.selectedChannel(), 0, self.pat_len)
+            print(f"note_value: {note_value}")
             pattern.append(grid_bit)
             notes.append(note_value)  # Store the note value (or None)
         return pattern, notes
