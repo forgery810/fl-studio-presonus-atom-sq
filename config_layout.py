@@ -10,7 +10,7 @@ buttons = {
                               "random_pattern"
           ], "track": 0},
 
-    "c": {  "functions": [    "quantize", 
+    "c": {  "functions": [    "change_select_range", 
                               "change_pattern_select_mode"
                         ],
          "track": 0},
