@@ -18,7 +18,7 @@ sequence_fours = [36, 40, 44, 48, 52, 56, 60, 64]
 led_colors = {
     "purple": {"midi_id": 146, "data_2": 0},
     "light_purple": {"midi_id": 146, "data_2": 60},
-    "mid_purple": {"midi_id": 146, "data_2": 10},
+    "mid_purple": {"midi_id": 146, "data_2": 30},
     "white": {"midi_id": 144, "data_2": 127},
     "light_white": {"midi_id": 144, "data_2": 6},
     "yellow": {"midi_id": 147, "data_2": 0},

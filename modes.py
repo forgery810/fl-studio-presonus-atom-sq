@@ -150,7 +150,6 @@ class ModeManager:
     def refresh_leds(self):
 
         if self.get_layout() != "KEYBOARD" and self.get_layout() != "DEFAULT_PADS":
-            print('refresh_leds')
             self.current_mode.update_display()
 
     def set_layout(self, layout):
@@ -340,16 +339,20 @@ class StepSequencerLayout(Enum):
     def channel_select_leds(self, lights_instance, state, color):
         """Updates LEDs for the channel select layout."""
         new_led_state = []
-        for i in range(16):
+        channel_colors = ""
+        if self.channel_access_range == 0:
+            channel_colors = "purple"
+        else:
+            channel_colors = "mid_purple"
+        offset = 16 * self.channel_access_range
+        for i in range(offset, offset + 16):
             if i == channels.selectedChannel():
-                new_led_state.append((52 + i, 1, "white"))  # Non-selectable channels off
+                new_led_state.append((52 + i - offset, 1, "white"))  # Non-selectable channels off
             elif i < channels.channelCount():
-                if (i + 52) in self.sequence_fours:
-                    new_led_state.append((i + 52, 1, "mid_purple") )
-                else:
-                    new_led_state.append((52 + i, 1, "purple"))  # Indicate selectable channels
+                
+                new_led_state.append((52 + i - offset, 1, channel_colors))  # Indicate selectable channels
             else:
-                new_led_state.append((52 + i, 0, "off"))  # Non-selectable channels off
+                new_led_state.append((52 + i - offset, 0, "off"))  # Non-selectable channels off
         lights_instance.update_led_state(new_led_state)
         lights_instance.send_midi_messages()
 
@@ -418,10 +421,16 @@ class StepSequencerLayout(Enum):
     def channel_mute_leds(self, lights_instance, state, color):
         """Updates LEDs for the channel mute layout."""
         new_led_state = []
+        muted_color = ""
         for i in range(16):
+            if self.channel_access_range == 0:
+                muted_color = "light_yellow" 
+            else:
+                muted_color = "light_green" 
+
             if (16 * self.channel_access_range) + i < channels.channelCount():
                 if channels.isChannelMuted((16 * self.channel_access_range) + i):
-                    new_led_state.append((52 + i, 1, "light_yellow"))  # Muted, LED off
+                    new_led_state.append((52 + i, 1, muted_color))  # Muted, LED off
                 else:
                     new_led_state.append((52 + i, 1, "yellow"))  # Not muted, LED yellow
             else:

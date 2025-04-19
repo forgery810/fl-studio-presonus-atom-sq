@@ -28,7 +28,7 @@ buttons = {
                         ],
          "track": 0},
 
-    "g": {  "functions": [    "wait_for_input", 
+    "g": {  "functions": [    "change_select_range", 
                               "double_pattern"
                         ],
          "track": 0},
