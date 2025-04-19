@@ -1,6 +1,6 @@
 # name=Presonus Atom SQ - ATM SQ
 # Author: ts-forgery
-VERSION = '1.26'
+VERSION = '1.28'
 
 import mixer
 import general
