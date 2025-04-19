@@ -568,9 +568,8 @@ class MixerControlMode(Mode):
             self.layout = MixerControlLayout.SOLO
         self.layout.update_leds(self.lights, self.state) 
 
-    def cycle_layout(self):
+    def cycle_layout(self, increment):
         self.set_plus_minus_leds()
-        pass
 
 class NotesMode(Mode):
     def __init__(self, lights_instance, state):
