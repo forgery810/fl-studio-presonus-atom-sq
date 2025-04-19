@@ -16,7 +16,7 @@ buttons = {
          "track": 0},
 
     "d": {  "functions": [    "enter", 
-                              "delete"],
+                              "randomize_plugin"],
          "track": 0},
 
     "e": {  "functions": [    "change_mode", 

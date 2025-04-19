@@ -463,7 +463,7 @@ class ParameterEntryLayout(Enum):
     EQUAL_VALUES = (0, "Equal", "param_equal_leds", "param_action", "equal_param_steps", "purple")
     RAMP_VALUES = (1, "Increase", "param_ramp_leds", "param_action", "ramp_param_steps", "light_blue")
     FADE_VALUES = (2, "Fade", "param_fade_leds", "param_action", "fade_param_steps", "light_yellow")
-    RANDOM_VALUES = (3, "Random", "param_random_leds", "param_action", "random_param_steps", "light_purple ")
+    RANDOM_VALUES = (3, "Random", "param_random_leds", "param_action", "random_param_steps", "mid_purple")
 
     def __init__(self, value, layout_name, led_method_name, pad_action_method_name, action_func_name, color):
         self._value_ = value
