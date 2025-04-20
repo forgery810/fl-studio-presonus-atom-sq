@@ -39,7 +39,7 @@ FOLLOW_TRACK = True
 	set to control mixer tracks 1-8, if you highlight any track between 9-16, they will then control 
 	tracks 9-16 respectively. This affects track level, arm, mute, solo and pan.""" 
 	
-PATTERN_CHANGE_IMMEDIATE = False
+PATTERN_CHANGE_IMMEDIATE = True
 """ This only affects pattern changes when using the 'Select Pattern *' where buttons are 
 	set with specific patterns to change to when pushed. If set to true, the pattern will not
 	change until the end of the current bar. False will mean patterns are changed immediately."""

@@ -10,31 +10,31 @@ buttons = {
                               "random_pattern"
           ], "track": 0},
 
-    "c": {  "functions": [    "change_select_range", 
+    "c": {  "functions": [    "quantize", 
                               "change_pattern_select_mode"
                         ],
          "track": 0},
 
     "d": {  "functions": [    "enter", 
-                              "randomize_plugin"],
+                              "delete"],
          "track": 0},
 
     "e": {  "functions": [    "change_mode", 
                               "change_mode"],
          "track": 0},
-
+ 
     "f": {  "functions": [    "change_sub_mode", 
                               "change_sub_mode"
                         ],
          "track": 0},
 
     "g": {  "functions": [    "change_select_range", 
-                              "double_pattern"
+                              "cut"
                         ],
          "track": 0},
 
     "h": {  "functions": [    "rotate_set_windows", 
-                              "focus_browser"
+                              "rotate_set_windows"
                         ],
           "track": 0},
 
@@ -43,7 +43,7 @@ buttons = {
           ], "track": 0},
 
     "b2": {  "functions": [   "shift_pattern_right", 
-                              "change_select_range"
+                              "link_last_tweaked"
           ], "track": 0},
 
     "c2": {  "functions": [   "double_pattern", 
@@ -320,7 +320,7 @@ pitch_bend = ["script_function", "pitch_bend"]
 #                         ],
 #          "track": 0},
 
-#     "g": {  "functions": [    "wait_for_input", 
+#     "g": {  "functions": [    "change_select_range", 
 #                               "double_pattern"
 #                         ],
 #          "track": 0},
