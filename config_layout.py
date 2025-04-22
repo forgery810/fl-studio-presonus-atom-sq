@@ -22,7 +22,7 @@ buttons = {
     "e": {  "functions": [    "change_mode", 
                               "change_mode"],
          "track": 0},
- 
+
     "f": {  "functions": [    "change_sub_mode", 
                               "change_sub_mode"
                         ],
@@ -75,7 +75,7 @@ buttons = {
           "track": 0},
 
     "button_1": {
-                "functions": [  "escape", 
+                "functions": [  "arm", 
                                 "change_color"
                         ], 
                 "track": 0},     
@@ -99,14 +99,14 @@ buttons = {
                 "track": 0 },
 
     "button_5": {
-                "functions": [  "random_trigs", 
+                "functions": [  "randomize_selected_channel_trigs", 
                                 "random_notes"
                         ], 
                 "track": 0},
 
     "button_6": {
                 "functions": [  "random_pattern", 
-                                "random_trigs"
+                                "menu"
                         ], 
           "track": 0},
    
@@ -290,6 +290,8 @@ jog_mappings = {
 
 pitch_bend = ["script_function", "pitch_bend"]
 
+
+
 ## Default Layout Below
 
 # buttons = {
@@ -321,12 +323,12 @@ pitch_bend = ["script_function", "pitch_bend"]
 #          "track": 0},
 
 #     "g": {  "functions": [    "change_select_range", 
-#                               "double_pattern"
+#                               "cut"
 #                         ],
 #          "track": 0},
 
 #     "h": {  "functions": [    "rotate_set_windows", 
-#                               "focus_browser"
+#                               "rotate_set_windows"
 #                         ],
 #           "track": 0},
 
@@ -335,7 +337,7 @@ pitch_bend = ["script_function", "pitch_bend"]
 #           ], "track": 0},
 
 #     "b2": {  "functions": [   "shift_pattern_right", 
-#                               "change_select_range"
+#                               "link_last_tweaked"
 #           ], "track": 0},
 
 #     "c2": {  "functions": [   "double_pattern", 
@@ -367,7 +369,7 @@ pitch_bend = ["script_function", "pitch_bend"]
 #           "track": 0},
 
 #     "button_1": {
-#                 "functions": [  "escape", 
+#                 "functions": [  "arm", 
 #                                 "change_color"
 #                         ], 
 #                 "track": 0},     
@@ -391,14 +393,14 @@ pitch_bend = ["script_function", "pitch_bend"]
 #                 "track": 0 },
 
 #     "button_5": {
-#                 "functions": [  "random_trigs", 
+#                 "functions": [  "randomize_selected_channel_trigs", 
 #                                 "random_notes"
 #                         ], 
 #                 "track": 0},
 
 #     "button_6": {
 #                 "functions": [  "random_pattern", 
-#                                 "random_trigs"
+#                                 "menu"
 #                         ], 
 #           "track": 0},
    
@@ -581,4 +583,3 @@ pitch_bend = ["script_function", "pitch_bend"]
 # }
 
 # pitch_bend = ["script_function", "pitch_bend"]
-

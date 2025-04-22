@@ -469,9 +469,30 @@ class Action():
             finalNote = note + root
             channels.setStepParameterByIndex(channels.selectedChannel(), patterns.patternNumber(), i, 0, finalNote)     
 
+    def randomize_all_channel_trigs(self):
+        number_of_channels = channels.channelCount(patterns.patternNumber())
+        for chan in range(number_of_channels):
+            channels.selectOneChannel(chan)
+            self.random_trigs()
+
+    def randomize_selected_channel_trigs(self):     ## Should consolidate along with random_trigs()
+        number_of_channels = channels.channelCount(patterns.patternNumber())
+        for chan in range(number_of_channels):
+            if channels.isChannelSelected(chan):
+                for i in range(patterns.getPatternLength(patterns.patternNumber())): 
+                    channels.setGridBit(chan, i, 0)
+                for z in range (patterns.getPatternLength(patterns.patternNumber())):
+                    y = utility.num_gen()
+                    if y < ( self.state.random_offset * 516):
+                        channels.setGridBit(chan, z, 1)
+                    else:
+                        pass
+
+
     def random_pattern(self):
         self.random_trigs()
         self.random_notes()
+
 
     def shift(self):
         if self.state.shift_status == 0:
@@ -552,6 +573,9 @@ class Action():
         for i in range(parameter_count):
             rand_val = utility.mapvalues(utility.num_gen(), 0, 127, 0, 65535)/127.0
             plugins.setParamValue(rand_val, i, channel)
+
+
+
 
 class EncoderAction(Action):
 

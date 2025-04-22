@@ -1,3 +1,7 @@
+--- 1.28
+-Added randomize_selected_channel_trigs and randomize_all_channel_trigs
+-Minor bug fixes
+
 --- 1.26
 
 -Fixed issue where shift pattern wasn't working on > 16 step patterns
