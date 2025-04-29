@@ -34,6 +34,7 @@ class State:
         self.pattern_change_immediate = config.PATTERN_CHANGE_IMMEDIATE
         self.pattern_select_range = 0
         self.channel_index = 0
+        self.pattern_data_index = 0
 
     def set_plus_minus_leds(self):
         plus = lights.octave_colors["plus_white"]

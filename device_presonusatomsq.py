@@ -14,6 +14,7 @@ import action
 from modes import ModeManager, MainMode, NoteSubmode
 import state
 import patterns
+import pattern_presets
 
 lights = Lights()
 state = state.State()
@@ -30,10 +31,13 @@ def OnInit():
 
 def OnRefresh(ref_num):
 	"""called by FL when any change is made to the program. with mouse, keyboard, controller etc"""
-	# print(f"OnRefresh: {ref_num}")
+	print(f"OnRefresh: {ref_num}")
 	if ref_num == 65824:
 		state.channel_index = -1
 		state.selected_steps = []
+	elif ref_num == 1024 and pattern_presets.active:
+		pattern_presets.set_pattern(state)	
+
 	mode_manager.refresh_leds()
 
 def OnMidiMsg(event):

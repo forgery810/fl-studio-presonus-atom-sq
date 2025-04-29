@@ -10,7 +10,7 @@ buttons = {
                               "random_pattern"
           ], "track": 0},
 
-    "c": {  "functions": [    "quantize", 
+    "c": {  "functions": [    "rotate_pattern_data", 
                               "change_pattern_select_mode"
                         ],
          "track": 0},
@@ -293,6 +293,9 @@ pitch_bend = ["script_function", "pitch_bend"]
 
 
 ## Default Layout Below
+
+
+
 
 # buttons = {
 

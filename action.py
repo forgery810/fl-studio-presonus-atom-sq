@@ -16,6 +16,7 @@ from modes import Mode
 import modes
 import utility
 from shifter import Shifter
+import pattern_presets
 
 class Action():
 
@@ -575,6 +576,16 @@ class Action():
             plugins.setParamValue(rand_val, i, channel)
 
 
+
+
+    def rotate_pattern_data(self):
+        pattern_data_keys = pattern_presets.pattern_data.keys()
+        pattern_data_length = len(pattern_presets.pattern_data)
+        print(pattern_data_length)
+        self.state.pattern_data_index += 1
+        if self.state.pattern_data_index >= pattern_data_length:
+            self.state.pattern_data_index = 0
+        ui.setHintMsg(f"Pattern Preset: {pattern_presets.pattern_data[self.state.pattern_data_index]['name']}")
 
 
 class EncoderAction(Action):
