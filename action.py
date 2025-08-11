@@ -575,9 +575,6 @@ class Action():
             rand_val = utility.mapvalues(utility.num_gen(), 0, 127, 0, 65535)/127.0
             plugins.setParamValue(rand_val, i, channel)
 
-
-
-
     def rotate_pattern_data(self):
         pattern_data_keys = pattern_presets.pattern_data.keys()
         pattern_data_length = len(pattern_presets.pattern_data)

@@ -1,3 +1,9 @@
+# Development Branch
+This is the development branch for the SQ MIDI script. It is a version of the main branch for experimenting with new features. It will be more prone to bugs and may have less documentation.
+
+# Added Functionality
+Adding project presets. Patterns can have their own tempo, set in the pattern_presets.py file.
+
 # Presonus Atom SQ MIDI Script for FL Studio 
 
 A python MIDI-script to increase the functionality of the Presonus Atom SQ with FL Studio. This script adds a step-sequencer, random step and random note generator, mixer, channel, and plugin control, etc.

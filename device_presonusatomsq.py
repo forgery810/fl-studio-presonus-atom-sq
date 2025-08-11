@@ -15,6 +15,7 @@ from modes import ModeManager, MainMode, NoteSubmode
 import state
 import patterns
 import pattern_presets
+import arrangement
 
 lights = Lights()
 state = state.State()
@@ -35,9 +36,9 @@ def OnRefresh(ref_num):
 	if ref_num == 65824:
 		state.channel_index = -1
 		state.selected_steps = []
-	elif ref_num == 1024 and pattern_presets.active:
-		pattern_presets.set_pattern(state)	
-
+	elif ref_num == 1024:
+		if pattern_presets.active:
+			pattern_presets.set_pattern(state)	
 	mode_manager.refresh_leds()
 
 def OnMidiMsg(event):
@@ -50,15 +51,23 @@ def check_for_pattern_change():
 		patterns.jumpToPattern(state.next_pattern)
 		state.current_pattern = state.next_pattern
 
-if mode_manager.get_layout() == 'PATTERN_ACCESS' or config.LIGHT_CURRENT_STEP:
+if mode_manager.get_layout() == 'PATTERN_ACCESS' or mode_manager.get_layout() == 'PATTERN_ARRANGER' or config.LIGHT_CURRENT_STEP:
 	def OnIdle():
 		"""called by FL whether or not in play mode"""
 
 		if transport.isPlaying():
 			if mode_manager.get_mode() == modes.MainMode.STEP_SEQUENCER and config.LIGHT_CURRENT_STEP:
 				mode_manager.current_mode.layout.update_active_step(lights)
-			if mode_manager.get_layout() == 'PATTERN_ACCESS' and state.current_pattern != state.next_pattern:
+			if state.current_pattern != state.next_pattern:
 				if patterns.getPatternLength(patterns.patternNumber()) - 1 == mixer.getSongStepPos():
 					patterns.jumpToPattern(state.next_pattern)
 					state.current_pattern = state.next_pattern
 
+count = 0
+def OnUpdateBeatIndicator(beat):
+	# global count
+	# # if beat != 1:
+	# count += 1
+	# print(count)
+	if mode_manager.get_layout() == 'PATTERN_ARRANGER' and beat == 1:
+		pattern_presets.set_arrangement(state)

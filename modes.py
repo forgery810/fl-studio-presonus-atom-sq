@@ -95,7 +95,7 @@ class ModeManager:
             MainMode.NOTES: NotesMode(lights_instance, state),
             MainMode.STEP_SEQUENCER: StepSequencerMode(lights_instance, state),
             MainMode.PAD_PER_CHANNEL: PadPerChannelMode(lights_instance, state),
-            MainMode.MIXER_CONTROL: MixerControlMode(lights_instance, state)
+            MainMode.MIXER_CONTROL: MixerControlMode(lights_instance, state),
         }
         self.active_modes = []
 
@@ -294,6 +294,7 @@ class StepSequencerLayout(Enum):
     PATTERN_ACCESS = (1, "Pattern Access", "pattern_select_leds", "pattern_select_action")
     CHANNEL_SELECT = (2, "Channel Select", "channel_select_leds", "channel_select_action")
     CHANNEL_MUTE = (3, "Channel Mute", "channel_mute_leds", "channel_mute_action")
+    PATTERN_ARRANGER = (4, "Pattern Arranger", "pattern_arranger_leds", "pattern_arranger_action")
 
 
     def __init__(self, value, layout_name, led_method_name, pad_action_method_name):
@@ -355,6 +356,28 @@ class StepSequencerLayout(Enum):
                 new_led_state.append((52 + i - offset, 0, "off"))  # Non-selectable channels off
         lights_instance.update_led_state(new_led_state)
         lights_instance.send_midi_messages()
+
+    def pattern_arranger_leds(self, lights_instance, state, color):
+        """Updates LEDs for the standard layout."""
+        new_led_state = []
+        pattern_led = 0   # store active pattern arrangement to light
+        for i in range(16):
+            if i == state.active_arrangement:
+                new_led_state.append((52 + i, 1, "white"))
+            elif i < 4:
+                new_led_state.append((i + 52, 1, "purple") )
+            elif i < 8:
+                new_led_state.append((i + 52, 1, "blue") )
+            elif i < 12:
+                new_led_state.append((i + 52, 1, "light_purple") )
+            else:
+                new_led_state.append((i + 52, 1, "light_blue") )
+        lights_instance.update_led_state(new_led_state)
+        lights_instance.send_midi_messages()
+
+    def pattern_arranger_action(self, pad_handler, event, state):
+        state.active_arrangement = event.data1 - 51
+        print(f"active_arrangement: {state.active_arrangement}")
 
     def handle_pad_press(self, pad_handler, event, state):
         """Calls the appropriate handler method for pad press events."""
